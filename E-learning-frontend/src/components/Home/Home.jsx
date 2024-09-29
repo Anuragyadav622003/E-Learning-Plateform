@@ -4,6 +4,7 @@ import Banner from './Banner';
 import Footer from './Footer';
 import Services from '../Services/Services';
 import Hero from '../Hero/Hero';
+import Subscribe from '../Subscribe/Subscribe';
 
 const Home = () => {
   return (
@@ -14,6 +15,9 @@ const Home = () => {
       </div>
     <div>      
     <Hero/>
+    </div>
+    <div>
+    <Subscribe/>
     </div>
 
       <div className="w-screen mt-10 bg-gray-900">

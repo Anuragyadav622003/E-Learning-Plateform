@@ -14,7 +14,7 @@ const Hero = () => {
     </div>
     <div className='flex flex-col justify-center'>
     <div className='text-center md:text-left space-y-12'>
-    <h1 className='text-3xl md:text-4xl font-bold leading-snug text-white'>
+    <h1 className='text-3xl md:text-4xl font-bold !leading-snug text-white'>
     The world's Leading Online Learning plateform
     
     </h1>
@@ -40,4 +40,4 @@ const Hero = () => {
   )
 }
 
-export default Hero
+export default Hero;
