@@ -2,19 +2,21 @@
 import React from 'react';
 import Banner from './Banner';
 import Footer from './Footer';
-import Services from '../Services/Services';
-import Hero from '../Hero/Hero';
+
+
 import Subscribe from '../Subscribe/Subscribe';
+import Services from '../Hero/Hero';
+import Hero from '../Hero/Hero';
 
 const Home = () => {
   return (
     <div className="flex flex-col bg-gray-900 w-screen items-center justify-center min-h-screen -mt-4">
       <Banner /> {/* Full width and margin below the banner */}
       <div>
-      <Services/>
+     <Services/>
       </div>
     <div>      
-    <Hero/>
+   <Hero/>
     </div>
     <div>
     <Subscribe/>
