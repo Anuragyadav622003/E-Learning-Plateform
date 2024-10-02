@@ -1,5 +1,5 @@
 import React from 'react';
-import Heropng from '../../components/Hero/Hii.png'
+import Heropng from '../../assets/Hii.png'
 import { GrUserExpert } from "react-icons/gr";
 import { MdOutlineAccessTime } from "react-icons/md";
 import { FaBookReader } from "react-icons/fa";
@@ -9,7 +9,7 @@ const Hero = () => {
     <div className='container py-14 md:py-24 grid grid-cols-1 md:grid grid-cols-2 gap-8 space-y-6 md:space-y-0'>
     <div className='flrx justify-center items-center'> 
     <img src={Heropng} alt=""
-    className='w-[350px] md:max-w-[450px] object-cover drop-shadow'
+    className=' object-cover drop-shadow'
     />
     </div>
     <div className='flex flex-col justify-center'>

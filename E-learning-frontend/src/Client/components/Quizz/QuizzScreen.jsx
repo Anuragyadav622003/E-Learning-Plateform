@@ -1,16 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { getQuizzes } from "./QuizzApi"; // Adjust the path as necessary
 import { useNavigate } from "react-router-dom";
-import {
-  Grid,
-  Card,
-  CardContent,
-  CardMedia,
-  Typography,
-  Button,
-  CircularProgress,
-  Box,
-} from "@mui/material";
 
 const QuizzScreen = () => {
   const [quizzes, setQuizzes] = useState([]);
@@ -35,33 +25,17 @@ const QuizzScreen = () => {
 
   if (loading) {
     return (
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          height: "100vh",
-        }}
-      >
-        <CircularProgress />
-      </Box>
+      <div className="flex justify-center items-center min-h-screen">
+        <div className="animate-spin rounded-full h-32 w-32 border-t-4 border-blue-500"></div>
+      </div>
     );
   }
 
   if (error) {
     return (
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          height: "100vh",
-        }}
-      >
-        <Typography variant="h6" color="error">
-          {error}
-        </Typography>
-      </Box>
+      <div className="flex justify-center items-center min-h-screen">
+        <p className="text-red-500 text-lg">{error}</p>
+      </div>
     );
   }
 
@@ -71,53 +45,29 @@ const QuizzScreen = () => {
   };
 
   return (
-    <Box sx={{ padding: 4 }}>
-      <Typography variant="h3" component="h1" align="center" gutterBottom>
-        All Quizzes
-      </Typography>
-      <Grid container spacing={4}>
+    <div className="p-6">
+      <h1 className="text-3xl font-bold text-center mb-6">All Quizzes</h1>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {quizzes.map((quiz, index) => (
-          <Grid item xs={12} sm={6} md={4} lg={3} key={index}>
-            <Card
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                height: "100%",
-                justifyContent: "space-between",
-              }}
-            >
-              <CardMedia
-                component="img"
-                height="140"
-                image={quiz.banner_url}
-                alt={quiz.title}
-              />
-              <CardContent>
-                <Typography variant="h5" component="div" gutterBottom>
-                  {quiz.title}
-                </Typography>
-                <Typography variant="body2" color="textSecondary">
-                  {quiz.description}
-                </Typography>
-                <Typography variant="caption" color="textSecondary">
-                  Category: {quiz.category}
-                </Typography>
-              </CardContent>
-              <Box sx={{ p: 2 }}>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  fullWidth
-                  onClick={() => handleClick(quiz)}
-                >
-                  Start Quiz
-                </Button>
-              </Box>
-            </Card>
-          </Grid>
+          <div key={index} className="max-w-sm rounded overflow-hidden shadow-lg">
+            <img className="w-full" src={quiz.banner_url} alt={quiz.title} />
+            <div className="px-6 py-4">
+              <h2 className="font-bold text-xl mb-2">{quiz.title}</h2>
+              <p className="text-gray-700 text-base mb-2">{quiz.description}</p>
+              <p className="text-gray-500 text-sm">Category: {quiz.category}</p>
+            </div>
+            <div className="px-6 py-4">
+              <button
+                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-full"
+                onClick={() => handleClick(quiz)}
+              >
+                Start Quiz
+              </button>
+            </div>
+          </div>
         ))}
-      </Grid>
-    </Box>
+      </div>
+    </div>
   );
 };
 

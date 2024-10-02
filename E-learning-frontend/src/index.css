@@ -2,9 +2,15 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&family=Poppins&display=swap');
 
+/* Import Flowbite first */
+@import 'flowbite';
+
+/* Tailwind CSS directives */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-body{
-  font-family:"Poppins","sans-serif";
+
+/* Additional custom styles */
+body {
+    font-family: "Poppins", "sans-serif";
 }

@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'; // Import BrowserRouter
+import {  Route, Routes } from 'react-router-dom'; // Import BrowserRouter
 import React from 'react';
 import Login from './components/Auth/Login';
 import Signup from './components/Auth/Signup';
@@ -9,7 +9,7 @@ import QuizzPlay from './components/Quizz/QuizzPlay'
 
 function ComponentsRouter() {
   return (
-    
+   
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
@@ -17,6 +17,7 @@ function ComponentsRouter() {
         <Route path='/quizzes' element={<QuizzScreen/>}/>
         <Route path='/quizzPlay' element={<QuizzPlay/>}/>
       </Routes>
+
   
   );
 }

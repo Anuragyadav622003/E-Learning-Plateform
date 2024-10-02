@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-
+import BannerSvg from '../../assets/Banner.svg';
 function Banner() {
   const navigate = useNavigate();
 
@@ -29,7 +29,7 @@ function Banner() {
           </svg>
           <input
             type="text"
-            className="flex-grow h-10 font-semibold text-lg text-gray-300 placeholder-slate-400 focus:outline-none focus:ring-0 bg-transparent"
+            className="flex-grow h-10 font-semibold text-lg text-gray-300  placeholder-slate-400 focus:outline-none focus:ring-0 bg-transparent"
             placeholder="Enter your email"
           />
         </label>
@@ -45,7 +45,7 @@ function Banner() {
       {/* Right Image Section */}
       <div className="w-full md:w-1/2 flex justify-center items-start mt-6 md:mt-0 sm:pb-16 md:ml-12">
         <img
-          src='/Banner.svg' // Ensure the path is correct
+          src={BannerSvg} // Ensure the path is correct
           className="h-auto max-h-full w-full md:min-h-[500px] object-contain rounded-lg shadow-lg"
           alt="Learning Banner"
         />
