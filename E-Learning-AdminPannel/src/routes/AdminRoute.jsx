@@ -8,7 +8,7 @@ import Helps_Support from '../helps_support/Helps_Support';
 import Assignments from '../pages/assignments/Assignments';
 import Quizzes from '../pages/quizzes/Quizzes';
 import Reports from '../reports/Reports';
-import Settings from '../Settings/Settings';
+import Settings from '../settings/Settings';
 
 
 function AdminRoute() {
