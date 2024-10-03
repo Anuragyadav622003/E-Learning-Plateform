@@ -18,7 +18,7 @@ function AdminLayout() {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
 
   const pages = [
-    { title: 'Dashboard', icon: <MdDashboardCustomize />, route: '/admin/dashboard' },
+    { title: 'Dashboard', icon: <MdDashboardCustomize />, route: '/admin/' },
     { title: 'Courses', icon: <MdAssignment />, route: '/admin/courses/create' },
     { title: 'Users', icon: <MdPeople />, route: '/admin/users' },
     { title: 'Assignments', icon: <MdAssignment />, route: '/admin/assignments' },
