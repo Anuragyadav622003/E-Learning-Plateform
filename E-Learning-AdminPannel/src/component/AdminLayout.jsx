@@ -1,9 +1,5 @@
-
-
-
-
 import React, { useState } from 'react';
-import { Link, Outlet } from 'react-router-dom';
+import { NavLink, Outlet } from 'react-router-dom';
 import {
   MdDashboardCustomize,
   MdAssignment,
@@ -57,15 +53,15 @@ function AdminLayout() {
           <button className="hidden md:flex relative hover:bg-gray-700 p-2 rounded transition duration-200">
             <MdNotifications size={24} />
           </button>
-          <Link to="/admin/profile" className="relative hover:bg-gray-700 p-2 rounded transition duration-200">
+          <NavLink to="/admin/profile" className="relative hover:bg-gray-700 p-2 rounded transition duration-200">
             <MdAccountCircle size={24} />
-          </Link>
-          <Link to="/admin/settings" className="hidden md:flex relative hover:bg-gray-700 p-2 rounded transition duration-200">
+          </NavLink>
+          <NavLink to="/admin/settings" className="hidden md:flex relative hover:bg-gray-700 p-2 rounded transition duration-200">
             <MdSettings size={24} />
-          </Link>
-          <Link to="/logout" className="hidden md:flex relative hover:bg-gray-700 p-2 rounded transition duration-200">
+          </NavLink>
+          <NavLink to="/logout" className="hidden md:flex relative hover:bg-gray-700 p-2 rounded transition duration-200">
             <MdLogout size={24} />
-          </Link>
+          </NavLink>
         </div>
       </header>
 
@@ -78,36 +74,40 @@ function AdminLayout() {
             isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
           } md:translate-x-0`}
         >
-          
-          
           <div className="p-4">
-          <h1 className="text-xl ml-2 py-4 md:hidden">Admin Dashboard</h1>
-        
-                <div className="md:hidden flex items-center py-2  rounded transition duration-200">
-                <div className="relative">
-            <input
-              type="text"
-              placeholder="Search..."
-              className="px-2 py-1 rounded bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-            />
-          </div>
-                </div>
-             
+            <h1 className="text-xl ml-2 py-4 md:hidden">Admin Dashboard</h1>
+
+            <div className="md:hidden flex items-center py-2 rounded transition duration-200">
+              <div className="relative">
+                <input
+                  type="text"
+                  placeholder="Search..."
+                  className="px-2 py-1 rounded bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                />
+              </div>
+            </div>
+
             {pages.map((item, index) => (
-              <Link to={item.route} key={index}>
-                <div className="flex items-center p-2 hover:bg-gray-700 rounded transition duration-200">
-                  <div className="mr-2">{item.icon}</div>
-                  <span>{item.title}</span>
-                </div>
-              </Link>
+              <NavLink
+                to={item.route}
+                key={index}
+                className={({ isActive }) =>
+                  isActive
+                    ? 'flex items-center p-2 bg-indigo-500 text-white rounded transition duration-200'
+                    : 'flex items-center p-2 hover:bg-gray-700 rounded transition duration-200'
+                }
+              >
+                <div className="mr-2">{item.icon}</div>
+                <span>{item.title}</span>
+              </NavLink>
             ))}
-            <Link to='/logout' >
-                <div className="flex items-center p-2 hover:bg-gray-700 rounded transition duration-200">
-                  <div className="mr-2"><MdLogout  /></div>
-                  <span>logout
-                  </span>
-                </div>
-              </Link>
+
+            <NavLink to='/logout'>
+              <div className="flex items-center p-2 hover:bg-gray-700 rounded transition duration-200">
+                <div className="mr-2"><MdLogout /></div>
+                <span>Logout</span>
+              </div>
+            </NavLink>
           </div>
         </nav>
 

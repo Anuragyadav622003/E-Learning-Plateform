@@ -9,56 +9,55 @@ import Assignments from '../pages/assignments/Assignments';
 import Quizzes from '../pages/quizzes/Quizzes';
 import Reports from '../reports/Reports';
 import Settings from '../settings/Settings';
-
+import Home from '../Home/Home';
 
 function AdminRoute() {
     const router = createBrowserRouter([
-          {
-            path:'/',
-            element:<AdminLayout/>,
-     
-            children:[
+        {
+            path: '/',
+            element: <Home />,  // Home page will lead to admin
+        },
+        {
+            path: '/admin',
+            element: <AdminLayout />,  // Admin layout will wrap dashboard and other pages
+            children: [
                 {
-                    index:true,
-                    path:'/admin/dashboard',
-                    element:<Dashboard/>
-
+                    index: true,  // This makes the dashboard load by default
+                    element: <Dashboard />
                 },
                 {
-                    
-                    path:'/admin/courses/create',
-                    element:<CourseCreate/>
+                    path: 'courses/create',
+                    element: <CourseCreate />
                 },
                 {
-                    path:'/admin/users',
-                    element:<User/>
+                    path: 'users',
+                    element: <User />
                 },
                 {
-                    path:'/admin/assignments',
-                    element:<Assignments/>
+                    path: 'assignments',
+                    element: <Assignments />
                 },
                 {
-                    path:'/admin/quizzes',
-                    element:<Quizzes/>
+                    path: 'quizzes',
+                    element: <Quizzes />
                 },
                 {
-                    path:'/admin/reports',
-                    element:<Reports/>
+                    path: 'reports',
+                    element: <Reports />
                 },
                 {
-                    path:'/admin/helps_supports',
-                    element:<Helps_Support/>
+                    path: 'help-support',
+                    element: <Helps_Support />
                 },
                 {
-                    path:'/admin/settings',
-                    element:<Settings/>
+                    path: 'settings',
+                    element: <Settings />
                 }
             ]
-
-
-          }
+        }
     ]);
-    return  <RouterProvider router = {router}/>
+
+    return <RouterProvider router={router} />;
 }
 
 export default AdminRoute;
