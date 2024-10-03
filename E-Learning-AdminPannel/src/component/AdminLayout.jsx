@@ -25,13 +25,13 @@ function AdminLayout() {
     { title: 'Quizzes', icon: <MdQuiz />, route: '/admin/quizzes' },
     { title: 'Reports', icon: <MdReport />, route: '/admin/reports' },
     { title: 'Settings', icon: <MdSettings />, route: '/admin/settings' },
-    { title: 'Help & Support', icon: <MdHelp />, route: '/admin/helps_supports' },
+    { title: 'Help & Support', icon: <MdHelp />, route: '/admin/help_support' },
   ];
 
   return (
     <div className="flex flex-col h-screen">
       {/* Top Navigation */}
-      <header className="flex justify-between items-center p-4 bg-gray-800 text-white shadow-md">
+      <header className="flex z-10 justify-between items-center p-4 bg-gray-900 text-white shadow-md">
         <div className="flex items-center">
           <button
             className="md:hidden p-2 hover:bg-gray-700 rounded transition duration-200"
@@ -39,29 +39,27 @@ function AdminLayout() {
           >
             <MdMenu size={24} />
           </button>
-          <h1 className={`text-xl ml-2 ${isSidebarOpen ? 'ml-2' : 'ml-0'}`}>
-            Admin Dashboard
-          </h1>
+          <h1 className="text-2xl ml-2 font-semibold">Admin Dashboard</h1>
         </div>
         {/* Top Nav Icons */}
-        <div className="flex items-center space-x-4">
-          <div className="relative">
+        <div className="flex md:items-center space-x-4">
+          <div className="hidden md:flex relative">
             <input
               type="text"
               placeholder="Search..."
               className="px-2 py-1 rounded bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500"
             />
           </div>
-          <button className="relative hover:bg-gray-700 p-2 rounded transition duration-200">
+          <button className="hidden md:flex relative hover:bg-gray-700 p-2 rounded transition duration-200">
             <MdNotifications size={24} />
           </button>
           <Link to="/admin/profile" className="relative hover:bg-gray-700 p-2 rounded transition duration-200">
             <MdAccountCircle size={24} />
           </Link>
-          <Link to="/admin/settings" className="relative hover:bg-gray-700 p-2 rounded transition duration-200">
+          <Link to="/admin/settings" className="hidden md:flex relative hover:bg-gray-700 p-2 rounded transition duration-200">
             <MdSettings size={24} />
           </Link>
-          <Link to="/logout" className="relative hover:bg-gray-700 p-2 rounded transition duration-200">
+          <Link to="/logout" className="hidden md:flex relative hover:bg-gray-700 p-2 rounded transition duration-200">
             <MdLogout size={24} />
           </Link>
         </div>
@@ -76,14 +74,30 @@ function AdminLayout() {
           } md:translate-x-0`}
         >
           <div className="p-4">
+            <h1 className="text-2xl ml-2 py-4 md:hidden font-semibold">Admin Dashboard</h1>
+            <div className="md:hidden flex items-center py-2 rounded transition duration-200">
+              <div className="relative">
+                <input
+                  type="text"
+                  placeholder="Search..."
+                  className="px-2 py-1 rounded bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                />
+              </div>
+            </div>
             {pages.map((item, index) => (
               <Link to={item.route} key={index}>
-                <div className="flex items-center p-2 hover:bg-gray-700 rounded transition duration-200">
+                <div className="flex items-center p-2 hover:bg-gray-700 rounded transition duration-200 text-lg">
                   <div className="mr-2">{item.icon}</div>
                   <span>{item.title}</span>
                 </div>
               </Link>
             ))}
+            <Link to="/logout">
+              <div className="flex items-center p-2 hover:bg-gray-700 rounded transition duration-200 text-lg">
+                <div className="mr-2"><MdLogout /></div>
+                <span>Logout</span>
+              </div>
+            </Link>
           </div>
         </nav>
 
@@ -93,8 +107,6 @@ function AdminLayout() {
             isSidebarOpen ? 'ml-64' : 'ml-0'
           }`}
         >
-          <h2 className="text-2xl font-bold">Welcome to the Dashboard</h2>
-          {/* More content */}
           <Outlet />
         </main>
       </div>
