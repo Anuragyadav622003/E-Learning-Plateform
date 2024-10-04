@@ -23,6 +23,7 @@ function AdminRoute() {
             children: [
                 {
                     index: true,  // This makes the dashboard load by default
+                    path:'dashboard',
                     element: <Dashboard />
                 },
                 {
@@ -46,7 +47,7 @@ function AdminRoute() {
                     element: <Reports />
                 },
                 {
-                    path: 'help-support',
+                    path: 'help_support',
                     element: <Helps_Support />
                 },
                 {

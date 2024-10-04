@@ -18,7 +18,7 @@ function AdminLayout() {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
 
   const pages = [
-    { title: 'Dashboard', icon: <MdDashboardCustomize />, route: '/admin' },
+    { title: 'Dashboard', icon: <MdDashboardCustomize />, route: '/admin/dashboard' },
     { title: 'Courses', icon: <MdAssignment />, route: '/admin/courses/create' },
     { title: 'Users', icon: <MdPeople />, route: '/admin/users' },
     { title: 'Assignments', icon: <MdAssignment />, route: '/admin/assignments' },
@@ -28,10 +28,16 @@ function AdminLayout() {
     { title: 'Help & Support', icon: <MdHelp />, route: '/admin/help_support' },
   ];
 
+  const handleLinkClick = () => {
+    if (window.innerWidth <= 768) {
+      setSidebarOpen(false);
+    }
+  };
+
   return (
     <div className="flex flex-col h-screen">
       {/* Top Navigation */}
-      <header className="flex z-10 justify-between items-center p-4 bg-gray-900 text-white shadow-md">
+      <header className="w-full flex z-10 justify-between items-center p-4 bg-gray-900 text-white shadow-md fixed top-0 left-0 right-0">
         <div className="flex items-center">
           <button
             className="md:hidden p-2 hover:bg-gray-700 rounded transition duration-200"
@@ -43,7 +49,7 @@ function AdminLayout() {
         </div>
         {/* Top Nav Icons */}
         <div className="flex md:items-center space-x-4">
-          <div className=" hidden md:flex relative ">
+          <div className="hidden md:flex relative">
             <input
               type="text"
               placeholder="Search..."
@@ -66,8 +72,7 @@ function AdminLayout() {
       </header>
 
       {/* Main Content Area */}
-      <div className="flex flex-1">
-
+      <div className="flex flex-1 pt-16"> {/* pt-16 to account for fixed header height */}
         {/* Sidebar */}
         <nav
           className={`fixed inset-y-0 left-0 z-50 w-64 transition-transform transform bg-gray-900 text-white md:relative md:translate-x-0 ${
@@ -91,6 +96,7 @@ function AdminLayout() {
               <NavLink
                 to={item.route}
                 key={index}
+                onClick={handleLinkClick}
                 className={({ isActive }) =>
                   isActive
                     ? 'flex items-center p-2 bg-indigo-500 text-white rounded transition duration-200'
@@ -102,7 +108,7 @@ function AdminLayout() {
               </NavLink>
             ))}
 
-            <NavLink to='/logout'>
+            <NavLink to='/logout' onClick={handleLinkClick}>
               <div className="flex items-center p-2 hover:bg-gray-700 rounded transition duration-200">
                 <div className="mr-2"><MdLogout /></div>
                 <span>Logout</span>
@@ -112,12 +118,7 @@ function AdminLayout() {
         </nav>
 
         {/* Main Content */}
-        <main
-          className={`flex-1 p-6 bg-gray-100 transition-all duration-300 ${
-            isSidebarOpen ? 'ml-64' : 'ml-0'
-          }`}
-        >
-          {/* More content */}
+        <main className="flex-1 p-6 bg-gray-100">
           <Outlet />
         </main>
       </div>
