@@ -45,7 +45,7 @@ function AdminLayout() {
           >
             <MdMenu size={24} />
           </button>
-          <h1 className="text-xl ml-2">Admin Dashboard</h1>
+          <h1 className="text-xl ml-2"> Admin Dashboard</h1>
         </div>
         {/* Top Nav Icons */}
         <div className="flex md:items-center space-x-4">
@@ -65,7 +65,7 @@ function AdminLayout() {
           <NavLink to="/admin/settings" className="hidden md:flex relative hover:bg-gray-700 p-2 rounded transition duration-200">
             <MdSettings size={24} />
           </NavLink>
-          <NavLink to="/logout" className="hidden md:flex relative hover:bg-gray-700 p-2 rounded transition duration-200">
+          <NavLink to="/logout-user" className="hidden md:flex relative hover:bg-gray-700 p-2 rounded transition duration-200">
             <MdLogout size={24} />
           </NavLink>
         </div>
