@@ -36,7 +36,7 @@ function Banner() {
         {/* Get Started Button */}
         <button
           className="border text-xl border-transparent bg-pink-400 hover:bg-pink-500 text-black font-bold py-3 px-5 rounded transition duration-300"
-          onClick={() => navigate('/admin')}
+          onClick={() => navigate('/admin/dashboard')}
         >
           Get Started
         </button>
