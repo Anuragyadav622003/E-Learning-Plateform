@@ -75,7 +75,7 @@ function AdminLayout() {
       <div className="flex flex-1 pt-16"> {/* pt-16 to account for fixed header height */}
         {/* Sidebar */}
         <nav
-          className={`fixed inset-y-0 left-0 z-50 w-64 transition-transform transform bg-gray-900 text-white md:relative md:translate-x-0 ${
+          className={`fixed inset-y-0 left-0 z-50 w-48 transition-transform transform bg-gray-900 text-white md:relative md:translate-x-0 ${
             isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
           } md:translate-x-0`}
         >
