@@ -1,6 +1,17 @@
 import React from 'react';
 import { Bar } from 'react-chartjs-2';
-import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, LineElement, PointElement, Filler } from 'chart.js';
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+  LineElement,
+  PointElement,
+  Filler,
+} from 'chart.js';
 
 // Register necessary components
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, LineElement, PointElement, Filler);
@@ -57,9 +68,9 @@ const RevenueProfitChart = () => {
   };
 
   return (
-    <div className="bg-white shadow-md rounded-lg p-6 w-full h-64 md:h-96 lg:h-[30rem]"> {/* Full width, responsive height */}
+    <div className="bg-white shadow-md rounded-lg p-4 w-full h-64 md:h-96 lg:h-[30rem] flex flex-col"> {/* Use flex column for layout */}
       <h2 className="text-center text-xl font-semibold text-gray-800 mb-4">Revenue and Profit Overview</h2>
-      <div className="w-full h-full"> {/* Ensure chart takes full height and width */}
+      <div className="flex-1 w-full h-full"> {/* Ensure chart takes full height and width */}
         <Bar data={data} options={options} />
       </div>
     </div>
