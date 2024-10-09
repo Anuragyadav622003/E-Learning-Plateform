@@ -1,15 +1,13 @@
 import React from 'react';
+import DashboardCharts from '../../assets/Carts/DashboardCharts';
 
 const Dashboard = () => {
   return (
-    <div>
+    <div className="p-6"> {/* Added padding for overall spacing */}
       <h2 className="text-2xl font-semibold mb-4">Dashboard Overview</h2>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-   
-
-
+      <div className="grid grid-cols-1  md:grid-cols-3 gap-6 mb-8">
         <div className="p-6 bg-white shadow-md rounded-lg">
           <h3 className="text-lg font-semibold mb-2">Total Courses</h3>
           <p className="text-4xl font-bold">12</p>
@@ -24,6 +22,11 @@ const Dashboard = () => {
           <h3 className="text-lg font-semibold mb-2">Total Students</h3>
           <p className="text-4xl font-bold">150</p>
         </div>
+      </div>
+
+      {/* Graph and Chart */}
+      <div className="grid grid-cols-1  md:grid-cols-3 gap-6 mb-8">
+        <DashboardCharts />
       </div>
 
       {/* Course Management Section */}
