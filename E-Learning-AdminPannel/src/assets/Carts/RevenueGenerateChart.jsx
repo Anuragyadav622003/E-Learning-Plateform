@@ -27,6 +27,7 @@ const RevenueProfitChart = () => {
         borderColor: 'rgba(75, 192, 192, 1)',
         borderWidth: 1,
         type: 'bar',
+        barThickness: 15, // Set a specific thickness for bars
       },
       {
         label: 'Total Profit',
@@ -45,8 +46,8 @@ const RevenueProfitChart = () => {
     maintainAspectRatio: false,
     scales: {
       x: {
-        barPercentage: 0.5, // Adjust bar width (0.0 to 1.0)
-        categoryPercentage: 0.5, // Adjust space per category
+        barPercentage: 0.5, // Adjust bar width percentage
+        categoryPercentage: 1.0, // Use full category space
       },
       y: {
         beginAtZero: true,
