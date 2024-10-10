@@ -3,7 +3,8 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import connectDB from './db.js';
 import userRoutes from './src/routers/User.js';
-import quizzRoutes from './src/routers/Quizzes.js'
+import quizzRoutes from './src/routers/Quizzes.js';
+import dashboardRoutes from './src/routers/AdminDashboard.js'
 
 
 
@@ -27,8 +28,13 @@ app.get('/',(req,res)=>{
 });
 
 
-app.use('/api/user',userRoutes)
-app.use('/api',quizzRoutes)
+app.use('/api/user',userRoutes);
+app.use('/api',quizzRoutes);
+
+// Admin
+
+// Admin Dashboard routes
+app.use('/admin',dashboardRoutes);
 
 
 // Start server
