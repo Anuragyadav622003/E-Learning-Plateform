@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { Bar } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
@@ -82,4 +82,4 @@ const RevenueProfitChart = () => {
   );
 };
 
-export default RevenueProfitChart;
+export default memo(RevenueProfitChart);

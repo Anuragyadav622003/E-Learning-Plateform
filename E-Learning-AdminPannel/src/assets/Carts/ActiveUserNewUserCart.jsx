@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,memo } from 'react';
 import { Line } from 'react-chartjs-2';
 
 const ActiveUserNewUserCart = () => {
@@ -118,4 +118,4 @@ const ActiveUserNewUserCart = () => {
   );
 };
 
-export default ActiveUserNewUserCart;
+export default  memo(ActiveUserNewUserCart);
