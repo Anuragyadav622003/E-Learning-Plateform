@@ -52,7 +52,7 @@ const Dashboard = () => {
         // Fetch user stats data
         // const userStatsResult = await dashboard_User_Stats();
         // console.log("User Stats Data:", userStatsResult); // Log the result
-        
+
         // Handle user stats data if needed (you can update the state with it or use it directly)
       } catch (error) {
         dispatch({ type: "FETCH_DASHBOARD_FAILURE", payload: error.message }); // Dispatch failure action
@@ -81,7 +81,6 @@ const Dashboard = () => {
   }
 
   //card
-
   const Card = (title, value) => (
     <div className="p-6 bg-white shadow-md rounded-lg">
       <h3 className="text-lg font-semibold mb-2">{title}</h3>
@@ -90,15 +89,24 @@ const Dashboard = () => {
   );
 
   return (
-    <div className="p-6">
+    <div className="p-6 ">
       {" "}
       {/* Added padding for overall spacing */}
       <h2 className="text-2xl font-semibold mb-4">Dashboard Overview</h2>
       {/* Stats Cards */}
       <div className="grid grid-cols-1  md:grid-cols-3 gap-6 mb-8">
         {Card("Total Courses", 12)}
-        {Card("Total Quizzes", 12)}
-        {Card("Total Students", state.dashboardData.totalUsers)}
+        {Card("Total Quizzes", state.dashboardData.totalQuizzes || 0)}
+        {Card("Total Students", state.dashboardData.totalStudents || 0)}
+
+
+        {Card(  "Total Users", state.dashboardData.totalUsers || 0 )}
+  {Card("Total Admins",state.dashboardData.totalAdmins || 0 )}
+  {Card("Total Instructors",state.dashboardData.totalInstructors || 0 )}
+  
+  {Card("Quizzes Created",state.dashboardData.quizzesCreated || 0 )}
+
+
       </div>
       {/* Graph and Chart */}
       <div className="grid grid-cols-1  md:grid-cols-3 gap-6 mb-8">

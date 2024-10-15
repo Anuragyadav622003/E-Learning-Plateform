@@ -12,7 +12,9 @@ import {
   MdNotifications,
   MdAccountCircle,
   MdLogout,
+  MdDarkMode
 } from "react-icons/md";
+import DarkModeSwitch from "./Darkmode";
 
 function AdminLayout() {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
@@ -47,7 +49,7 @@ function AdminLayout() {
   };
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col min-h-screen ">
       {/* Top Navigation */}
       <header className="w-full flex z-10 justify-between items-center p-4 bg-gray-900 text-white shadow-lg fixed top-0 left-0 right-0">
         <div className="flex items-center">
@@ -68,6 +70,7 @@ function AdminLayout() {
               className="px-2 py-1 rounded bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500"
             />
           </div>
+        <DarkModeSwitch/>
           <button className="hidden md:flex relative hover:bg-gray-800 p-2 rounded-full transition duration-200">
             <MdNotifications size={24} />
           </button>
@@ -140,7 +143,7 @@ function AdminLayout() {
           </div>
         </nav>
         {/* Main Content */}
-        <main className="flex-1 p-6 bg-gray-100 overflow-y-auto max-h-[calc(100vh-64px)] scrollbar-hide">
+        <main className="flex-1 p-6 bg-gray-100 overflow-y-auto max-h-[calc(100vh-64px)] scrollbar-hide ">
           <Outlet />
         </main>
       </div>

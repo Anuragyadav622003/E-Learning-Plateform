@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { createQuizz } from "./QuizzApi";
 
 const Quizzes = () => {
   const [quiz, setQuiz] = useState({
@@ -56,7 +57,10 @@ const Quizzes = () => {
   // Handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
+    
     console.log(quiz);
+
+    createQuizz(quiz);
     // Perform API submission here with quiz object
   };
 
