@@ -18,10 +18,16 @@ export const registerUser = async (req, res) => {
   } = req.body;
 
   try {
-    // Check if the user already exists
-    const existingUser = await User.findOne({ email });
-    if (existingUser) {
-      return res.status(400).json({ message: "User already exists" });
+    // Check if the user already exists by email
+    const existingUserByEmail = await User.findOne({ email });
+    if (existingUserByEmail) {
+      return res.status(400).json({ message: "Email already registered" });
+    }
+
+    // Check if the mobile number already exists
+    const existingUserByMobile = await User.findOne({ mobileNumber });
+    if (existingUserByMobile) {
+      return res.status(400).json({ message: "Mobile number already registered" });
     }
 
     // Hash the password
