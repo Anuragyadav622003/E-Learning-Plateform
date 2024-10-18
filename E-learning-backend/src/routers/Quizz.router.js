@@ -1,5 +1,5 @@
 import express from 'express';
-import { getAllQuizzes } from '../controllers/QuizzesController.js';
+import { getAllQuizzes } from '../controllers/Quizz.controller.js';
 const router = express.Router();
 //router.post('/quiz', quizController.createQuiz);         // Create a new quiz
 router.get('/quizzes', getAllQuizzes);       // Get all quizzes

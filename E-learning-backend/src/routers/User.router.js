@@ -1,6 +1,6 @@
 // routes/userRoutes.js
 import express from 'express';
-import { loginUser, registerUser } from '../controllers/UserController.js';
+import { loginUser, registerUser } from '../controllers/User.controller.js';
 
 
 
