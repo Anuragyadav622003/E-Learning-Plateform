@@ -3,7 +3,8 @@ import axios from 'axios';
 
 export const createQuizz = async (postData) => {
   try {
-    const response = await axios.post(`${Base_url}/create/quizz`, postData);
+    console.log(postData,"postData");
+    const response = await axios.post(`${Base_url}/api/quizz/createQuizz`, postData);
     return response.data;
   } catch (error) {
     console.error("Error in createQuizz:", error);
