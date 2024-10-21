@@ -4,7 +4,7 @@ import Banner from './Banner';
 import Footer from './Footer';
 
 
-import Subscribe from './Subscribe';
+import Subscribe from '../Subscribe/Subscribe';
 import Services from '../Services/Services';
 import Hero from './Hero';
 

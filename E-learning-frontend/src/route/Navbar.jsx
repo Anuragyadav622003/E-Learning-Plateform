@@ -27,7 +27,7 @@ export default function Navbar() {
 
   return (
     <nav className="bg-gray-800 w-screen">
-      <div className="mx-auto px-2 sm:px-6 lg:px-8">
+      <div className=" px-2 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-12"> {/* Reduced height */}
           {/* Logo */}
           <div className="flex items-center">
