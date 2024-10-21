@@ -4,13 +4,13 @@ import Banner from './Banner';
 import Footer from './Footer';
 
 
-import Subscribe from '../Subscribe/Subscribe';
+import Subscribe from './Subscribe';
 import Services from '../Services/Services';
-import Hero from '../Hero/Hero';
+import Hero from './Hero';
 
 const Home = () => {
   return (
-    <div className="flex flex-col bg-gray-900 w-screen items-center justify-center min-h-screen -mt-4">
+    <div className="flex flex-col bg-gray-900 w-screen items-center justify-center min-h-screen ">
       <Banner /> {/* Full width and margin below the banner */}
       <div>
      <Services/>

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { getQuizzes } from "./QuizzApi"; // Adjust the path as necessary
 import { useNavigate } from "react-router-dom";
+import QuizzNav from "./QuizzNav";
 
 const QuizzScreen = () => {
   const [quizzes, setQuizzes] = useState([]);
@@ -45,7 +46,10 @@ const QuizzScreen = () => {
   };
 
   return (
+    <>
+    <QuizzNav/>
     <div className="p-6">
+      
       <h1 className="text-3xl font-bold text-center mb-6">All Quizzes</h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {quizzes.map((quiz, index) => (
@@ -68,6 +72,7 @@ const QuizzScreen = () => {
         ))}
       </div>
     </div>
+    </>
   );
 };
 
