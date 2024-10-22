@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import User from './User.js';
+import User from './User.model.js';
 // Quiz Schema (supports multiple quizzes)
 const quizSchema = new mongoose.Schema({
   title: String,        // Title of the quiz
