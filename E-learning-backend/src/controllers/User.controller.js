@@ -1,7 +1,8 @@
 // controllers/userController.js
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import User from "../modals/User.js"; // Adjust the import as necessary
+import User from "../modals/User.model.js"; // Adjust the import as necessary
+import { uploadOnCloud } from "../utils/cloudinary.util.js";
 
 const secretKey = process.env.SECRET_KEY || "ELearning"; // Use consistent naming for environment variables
 
@@ -13,11 +14,13 @@ export const registerUser = async (req, res) => {
     password,
     mobileNumber,
     gender,
-    role,
-    profileImage,
+    role
+    
   } = req.body;
+  const profileLocalPath = req.files?.profileimage?.[0]?.path;
 
   try {
+<<<<<<< HEAD:E-learning-backend/src/controllers/UserController.js
     // Check if the user already exists by email
     const existingUserByEmail = await User.findOne({ email });
     if (existingUserByEmail) {
@@ -28,10 +31,30 @@ export const registerUser = async (req, res) => {
     const existingUserByMobile = await User.findOne({ mobileNumber });
     if (existingUserByMobile) {
       return res.status(400).json({ message: "Mobile number already registered" });
+=======
+    // Check if the user already exists
+    const existingUser = await User.findOne({ $or: [{ username }, { email }] });
+    if (existingUser) {
+      return res.status(400).json({ message: "User already exists" });
+>>>>>>> 9b8698da94d2ec8049c54281f3971dc36516e691:E-learning-backend/src/controllers/User.controller.js
     }
 
     // Hash the password
     const hashedPassword = await bcrypt.hash(password, 10); // Use a salt round of 10 for better security
+ 
+    if(!profileLocalPath) {
+      return res.status(400).json("ProfilePath not find ");
+    }
+    if (!profileLocalPath) {
+      throw new ApiError(400, "Profile imgage file required");
+    }
+  
+    const profileImage = await uploadOnCloud(profileLocalPath);
+  
+  
+    if (!profileImage) {
+      throw new ApiError(400, "Image upload failed");
+    }
 
     // Create a new user
     const newUser = new User({
@@ -41,7 +64,7 @@ export const registerUser = async (req, res) => {
       mobileNumber,
       gender,
       role, // Include role in the user creation
-      profileImage, // Include profileImage in the user creation
+      profileImage : profileImage.secure_url, // Include profileImage in the user creation
     });
 
     await newUser.save();
