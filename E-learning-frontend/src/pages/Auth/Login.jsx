@@ -3,20 +3,28 @@ import { useAuth0 } from '@auth0/auth0-react';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import { Link, useNavigate } from 'react-router-dom';
 import { login } from './AuthApi';
+
 function Login() {
   const { loginWithRedirect, user, isAuthenticated } = useAuth0();
-  const navigate  = useNavigate();
-  // State to store email and password
+  const navigate = useNavigate();
+
+  // State to store email, password, error message, and loading status
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
   // Handle Google login
   const handleGoogleLogin = async () => {
+    setLoading(true);
     try {
       await loginWithRedirect({ connection: 'google-oauth2' });
     } catch (error) {
       console.error('Error during Google login:', error);
+      setError('Error logging in with Google. Please try again.');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -24,9 +32,7 @@ function Login() {
   useEffect(() => {
     if (isAuthenticated && user) {
       console.log('Google User data:', user);
-      // Optionally store user data locally
       localStorage.setItem('user', JSON.stringify(user));
-      // Send user data to the backend if needed
       try {
         login({ email: user.email, password: 'google-authenticated' });
       } catch (error) {
@@ -42,17 +48,25 @@ function Login() {
   // Handle form submission for manual login
   const handleSubmit = async (e) => {
     e.preventDefault();  // Prevent form default submission
+    setError('');  // Reset error state
+    setLoading(true);  // Set loading state
+
+    // Basic validation
+    if (!email.includes('@') || password.length < 6) {
+      setError('Please enter a valid email and a password with at least 6 characters.');
+      setLoading(false);
+      return;
+    }
+
     try {
-      // Call login function with email and password
-   const resp =   await login({ email, password });
-   alert(resp);
-  
+      const resp = await login({ email, password });
+      alert(resp);
     } catch (error) {
       console.error('Error during manual login:', error);
-    }finally{
-// setEmail('');
-// setPassword('');
-navigate('/');
+      setError('Login failed. Please check your credentials and try again.');
+    } finally {
+      setLoading(false);
+      navigate('/');  // Navigate to the homepage after successful login
     }
   };
 
@@ -72,6 +86,9 @@ navigate('/');
           onSubmit={handleSubmit} // Form submission handled here
         >
           <h1 className="text-center text-3xl font-bold mb-6 text-teal-950">Login</h1>
+
+          {/* Error Message */}
+          {error && <div className="mb-4 text-red-600 text-center">{error}</div>}
 
           {/* Email Field */}
           <div className="mb-4">
@@ -108,13 +125,21 @@ navigate('/');
             </div>
           </div>
 
+          {/* Forgot Password Link */}
+          <div className="mb-4 text-right">
+            <Link to="/forgot-password" className="text-sm text-teal-600 hover:underline">
+              Forgot Password?
+            </Link>
+          </div>
+
           {/* Login Button */}
           <div className="mb-6">
             <button
               type="submit"  // Ensure the form is submitted when button is clicked
-              className="w-full h-12 bg-teal-950 rounded-md text-white font-semibold hover:bg-teal-700 transition duration-200"
+              className={`w-full h-12 rounded-md text-white font-semibold transition duration-200 ${loading ? 'bg-teal-300 cursor-not-allowed' : 'bg-teal-950 hover:bg-teal-700'}`}
+              disabled={loading} // Disable button while loading
             >
-              Login
+              {loading ? 'Logging in...' : 'Login'}
             </button>
           </div>
 

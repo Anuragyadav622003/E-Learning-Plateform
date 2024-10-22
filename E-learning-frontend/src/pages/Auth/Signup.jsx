@@ -32,10 +32,20 @@ function reducer(state, action) {
   }
 }
 
+// Mock function to simulate checking if the email exists
+const checkIfEmailExists = async (email) => {
+  // Simulate API call
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve(email === 'test@example.com'); // Example email already exists
+    }, 500);
+  });
+};
+
 function Signup() {
   const [state, dispatch] = useReducer(reducer, initialState);
   const navigate = useNavigate();
-  
+
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -48,33 +58,78 @@ function Signup() {
     dispatch({ type: 'SET_LOADING', value: true });
     dispatch({ type: 'SET_ERROR', value: '' });
 
-    // Simulate an API call
-    setTimeout(() => {
-      if (state.email === 'test@example.com') {
-        dispatch({ type: 'SET_ERROR', value: 'Email already exists' });
-      } else {
-        // Pass the data to the register function
-        register({
-          username: state.username,
-          email: state.email,
-          password: state.password,
-          mobileNumber: state.mobileNumber,
-          gender: state.gender,
-          profileImage: state.profileImage,
-          role: state.role,
-        });
-        alert('Registration successful!');
-        dispatch({ type: 'RESET' }); // Reset form state after successful registration
-      }
+    // Validation checks
+    if (!state.username || !state.email || !state.mobileNumber || !state.gender || !state.password || !state.confirmPassword) {
+      dispatch({ type: 'SET_ERROR', value: 'All fields are required.' });
       dispatch({ type: 'SET_LOADING', value: false });
-    }, 2000);
+      return;
+    }
 
-    navigate('/login');
+    // Username length check
+    if (state.username.length < 3 || state.username.length > 20) {
+      dispatch({ type: 'SET_ERROR', value: 'Username must be between 3 and 20 characters long.' });
+      dispatch({ type: 'SET_LOADING', value: false });
+      return;
+    }
+
+    // Password strength check
+    const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/; // At least 8 chars, 1 uppercase, 1 lowercase, 1 number, 1 special char
+    if (!passwordPattern.test(state.password)) {
+      dispatch({ type: 'SET_ERROR', value: 'Password must be at least 8 characters long, include uppercase and lowercase letters, a number, and a special character.' });
+      dispatch({ type: 'SET_LOADING', value: false });
+      return;
+    }
+
+    // Check if passwords match
+    if (state.password !== state.confirmPassword) {
+      dispatch({ type: 'SET_ERROR', value: 'Passwords do not match.' });
+      dispatch({ type: 'SET_LOADING', value: false });
+      return;
+    }
+
+    // Simple email validation
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailPattern.test(state.email)) {
+      dispatch({ type: 'SET_ERROR', value: 'Invalid email format.' });
+      dispatch({ type: 'SET_LOADING', value: false });
+      return;
+    }
+
+    // Validate mobile number format (e.g., 10 digits)
+    const mobilePattern = /^[0-9]{10}$/;
+    if (!mobilePattern.test(state.mobileNumber)) {
+      dispatch({ type: 'SET_ERROR', value: 'Invalid mobile number. It should be 10 digits.' });
+      dispatch({ type: 'SET_LOADING', value: false });
+      return;
+    }
+
+    // Check if email already exists
+    const emailExists = await checkIfEmailExists(state.email);
+    if (emailExists) {
+      dispatch({ type: 'SET_ERROR', value: 'Email already exists.' });
+      dispatch({ type: 'SET_LOADING', value: false });
+      return;
+    }
+
+    // Register user if all validations pass
+    register({
+      username: state.username,
+      email: state.email,
+      password: state.password,
+      mobileNumber: state.mobileNumber,
+      gender: state.gender,
+      profileImage: state.profileImage,
+      role: state.role,
+    });
+    
+    alert('Registration successful!');
+   // dispatch({ type: 'RESET' }); // Reset form state after successful registration
+    navigate('/login'); // Redirect to login page
   };
 
   return (
-    <div className='flex flex-col items-center justify-center min-h-screen  py-4'>
-      <div className='w-full max-w-2xl p-6 bg-white rounded-lg shadow-md'> {/* Increased width */}
+    <div className='flex flex-col items-center justify-center min-h-screen py-4'>
+      <div className='w-full max-w-2xl p-6 bg-white rounded-lg shadow-md'>
         <h2 className='text-2xl font-bold text-center text-teal-950 mb-6'>
           Create an Account
         </h2>
@@ -103,7 +158,6 @@ function Signup() {
             )}
           </div>
 
-          {/* Responsive Grid Layout for Username and Mobile Number */}
           <div className='grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4'> 
             <div>
               <label className='block text-sm font-medium text-gray-700'>
@@ -148,7 +202,6 @@ function Signup() {
             />
           </div>
 
-          {/* Responsive Grid Layout for Gender and Role */}
           <div className='grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4'> 
             <div>
               <label className='block text-sm font-medium text-gray-700'>
@@ -178,7 +231,7 @@ function Signup() {
               >
                 <option value='student'>Student</option>
                 <option value='instructor'>Instructor</option>
-                <option value='admin'>Admin</option> {/* Third option */}
+                <option value='admin'>Admin</option>
               </select>
             </div>
           </div>
@@ -213,18 +266,19 @@ function Signup() {
 
           <button
             type='submit'
-            className='w-full p-2 mt-4 text-white bg-teal-600 rounded-md hover:bg-teal-700 focus:outline-none'
             disabled={state.loading}
+            className={`w-full p-2 mt-4 text-white rounded-md ${state.loading ? 'bg-gray-400' : 'bg-teal-600 hover:bg-teal-700'} focus:outline-none`}
           >
-            {state.loading ? 'Creating...' : 'Create Account'}
+            {state.loading ? 'Creating Account...' : 'Create Account'}
           </button>
-
-          <div className='mt-4 text-center'>
-            <Link to='/login' className='text-teal-600 hover:underline'>
-              Already have an account? Log in
-            </Link>
-          </div>
         </form>
+
+        <p className='mt-4 text-center'>
+          Already have an account?{' '}
+          <Link to='/login' className='text-teal-600 hover:underline'>
+            Login here
+          </Link>
+        </p>
       </div>
     </div>
   );
