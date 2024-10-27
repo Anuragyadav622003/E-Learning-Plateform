@@ -6,6 +6,21 @@ import { uploadOnCloud } from "../utils/cloudinary.util.js";
 
 const secretKey = process.env.SECRET_KEY || "ELearning"; // Use consistent naming for environment variables
 
+// Function to generate access and refresh tokens
+const generateAccessRefreshTokens = async (userId) => {
+  try {
+    const user = await User.findById(userId); 
+    const accessToken = user.generateAccessToken(); 
+    const refreshToken = user.refreshAccessToken(); 
+    user.refreshToken = refreshToken;
+    await user.save({ validateBeforeSave: false });
+
+    return { accessToken, refreshToken };
+  } catch (error) {
+    throw new ApiError(500, "Something went wrong while generating refresh and access tokens");
+  }
+};
+
 // Register a new user
 export const registerUser = async (req, res) => {
   const {
@@ -20,7 +35,6 @@ export const registerUser = async (req, res) => {
   const profileLocalPath = req.files?.profileimage?.[0]?.path;
 
   try {
-<<<<<<< HEAD:E-learning-backend/src/controllers/UserController.js
     // Check if the user already exists by email
     const existingUserByEmail = await User.findOne({ email });
     if (existingUserByEmail) {
@@ -31,12 +45,11 @@ export const registerUser = async (req, res) => {
     const existingUserByMobile = await User.findOne({ mobileNumber });
     if (existingUserByMobile) {
       return res.status(400).json({ message: "Mobile number already registered" });
-=======
     // Check if the user already exists
     const existingUser = await User.findOne({ $or: [{ username }, { email }] });
     if (existingUser) {
       return res.status(400).json({ message: "User already exists" });
->>>>>>> 9b8698da94d2ec8049c54281f3971dc36516e691:E-learning-backend/src/controllers/User.controller.js
+
     }
 
     // Hash the password
@@ -77,43 +90,86 @@ export const registerUser = async (req, res) => {
 
 // Login a user
 export const loginUser = async (req, res) => {
-  const { email, password } = req.body;
-  console.log(req.body);
+  const { username , email, password } = req.body;
+
+  if( !username &&  !email){
+    return  res.status(404).json("Invalid username or email you enter");
+  }
+ 
 
   try {
-    // Find the user by email
-    const user = await User.findOne({ email }).select("+password"); // Include the password in the query
-
+  
+    const user = await User.findOne({ $or:[{username},{ email }]}); 
     if (!user) {
       return res.status(401).json({ message: "Invalid email or password" });
     }
 
-    // Compare the provided password with the stored hashed password
-    const isPasswordValid = await bcrypt.compare(password, user.password);
+ 
+    const isPasswordValid =  await bcrypt.compare(password , user.password);
     if (!isPasswordValid) {
       return res.status(401).json({ message: "Invalid email or password" });
     }
 
-    // Generate a token
-    const token = jwt.sign({ id: user._id, role: user.role }, secretKey, {
-      expiresIn: "1h", // Token expiration time
-    });
+    const { accessToken, refreshToken } = await generateAccessRefreshTokens( user._id);
 
-    return res.status(200).json({
-      message: "Login successful",
-      token, // Send the token back to the client
-      user: {
-        id: user._id,
-        username: user.username,
-        email: user.email,
-        mobileNumber: user.mobileNumber,
-        gender: user.gender,
-        role: user.role,
-        profileImage: user.profileImage, // Send the profile image back as well
-      },
-    });
+    const loggedInUser = await User.findById(user._id).select("-password -refreshToken");
+  
+    const options = {
+      httpOnly: true,
+      secure: true
+    };
+  
+    return res
+      .status(200)
+      .cookie("accessToken", accessToken, options)
+      .cookie("refreshToken", refreshToken, options)
+      .json(
+        new ApiResponse(
+          200,
+          {
+            user: loggedInUser,
+            accessToken,
+            refreshToken
+          },
+          "User logged in successfully"
+        )
+      );
+  
   } catch (error) {
     console.error(error); // Log the error for debugging
     return res.status(500).json({ message: "Server error", error });
   }
+};
+
+// Logout  function  here
+const logoutUser   =   async  ( req , res ) =>{
+  await User.findByIdAndUpdate(req.user._id , {
+    $unset : {
+      refreshToken : 1 ,
+
+    }
+  },
+{
+  new: true
+}) ;
+
+const options = {
+  httpOnly : true  ,
+  secure: true 
+
+}
+
+return res
+.status(200)
+.clearCookie("accessToken",  options)
+.clearCookie("refreshToken",  options)
+.json(
+
+  200,
+  {
+    
+  },
+  "User logged Out  successfully"
+
+);
 };
