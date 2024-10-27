@@ -1,1 +1,2 @@
-export default  Base_Url ="e-learning-with-video-streaming-and-assessment.vercel.app";
+const Base_Url ="https://e-learning-plateform-backend.vercel.app";
+export default Base_Url;

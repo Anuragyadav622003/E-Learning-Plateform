@@ -3,7 +3,7 @@ import axios from 'axios';
 export const dashboardData = async()=>{
    
     try {
-      const response =   await axios.get(`${Base_url}/dashboard`);
+      const response =   await axios.get(`${Base_url}/admin/dashboard`);
       return response.data;
     } catch (error) {
         console.log("error in dashboardData",error);
@@ -13,7 +13,7 @@ export const dashboardData = async()=>{
 };
 export const dashboard_User_Stats = async()=>{
     try {
-      const response =   await axios.get(`${Base_url}/user-stats`);
+      const response =   await axios.get(`${Base_url}/admin/user-stats`);
       return response.data;
     } catch (error) {
         console.log("error in dashboard user-stats",error);

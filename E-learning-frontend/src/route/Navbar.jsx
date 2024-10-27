@@ -27,8 +27,8 @@ export default function Navbar() {
 
   return (
     <nav className="bg-gray-800 w-screen">
-      <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8 ">
-        <div className="flex items-center justify-between h-16">
+      <div className=" px-2 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between h-12"> {/* Reduced height */}
           {/* Logo */}
           <div className="flex items-center">
             <img
@@ -36,7 +36,7 @@ export default function Navbar() {
               alt="Logo"
               className="h-8 w-auto"
             />
-            <span className='text-white font-extrabold px-2'>SkillSphere</span>
+            <span className="text-white font-extrabold px-2">SkillSphere</span>
           </div>
 
           {/* Desktop Navigation */}
@@ -48,7 +48,7 @@ export default function Navbar() {
                   to={item.href}
                   className={({ isActive }) =>
                     classNames(
-                      'text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium',
+                      'text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-1.5 text-sm font-medium', // Reduced padding
                       isActive ? 'bg-gray-900 text-white' : ''
                     )
                   }
@@ -65,7 +65,7 @@ export default function Navbar() {
                   <img
                     src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
                     alt="User Avatar"
-                    className="hidden md:block h-10 w-10 rounded-full"
+                    className="hidden md:block h-8 w-8 rounded-full" // Reduced avatar size
                   />
                 </button>
                 {dropdownOpen && (
