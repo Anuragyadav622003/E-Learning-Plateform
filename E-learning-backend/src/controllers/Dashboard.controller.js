@@ -1,6 +1,6 @@
 // controllers/dashboardController.js
-import { Quizz } from "../modals/Quizz.model.js";
-import User from "../modals/User.model.js";
+import { Quizz } from "../modals/QuizzModel.js";
+import User from "../modals/UserModel.js";
 
 // Function to get dashboard data
 const getDashboardData = async (req, res) => {

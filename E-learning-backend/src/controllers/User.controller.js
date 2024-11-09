@@ -1,7 +1,7 @@
 // controllers/userController.js
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import User from "../modals/User.model.js"; // Adjust the import as necessary
+import User from "../modals/UserModel.js"; // Adjust the import as necessary
 import { uploadOnCloud } from "../utils/cloudinary.util.js";
 
 const secretKey = process.env.SECRET_KEY || "ELearning"; // Use consistent naming for environment variables

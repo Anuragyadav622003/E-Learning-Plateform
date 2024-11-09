@@ -1,4 +1,4 @@
-import { Quizz } from "../modals/Quizz.model.js";
+import { Quizz } from "../modals/QuizzModel.js";
 
 export const getAllQuizzes = async (req, res) => {
   try {
