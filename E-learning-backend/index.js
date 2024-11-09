@@ -29,13 +29,13 @@ app.get('/',(req,res)=>{
 });
 
 
-app.use('/api/user',userRoutes);
-app.use('/api/quizz',quizzRoutes);
+// app.use('/api/user',userRoutes);
+// app.use('/api/quizz',quizzRoutes);
 
 // Admin
 
 // Admin Dashboard routes
-app.use('/admin',dashboardRoutes);
+// app.use('/admin',dashboardRoutes);
 // app.use('/admin/create')
 
 
