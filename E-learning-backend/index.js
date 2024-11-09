@@ -36,7 +36,7 @@ app.use('/api/quizz',quizzRoutes);
 // // Admin
 
 // Admin Dashboard routes
-// app.use('/admin',dashboardRoutes);
+ app.use('/admin',dashboardRoutes);
 //  app.use('/admin/create');
 
 

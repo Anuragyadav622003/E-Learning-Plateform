@@ -1,16 +1,16 @@
-// db.js
+// db.js 
 import mongoose from 'mongoose';
  // Ensure you have dotenv installed and required
  import dotenv from 'dotenv';
  dotenv.config();
 const mongoURI = process.env.mongodb_url; // MongoDB connection string from .env file
-
+console.log(mongoURI)
 const connectDB = async () => {
   try {
     await mongoose.connect(mongoURI, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
-    });
+    });  
     console.log('MongoDB connected established');
   } catch (err) {
     console.error('MongoDB connection error:', err);
