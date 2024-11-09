@@ -24,19 +24,20 @@ app.use(express.json());
 app.use(express.static('public'));
 
 
+
 app.get('/',(req,res)=>{
   res.send('hello world')
 });
 
 
-app.use('/api/user',userRoutes);
-app.use('/api/quizz',quizzRoutes);
+// app.use('/api/user',userRoutes);
+// app.use('/api/quizz',quizzRoutes);
 
-// Admin
+// // Admin
 
-// Admin Dashboard routes
-app.use('/admin',dashboardRoutes);
-// app.use('/admin/create')
+// // Admin Dashboard routes
+// app.use('/admin',dashboardRoutes);
+// // app.use('/admin/create')
 
 
 // Start server
