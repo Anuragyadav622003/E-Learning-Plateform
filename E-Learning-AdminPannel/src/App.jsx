@@ -9,7 +9,7 @@ function App() {
     <div>
       <AdminRoute/>
       <FinalDashboard/>
- <ImageCarousel/>
+      <ImageCarousel/>
      
     </div>
   )
