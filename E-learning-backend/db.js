@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
  // Ensure you have dotenv installed and required
  import dotenv from 'dotenv';
  dotenv.config();
-const mongoURI = process.env.mongodb_url || "mongodb+srv://anuragyadav622003:anuragyadav622003@cluster0.i72it.mongodb.net/" // MongoDB connection string from .env file
+const mongoURI = process.env.Mongodb_Url // MongoDB connection string from .env file
 
 const connectDB = async () => {
   try {
