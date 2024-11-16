@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import VideoGallery from "../../componenet/YoutubeVideo";
 
 // Sample courses data
 const coursesData = [
@@ -63,6 +64,7 @@ const Courses = () => {
         {filteredCourses.length === 0 && (
           <p className="text-center text-gray-500 mt-6">No courses found.</p>
         )}
+        <VideoGallery/>
       </div>
     </div>
   );
