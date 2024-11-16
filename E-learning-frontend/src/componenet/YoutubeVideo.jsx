@@ -5,10 +5,10 @@ const VideoGallery = () => {
   const videoIds = [
     "FxAG_11PzCk", // Replace these with your YouTube video IDs
     "BNfAf4To73c",
-    "F44ug04SzQ",
+   
     "ZVG5u3_o93U",
     "FNpV3DQWUf8",
-    "DS-raAyMxl4",
+    "HtvwcJLqxE0"
   ];
 
   const handlePlayerReady = (event) => {
