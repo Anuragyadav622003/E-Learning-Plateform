@@ -75,19 +75,19 @@ const QuizzScreen = () => {
   });
 
   const handleClick = async(quiz) => {
-   
-    // try {
-    //   const response = await authorize();
-    //   if(response){
-    //     localStorage.setItem("quizzToPlay", JSON.stringify(quiz));
-    //     navigate("/quizzPlay");
-    //   }
-    //   else{
-    //    // navigate('/login');
-    //   }
-    // } catch (error) {
-    //  console.log(error,"Authorization faild");
-    // }
+    localStorage.setItem("quizzToPlay", JSON.stringify(quiz));
+    try {
+      const response = await authorize();
+      if(response){
+        localStorage.setItem("quizzToPlay", JSON.stringify(quiz));
+        navigate("/quizzPlay");
+      }
+      else{
+        navigate('/login');
+      }
+     } catch (error) {
+     console.log(error,"Authorization faild");
+     }
     navigate("/quizzPlay");
   };
 
