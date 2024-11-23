@@ -1,13 +1,14 @@
-import express from 'express';
+import express, { urlencoded } from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
+
 import cookieParser from 'cookie-parser';
 import connectDB from './db.js';
 import userRoutes from './src/routers/UserRouter.js';
 import quizzRoutes from './src/routers/QuizzRouter.js';
 import dashboardRoutes from './src/routers/AdminRouter.js';
 import  authorizRouter  from './src/routers/AuthorizRouter.js';
-
+//upload images
 
 
 
@@ -24,12 +25,14 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static('public'));
 app.use(cookieParser(process.env.COOKIE_SECRET || 'your-default-secret'));
+app.use(express.urlencoded());
 
 
 
 app.get('/',(req,res)=>{
   res.send('hello world')
 });
+
 
 //authorizarion for each action
 app.use('/api/authorize',authorizRouter); 
