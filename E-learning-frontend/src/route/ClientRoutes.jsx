@@ -9,6 +9,8 @@ import ForgotPassword from '../pages/Auth/ForgotPassword';
 import Courses from '../pages/Courses/Courses';
 import Profile from '../pages/Profile/Profile';
 import { Logout } from '@mui/icons-material';
+import CourseDetails from '../pages/Courses/CourseDetails';
+import CourseContent from '../pages/Courses/CourseContent';
 
 
 
@@ -23,6 +25,8 @@ function ComponentsRouter() {
         <Route path='/quizzes' element={<QuizzScreen/>}/>
         <Route path='/quizzPlay' element={<QuizzPlay/>}/>
         <Route path="/courses" element={<Courses/>}/>
+        <Route path="/course/:id" element={<CourseDetails/>} />
+        <Route path="/course/:id/content" element={<CourseContent/>} />
         <Route path='/profile' element={<Profile/>}/>
      <Route path='/logout' element={<Logout/>}/>
 

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useTimer } from 'react-timer-hook';
 
-function QuizzScreen() {
+function QuizzPlay() {
   const timerDuration = 30; // Set the duration for each question timer (in seconds)
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedOption, setSelectedOption] = useState(null);
@@ -127,4 +127,4 @@ function QuizzScreen() {
   );
 }
 
-export default QuizzScreen;
+export default QuizzPlay;

@@ -1,135 +1,80 @@
-import React, { useReducer } from 'react';
+import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
 import { register } from './AuthApi';
 
-// Initial state for the form
-const initialState = {
-  profileImage: null,
-  username: '',
-  email: '',
-  mobileNumber: '',
-  gender: '',
-  role: 'admin', // Default to 'admin'
-  password: '',
-  confirmPassword: '',
-  loading: false,
-  error: '',
-};
-
-// Reducer function to handle state updates
-function reducer(state, action) {
-  switch (action.type) {
-    case 'SET_FIELD':
-      return { ...state, [action.field]: action.value };
-    case 'SET_LOADING':
-      return { ...state, loading: action.value };
-    case 'SET_ERROR':
-      return { ...state, error: action.value };
-    case 'RESET':
-      return initialState;
-    default:
-      return state;
-  }
-}
-
-// Mock function to simulate checking if the email exists
-const checkIfEmailExists = async (email) => {
-  // Simulate API call
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(email === 'test@example.com'); // Example email already exists
-    }, 500);
-  });
-};
+// Validation schema using Yup
+const validationSchema = Yup.object({
+  username: Yup.string()
+    .min(3, 'Username must be between 3 and 20 characters')
+    .max(20, 'Username must be between 3 and 20 characters')
+    .required('Username is required'),
+  email: Yup.string()
+    .email('Invalid email format')
+    .required('Email is required'),
+  mobileNumber: Yup.string()
+    .matches(/^[0-9]{10}$/, 'Mobile number must be 10 digits')
+    .required('Mobile number is required'),
+  gender: Yup.string().required('Gender is required'),
+  password: Yup.string()
+    .min(8, 'Password must be at least 8 characters')
+    .matches(/[A-Z]/, 'Password must have at least one uppercase letter')
+    .matches(/[a-z]/, 'Password must have at least one lowercase letter')
+    .matches(/\d/, 'Password must have at least one number')
+    .matches(/[@$!%*?&]/, 'Password must have at least one special character')
+    .required('Password is required'),
+  confirmPassword: Yup.string()
+    .oneOf([Yup.ref('password'), null], 'Passwords must match')
+    .required('Confirm Password is required'),
+});
 
 function Signup() {
-  const [state, dispatch] = useReducer(reducer, initialState);
   const navigate = useNavigate();
+
+  const formik = useFormik({
+    initialValues: {
+      profileImage: null,
+      username: '',
+      email: '',
+      mobileNumber: '',
+      gender: '',
+      role: '',
+      password: '',
+      confirmPassword: '',
+    },
+    validationSchema,
+    onSubmit: async (values) => {
+      try {
+        const emailExists = await checkIfEmailExists(values.email);
+        if (emailExists) {
+          formik.setErrors({ email: 'Email already exists.' });
+          return;
+        }
+
+        await register({
+          username: values.username,
+          email: values.email,
+          password: values.password,
+          mobileNumber: values.mobileNumber,
+          gender: values.gender,
+          profileImage: values.profileImage,
+          role: values.role,
+        });
+
+        alert('Registration successful!');
+        formik.resetForm();
+        navigate('/login');
+      } catch (error) {
+        formik.setErrors({ general: error.message || 'Registration failed.' });
+      }
+    },
+  });
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      dispatch({ type: 'SET_FIELD', field: 'profileImage', value: URL.createObjectURL(file) });
-    }
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    dispatch({ type: 'SET_LOADING', value: true });
-    dispatch({ type: 'SET_ERROR', value: '' });
-
-    // Validation checks
-    if (!state.username || !state.email || !state.mobileNumber || !state.gender || !state.password || !state.confirmPassword) {
-      dispatch({ type: 'SET_ERROR', value: 'All fields are required.' });
-      dispatch({ type: 'SET_LOADING', value: false });
-      return;
-    }
-
-    // Username length check
-    if (state.username.length < 3 || state.username.length > 20) {
-      dispatch({ type: 'SET_ERROR', value: 'Username must be between 3 and 20 characters long.' });
-      dispatch({ type: 'SET_LOADING', value: false });
-      return;
-    }
-
-    // Password strength check
-    const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/; // At least 8 chars, 1 uppercase, 1 lowercase, 1 number, 1 special char
-    if (!passwordPattern.test(state.password)) {
-      dispatch({ type: 'SET_ERROR', value: 'Password must be at least 8 characters long, include uppercase and lowercase letters, a number, and a special character.' });
-      dispatch({ type: 'SET_LOADING', value: false });
-      return;
-    }
-
-    // Check if passwords match
-    if (state.password !== state.confirmPassword) {
-      dispatch({ type: 'SET_ERROR', value: 'Passwords do not match.' });
-      dispatch({ type: 'SET_LOADING', value: false });
-      return;
-    }
-
-    // Simple email validation
-    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailPattern.test(state.email)) {
-      dispatch({ type: 'SET_ERROR', value: 'Invalid email format.' });
-      dispatch({ type: 'SET_LOADING', value: false });
-      return;
-    }
-
-    // Validate mobile number format (e.g., 10 digits)
-    const mobilePattern = /^[0-9]{10}$/;
-    if (!mobilePattern.test(state.mobileNumber)) {
-      dispatch({ type: 'SET_ERROR', value: 'Invalid mobile number. It should be 10 digits.' });
-      dispatch({ type: 'SET_LOADING', value: false });
-      return;
-    }
-
-    // Check if email already exists
-    const emailExists = await checkIfEmailExists(state.email);
-    if (emailExists) {
-      dispatch({ type: 'SET_ERROR', value: 'Email already exists.' });
-      dispatch({ type: 'SET_LOADING', value: false });
-      return;
-    }
-
-    // Register user if all validations pass
-    try {
-      const response = await register({
-        username: state.username,
-        email: state.email,
-        password: state.password,
-        mobileNumber: state.mobileNumber,
-        gender: state.gender,
-        profileImage: state.profileImage,
-        role: state.role,
-      });
-      
-      alert('Registration successful!');
-      dispatch({ type: 'RESET' }); // Reset form state after successful registration
-      navigate('/login'); // Redirect to login page
-    } catch (error) {
-      dispatch({ type: 'SET_ERROR', value: error.message || 'Registration failed.' });
-    } finally {
-      dispatch({ type: 'SET_LOADING', value: false });
+      formik.setFieldValue('profileImage', URL.createObjectURL(file));
     }
   };
 
@@ -137,9 +82,9 @@ function Signup() {
     <div className="flex flex-col items-center justify-center min-h-screen py-4">
       <div className="w-full max-w-2xl p-6 bg-white rounded-lg shadow-xl">
         <h2 className="text-2xl font-bold text-center text-teal-950 mb-6">Create an Account</h2>
-        <form onSubmit={handleSubmit}>
-          {state.error && (
-            <div className="text-red-600 text-sm mb-4">{state.error}</div>
+        <form onSubmit={formik.handleSubmit}>
+          {formik.errors.general && (
+            <div className="text-red-600 text-sm mb-4">{formik.errors.general}</div>
           )}
           <div className="mb-4">
             <label className="block text-sm font-medium text-gray-700">Profile Image</label>
@@ -148,11 +93,10 @@ function Signup() {
               accept="image/*"
               onChange={handleImageChange}
               className="block w-full p-2 mt-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-600"
-              required
             />
-            {state.profileImage && (
+            {formik.values.profileImage && (
               <img
-                src={state.profileImage}
+                src={formik.values.profileImage}
                 alt="Profile Preview"
                 className="mt-2 w-24 h-24 rounded-full object-cover"
               />
@@ -164,24 +108,32 @@ function Signup() {
               <label className="block text-sm font-medium text-gray-700">Username</label>
               <input
                 type="text"
-                value={state.username}
-                onChange={(e) => dispatch({ type: 'SET_FIELD', field: 'username', value: e.target.value })}
+                name="username"
+                value={formik.values.username}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
                 className="block w-full p-2 mt-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-600"
                 placeholder="Enter your username"
-                required
               />
+              {formik.touched.username && formik.errors.username && (
+                <div className="text-red-600 text-sm">{formik.errors.username}</div>
+              )}
             </div>
 
             <div>
               <label className="block text-sm font-medium text-gray-700">Phone Number</label>
               <input
                 type="tel"
-                value={state.mobileNumber}
-                onChange={(e) => dispatch({ type: 'SET_FIELD', field: 'mobileNumber', value: e.target.value })}
+                name="mobileNumber"
+                value={formik.values.mobileNumber}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
                 className="block w-full p-2 mt-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-600"
                 placeholder="Enter your phone number"
-                required
               />
+              {formik.touched.mobileNumber && formik.errors.mobileNumber && (
+                <div className="text-red-600 text-sm">{formik.errors.mobileNumber}</div>
+              )}
             </div>
           </div>
 
@@ -189,40 +141,51 @@ function Signup() {
             <label className="block text-sm font-medium text-gray-700">Email</label>
             <input
               type="email"
-              value={state.email}
-              onChange={(e) => dispatch({ type: 'SET_FIELD', field: 'email', value: e.target.value })}
+              name="email"
+              value={formik.values.email}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
               className="block w-full p-2 mt-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-600"
               placeholder="Enter your email"
-              required
             />
+            {formik.touched.email && formik.errors.email && (
+              <div className="text-red-600 text-sm">{formik.errors.email}</div>
+            )}
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
             <div>
               <label className="block text-sm font-medium text-gray-700">Gender</label>
               <select
-                value={state.gender}
-                onChange={(e) => dispatch({ type: 'SET_FIELD', field: 'gender', value: e.target.value })}
+                name="gender"
+                value={formik.values.gender}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
                 className="block w-full p-2 mt-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-600"
-                required
               >
-                <option value="">Select Gender</option>
+                <option value="" disabled>Select Gender</option>
                 <option value="male">Male</option>
                 <option value="female">Female</option>
                 <option value="other">Other</option>
               </select>
+              {formik.touched.gender && formik.errors.gender && (
+                <div className="text-red-600 text-sm">{formik.errors.gender}</div>
+              )}
             </div>
 
             <div>
               <label className="block text-sm font-medium text-gray-700">Role</label>
               <select
-                value={state.role}
-                onChange={(e) => dispatch({ type: 'SET_FIELD', field: 'role', value: e.target.value })}
+                name="role"
+                value={formik.values.role}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
                 className="block w-full p-2 mt-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-600"
               >
+                <option value="" disabled>Select Role</option>
                 <option value="admin">Admin</option>
-                <option value="student">student</option>
-                <option value="instructor">instructor</option>
+                <option value="student">Student</option>
+                <option value="instructor">Instructor</option>
               </select>
             </div>
           </div>
@@ -231,39 +194,47 @@ function Signup() {
             <label className="block text-sm font-medium text-gray-700">Password</label>
             <input
               type="password"
-              value={state.password}
-              onChange={(e) => dispatch({ type: 'SET_FIELD', field: 'password', value: e.target.value })}
+              name="password"
+              value={formik.values.password}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
               className="block w-full p-2 mt-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-600"
               placeholder="Enter your password"
-              required
             />
+            {formik.touched.password && formik.errors.password && (
+              <div className="text-red-600 text-sm">{formik.errors.password}</div>
+            )}
           </div>
 
           <div className="mb-6">
             <label className="block text-sm font-medium text-gray-700">Confirm Password</label>
             <input
               type="password"
-              value={state.confirmPassword}
-              onChange={(e) => dispatch({ type: 'SET_FIELD', field: 'confirmPassword', value: e.target.value })}
+              name="confirmPassword"
+              value={formik.values.confirmPassword}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
               className="block w-full p-2 mt-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-600"
               placeholder="Confirm your password"
-              required
             />
+            {formik.touched.confirmPassword && formik.errors.confirmPassword && (
+              <div className="text-red-600 text-sm">{formik.errors.confirmPassword}</div>
+            )}
           </div>
 
           <button
             type="submit"
-            className="w-full py-2 px-4 bg-teal-600 text-white font-bold rounded-md focus:outline-none hover:bg-teal-700 disabled:bg-teal-400"
-            disabled={state.loading}
+            className="w-full p-2 bg-teal-600 text-white rounded-md hover:bg-teal-700 focus:outline-none"
           >
-            {state.loading ? 'Registering...' : 'Sign Up'}
+            Register
           </button>
         </form>
-
-        <div className="text-center mt-4">
-          <p className="text-sm text-gray-600">
+        <div className="mt-4 text-center">
+          <p>
             Already have an account?{' '}
-            <Link to="/login" className="text-teal-600 font-medium">Login</Link>
+            <Link to="/login" className="text-teal-600 hover:underline">
+              Login
+            </Link>
           </p>
         </div>
       </div>
