@@ -56,15 +56,15 @@ const CourseContent = () => {
                     <p className="text-gray-600 dark:text-gray-400 mb-4">
                       {selectedSubtopic.content}
                     </p>
-                    <a
+                    {/* <a
                       href={selectedSubtopic.videoUrl}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-blue-500 underline"
                     >
                       Watch Video
-                    </a>
-                    <VideoGallery/>
+                    </a> */}
+                    <VideoGallery url={selectedSubtopic.videoUrl}/>
                   </div>
                 ) : (
                   <p className="text-gray-500 dark:text-gray-400">

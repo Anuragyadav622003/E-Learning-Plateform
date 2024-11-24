@@ -18,6 +18,13 @@ const ListComponent = ({ data, onTopicSelect, onSubtopicSelect }) => {
     );
   };
 
+  const handleTopicClick = (index, topic) => {
+    if (onTopicSelect) {
+      onTopicSelect(topic); // Notify parent about the topic selection
+    }
+    handleToggle(index); // Toggle the current topic
+  };
+
   return (
     <Box sx={{ width: 320, pl: '24px' }}>
       <List
@@ -40,7 +47,7 @@ const ListComponent = ({ data, onTopicSelect, onSubtopicSelect }) => {
               <IconButton
                 variant="plain"
                 size="sm"
-                onClick={() => handleToggle(index)}
+                onClick={() => handleTopicClick(index, topic)}
                 className="text-gray-800 dark:text-white text-base lg:text-lg"
               >
                 <KeyboardArrowDown
@@ -57,8 +64,8 @@ const ListComponent = ({ data, onTopicSelect, onSubtopicSelect }) => {
               sx={{
                 fontWeight: openStates[index] ? 'bold' : 'normal',
               }}
-              className="flex flex-wrap"
-              onClick={() => onTopicSelect && onTopicSelect(topic)}
+              className="flex flex-wrap cursor-pointer"
+              onClick={() => handleTopicClick(index, topic)}
             >
               <p className="text-gray-800 dark:text-white text-base lg:text-lg">
                 {topic.title}

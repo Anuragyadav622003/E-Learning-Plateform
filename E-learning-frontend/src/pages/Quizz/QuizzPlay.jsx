@@ -1,8 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import { useTimer } from 'react-timer-hook';
+import React, { useState, useEffect } from "react";
+import { useTimer } from "react-timer-hook";
+import { getQuizzes } from "./QuizzApi";
+import { useParams } from "react-router-dom";
 
 function QuizzPlay() {
-  const timerDuration = 30; // Set the duration for each question timer (in seconds)
+  const { id } = useParams(); // Extract the `id` from URL params
+
+  const timerDuration = 30; // Timer duration for each question
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedOption, setSelectedOption] = useState(null);
   const [score, setScore] = useState(0);
@@ -15,14 +19,22 @@ function QuizzPlay() {
   });
 
   useEffect(() => {
-    try {
-      const resp = localStorage.getItem('quizzToPlay');
-      const data = JSON.parse(resp);
-      setQuizData(data);
-    } catch (error) {
-      console.log(error);
-    }
-  }, []);
+    const fetchQuiz = async () => {
+      try {
+        const resp = await getQuizzes(); // Fetch all quizzes
+        const selectedQuiz = resp.find((quiz, index) => index === parseInt(id)); // Match quiz by index
+        if (selectedQuiz) {
+          setQuizData(selectedQuiz);
+        } else {
+          console.error("Quiz not found.");
+        }
+      } catch (error) {
+        console.error("Error fetching quizzes:", error);
+      }
+    };
+
+    fetchQuiz();
+  }, [id]);
 
   useEffect(() => {
     restart(new Date().getTime() + timerDuration * 1000);
@@ -35,7 +47,9 @@ function QuizzPlay() {
 
   const handleNext = () => {
     if (selectedOption) {
-      if (selectedOption === quizData.questions[currentQuestionIndex].correctAnswer) {
+      if (
+        selectedOption === quizData.questions[currentQuestionIndex].correctAnswer
+      ) {
         setScore(score + 1);
       }
     }
@@ -49,7 +63,11 @@ function QuizzPlay() {
   };
 
   if (!quizData) {
-    return <div className="flex justify-center items-center h-screen text-gray-100">Loading...</div>;
+    return (
+      <div className="flex justify-center items-center h-screen text-gray-100">
+        Loading...
+      </div>
+    );
   }
 
   return (
@@ -57,16 +75,23 @@ function QuizzPlay() {
       {!quizFinished ? (
         <>
           <div className="text-center mb-6">
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-indigo-600 dark:text-indigo-400">{quizData.title}</h1>
-            <p className="text-base sm:text-lg md:text-xl mt-2 text-gray-700 dark:text-gray-300">{quizData.description}</p>
-            <p className="text-sm sm:text-md md:text-lg mt-2 text-gray-500 dark:text-gray-400">Category: {quizData.category}</p>
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-indigo-600 dark:text-indigo-400">
+              {quizData.title}
+            </h1>
+            <p className="text-base sm:text-lg md:text-xl mt-2 text-gray-700 dark:text-gray-300">
+              {quizData.description}
+            </p>
+            <p className="text-sm sm:text-md md:text-lg mt-2 text-gray-500 dark:text-gray-400">
+              Category: {quizData.category}
+            </p>
           </div>
           <div className="bg-indigo-500 p-4 rounded-lg shadow-lg dark:bg-indigo-600">
             <h2 className="text-lg sm:text-xl md:text-2xl font-semibold text-white">
               Question {currentQuestionIndex + 1} of {quizData.questions.length}
             </h2>
             <div className="text-md sm:text-lg font-semibold text-yellow-400">
-              {Math.floor(seconds / 60)}:{seconds % 60 < 10 ? `0${seconds % 60}` : seconds % 60}
+              {Math.floor(seconds / 60)}:
+              {seconds % 60 < 10 ? `0${seconds % 60}` : seconds % 60}
             </div>
           </div>
           <div className="flex flex-col flex-grow space-y-4 w-full relative mt-4">
@@ -75,24 +100,29 @@ function QuizzPlay() {
                 {quizData.questions[currentQuestionIndex].question}
               </h3>
               <ul className="options-list list-none pl-0">
-                {quizData.questions[currentQuestionIndex].options.map((option, index) => (
-                  <li key={index} className="flex items-center my-4 border rounded-md p-4 hover:bg-gray-100 dark:hover:bg-gray-600 transition duration-200">
-                    <input
-                      type="radio"
-                      id={option}
-                      name="quiz-option"
-                      checked={selectedOption === option}
-                      onChange={() => setSelectedOption(option)}
-                      className="h-6 w-6 border-gray-700 focus:ring-indigo-500 focus:ring-2"
-                    />
-                    <label
-                      htmlFor={option}
-                      className="ml-4 text-base sm:text-lg md:text-xl font-medium text-gray-800 dark:text-gray-200"
+                {quizData.questions[currentQuestionIndex].options.map(
+                  (option, index) => (
+                    <li
+                      key={index}
+                      className="flex items-center my-4 border rounded-md p-4 hover:bg-gray-100 dark:hover:bg-gray-600 transition duration-200"
                     >
-                      {option}
-                    </label>
-                  </li>
-                ))}
+                      <input
+                        type="radio"
+                        id={option}
+                        name="quiz-option"
+                        checked={selectedOption === option}
+                        onChange={() => setSelectedOption(option)}
+                        className="h-6 w-6 border-gray-700 focus:ring-indigo-500 focus:ring-2"
+                      />
+                      <label
+                        htmlFor={option}
+                        className="ml-4 text-base sm:text-lg md:text-xl font-medium text-gray-800 dark:text-gray-200"
+                      >
+                        {option}
+                      </label>
+                    </li>
+                  )
+                )}
               </ul>
             </div>
             <div className="absolute bottom-4 right-4 w-fit">
@@ -107,11 +137,19 @@ function QuizzPlay() {
         </>
       ) : (
         <div className="flex flex-col items-center justify-center min-h-screen bg-white shadow-lg rounded-lg p-6 dark:bg-gray-700 dark:text-white">
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-indigo-600 dark:text-indigo-400 mb-4">Quiz Finished!</h2>
-          <p className="text-lg sm:text-xl md:text-2xl font-semibold text-gray-700 dark:text-gray-300 mb-4">Your Score:</p>
-          <p className="text-2xl sm:text-3xl md:text-4xl font-bold text-indigo-600 dark:text-indigo-400">{score} / {quizData.questions.length}</p>
-          <p className="text-md sm:text-lg text-gray-500 dark:text-gray-400 mt-4">Thank you for participating!</p>
-          <button 
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-indigo-600 dark:text-indigo-400 mb-4">
+            Quiz Finished!
+          </h2>
+          <p className="text-lg sm:text-xl md:text-2xl font-semibold text-gray-700 dark:text-gray-300 mb-4">
+            Your Score:
+          </p>
+          <p className="text-2xl sm:text-3xl md:text-4xl font-bold text-indigo-600 dark:text-indigo-400">
+            {score} / {quizData.questions.length}
+          </p>
+          <p className="text-md sm:text-lg text-gray-500 dark:text-gray-400 mt-4">
+            Thank you for participating!
+          </p>
+          <button
             className="mt-6 bg-indigo-600 text-white py-2 px-4 rounded-lg hover:bg-indigo-700 transition duration-300 ease-in-out dark:bg-indigo-700 dark:hover:bg-indigo-800"
             onClick={() => {
               setCurrentQuestionIndex(0);

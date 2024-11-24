@@ -23,7 +23,7 @@ function ComponentsRouter() {
         <Route path="/forgot-password" element={<ForgotPassword/>} />
         <Route path="/signup" element={<Signup />} />
         <Route path='/quizzes' element={<QuizzScreen/>}/>
-        <Route path='/quizzPlay' element={<QuizzPlay/>}/>
+        <Route path='/quizzes/:id' element={<QuizzPlay/>}/>
         <Route path="/courses" element={<Courses/>}/>
         <Route path="/course/:id" element={<CourseDetails/>} />
         <Route path="/course/:id/content" element={<CourseContent/>} />

@@ -15,6 +15,7 @@ const QuizzScreen = () => {
     const fetchQuizzes = async () => {
       try {
         const resp = await getQuizzes();
+      
         setQuizzes(resp);
       } catch (error) {
         console.error("Error fetching quizzes:", error);
@@ -57,19 +58,21 @@ const QuizzScreen = () => {
     );
   });
 
-  const handleClick = async (quiz) => {
-    try {
-      const response = await authorize();
-      if (response) {
-        localStorage.setItem("quizzToPlay", JSON.stringify(quiz));
-        navigate("/quizzPlay");
-      } else {
-        navigate('/login');
-      }
-    } catch (error) {
-      console.error("Authorization failed:", error);
-      navigate('/login');
-    }
+  const handleClick = async (quizId) => {
+   
+    // try {
+    //   const response = await authorize();
+    //   if (response) {
+    //     localStorage.setItem("quizzToPlay", JSON.stringify(quiz));
+    //     navigate(`/quizzes/${quizId}`);
+    //   } else {
+    //     navigate('/login');
+    //   }
+    // } catch (error) {
+    //   console.error("Authorization failed:", error);
+    //   navigate('/login');
+    // }
+     navigate(`/quizzes/${quizId}`);
   };
 
   return (
@@ -88,9 +91,9 @@ const QuizzScreen = () => {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {filteredQuizzes.map((quiz) => (
+          {filteredQuizzes.map((quiz,index) => (
             <div
-              key={quiz.id}
+              key={index}
               className="bg-white dark:bg-gray-800 shadow-xl rounded-lg overflow-hidden transition-transform transform hover:scale-105 duration-300 flex flex-col h-full"
             >
               <img className="w-full h-40 object-cover" src={quiz.banner_url} alt={quiz.title} />
@@ -103,7 +106,7 @@ const QuizzScreen = () => {
                 <div>
                   <button
                     className="mt-4 w-full bg-blue-500 dark:bg-blue-600 text-white py-2 rounded-md hover:bg-blue-600 dark:hover:bg-blue-700 transition-colors duration-300"
-                    onClick={() => handleClick(quiz)}
+                    onClick={() => handleClick(index)}
                   >
                     Start Quiz
                   </button>
