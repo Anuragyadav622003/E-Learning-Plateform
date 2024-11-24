@@ -26,7 +26,7 @@ const ListComponent = ({ data, onTopicSelect, onSubtopicSelect }) => {
   };
 
   return (
-    <Box sx={{ width: 320, pl: '24px' }}>
+    <Box>
       <List
         size="sm"
         sx={{
@@ -82,6 +82,12 @@ const ListComponent = ({ data, onTopicSelect, onSubtopicSelect }) => {
                       onClick={() =>
                         onSubtopicSelect && onSubtopicSelect(subtopic)
                       }
+                      sx={{
+                        backgroundColor: 'transparent', // No background change on hover
+                        '&:hover': {
+                          backgroundColor: 'transparent', // Prevent hover effect
+                        },
+                      }}
                     >
                       <p className="text-gray-800 dark:text-white text-sm lg:text-base">
                         {subtopic.stitle}
