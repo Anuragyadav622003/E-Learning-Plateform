@@ -3,13 +3,11 @@ import { NavLink } from 'react-router-dom';
 import DarkModeSwitch from '../componenet/Darkmod';
 
 const navigation = [
-  { name: 'Home', href: '/' },                     // Link to Home
-  { name: 'Courses', href: '/courses' },           // Link to Courses
-  { name: 'Quizzes', href: '/quizzes' },           // Link to Quizzes
-  { name: 'Profile', href: '/profile' },            // Link to User Profile
-            
+  { name: 'Home', href: '/' },
+  { name: 'Courses', href: '/courses' },
+  { name: 'Quizzes', href: '/quizzes' },
+  { name: 'Profile', href: '/profile' },
 ];
-
 
 const profile = [
   { name: 'Your Profile', href: '/profile' },
@@ -28,8 +26,8 @@ export default function Navbar() {
 
   return (
     <nav className="bg-gray-800 w-screen">
-      <div className=" px-2 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-12"> {/* Reduced height */}
+      <div className="px-2 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between h-14"> {/* Adjusted height */}
           {/* Logo */}
           <div className="flex items-center">
             <img
@@ -37,7 +35,7 @@ export default function Navbar() {
               alt="Logo"
               className="h-8 w-auto"
             />
-            <span className="text-white font-extrabold px-2">SkillSphere</span>
+            <span className="text-white font-extrabold text-lg sm:text-xl px-2">SkillSphere</span> {/* Updated font size */}
           </div>
 
           {/* Desktop Navigation */}
@@ -49,7 +47,7 @@ export default function Navbar() {
                   to={item.href}
                   className={({ isActive }) =>
                     classNames(
-                      'text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-1.5 text-sm font-medium', // Reduced padding
+                      'text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm md:text-base font-medium', // Updated font size
                       isActive ? 'bg-gray-900 text-white' : ''
                     )
                   }
@@ -58,8 +56,8 @@ export default function Navbar() {
                 </NavLink>
               ))}
 
-               {/* Dark Mode Toggle */}
-               <DarkModeSwitch/>
+              {/* Dark Mode Toggle */}
+              <DarkModeSwitch />
               {/* Profile Dropdown */}
               <div className="relative">
                 <button
@@ -69,7 +67,7 @@ export default function Navbar() {
                   <img
                     src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
                     alt="User Avatar"
-                    className="hidden md:block h-8 w-8 rounded-full" // Reduced avatar size
+                    className="hidden md:block h-8 w-8 rounded-full"
                   />
                 </button>
                 {dropdownOpen && (
@@ -81,7 +79,7 @@ export default function Navbar() {
                           to={item.href}
                           className={({ isActive }) =>
                             classNames(
-                              'block px-4 py-2 text-sm',
+                              'block px-4 py-2 text-sm md:text-base', // Adjust font size
                               isActive ? 'bg-gray-900 text-white' : 'text-gray-700 hover:bg-gray-100'
                             )
                           }
@@ -99,8 +97,7 @@ export default function Navbar() {
 
           {/* Mobile Menu Button */}
           <div className="sm:hidden flex">
-            {/* Dark Mode Toggle */}
-            <DarkModeSwitch/>
+            <DarkModeSwitch />
             <button
               onClick={toggleMenu}
               className="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none"

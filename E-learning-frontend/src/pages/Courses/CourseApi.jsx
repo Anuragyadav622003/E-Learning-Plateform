@@ -13,7 +13,7 @@ const coursesData = [
         subtitle: [
           {
             sid: 1,
-            stitle: "Day 1: What is Web Development?",
+            stitle: "What is Web Development?",
             videoUrl: "https://www.youtube.com/watch?v=1Rs2ND1ryYc",
             content: `
 ### What is Web Development?
@@ -29,7 +29,7 @@ Web development is the process of building and maintaining websites. It includes
           },
           {
             sid: 2,
-            stitle: "Day 2: Setting up Tools",
+            stitle: "Setting up Tools",
             videoUrl: "https://www.youtube.com/watch?v=gnkrDse9QKc",
             content: `
 ### Setting Up Your Development Environment:
@@ -62,7 +62,7 @@ To start developing websites, you’ll need:
         subtitle: [
           {
             sid: 1,
-            stitle: "Day 1: Variables and Scopes",
+            stitle: "Variables and Scopes",
             videoUrl: "https://www.youtube.com/watch?v=upDLs1sn7g4",
             content: `
 ### JavaScript Variables:
@@ -79,7 +79,7 @@ Variables store data. JavaScript uses **var**, **let**, and **const**:
           },
           {
             sid: 2,
-            stitle: "Day 2: Functions and Closures",
+            stitle: "Functions and Closures",
             videoUrl: "1JsJx1x35c0",
             content: `
 ### JavaScript Functions:
