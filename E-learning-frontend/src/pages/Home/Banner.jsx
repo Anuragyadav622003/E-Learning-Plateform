@@ -51,7 +51,7 @@ function Banner() {
         </label>
 
         {/* Email Input */}
-        <label className="flex items-center gap-3 p-3 bg-gray-800 rounded-md shadow-md transition duration-300 ease-in-out hover:shadow-lg focus-within:ring-2 focus-within:ring-blue-500">
+        {/* <label className="flex items-center gap-3 p-3 bg-gray-800 rounded-md shadow-md transition duration-300 ease-in-out hover:shadow-lg focus-within:ring-2 focus-within:ring-blue-500">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 16 16"
@@ -68,7 +68,7 @@ function Banner() {
             onFocus={handleFocus}
             onBlur={handleBlur}
           />
-        </label>
+        </label> */}
 
         {/* Get Started Button */}
         <button
