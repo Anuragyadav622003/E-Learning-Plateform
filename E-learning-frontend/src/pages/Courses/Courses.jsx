@@ -5,7 +5,8 @@ import { useNavigate } from "react-router-dom";
 
 const Courses = () => {
   const [searchQuery, setSearchQuery] = useState("");
-const navigate = useNavigate();
+  const navigate = useNavigate();
+
   // Filter courses based on the search query
   const filteredCourses = coursesData.filter((course) =>
     course.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -16,8 +17,8 @@ const navigate = useNavigate();
   // Function to render rating stars
   const renderStars = (rating) => {
     const fullStars = Math.floor(rating);
-    const halfStar = rating % 1 >= 0.5; // Check if there's a half-star
-    const emptyStars = 5 - fullStars - (halfStar ? 1 : 0); // Remaining stars after full and half
+    const halfStar = rating % 1 >= 0.5;
+    const emptyStars = 5 - fullStars - (halfStar ? 1 : 0);
 
     return (
       <>
@@ -32,11 +33,8 @@ const navigate = useNavigate();
     );
   };
 
-  // Handle Start Learning button click
   const handleStartLearning = (courseId) => {
     console.log(`Starting course with ID: ${courseId}`);
-    // Implement additional actions like navigation or state updates here
-    // alert(`You have started learning the course: ${coursesData.find(course => course.id === courseId).title}`);
     navigate(`/course/${courseId}`);
   };
 
@@ -57,26 +55,26 @@ const navigate = useNavigate();
         </div>
 
         {/* Courses Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
           {filteredCourses.map((course) => (
             <div
               key={course.id}
-              className="bg-white dark:bg-gray-800 shadow-xl rounded-lg overflow-hidden transition-transform transform hover:scale-105 duration-300 flex flex-col h-full"
+              className="bg-white dark:bg-gray-800 shadow-md rounded-lg overflow-hidden transition-transform transform hover:scale-105 duration-300 flex flex-col h-full"
             >
-              <img src={course.image} alt={course.title} className="w-full h-40 object-cover" />
-              <div className="p-4 flex flex-col justify-between flex-grow">
+              <img src={course.image} alt={course.title} className="w-full h-32 object-cover" />
+              <div className="p-3 flex flex-col justify-between flex-grow">
                 <div>
-                  <h2 className="text-xl font-semibold mb-2 text-gray-900 dark:text-white">{course.title}</h2>
-                  <p className="text-gray-700 dark:text-gray-400 mb-2">{course.description}</p>
-                  <p className="text-sm text-gray-500 dark:text-gray-400">Instructor: {course.instructor}</p>
+                  <h2 className="text-lg font-semibold mb-1 text-gray-900 dark:text-white">{course.title}</h2>
+                  <p className="text-sm text-gray-700 dark:text-gray-400 mb-1">{course.description}</p>
+                  <p className="text-xs text-gray-500 dark:text-gray-400">Instructor: {course.instructor}</p>
                 </div>
                 <div>
-                  <p className="text-yellow-500 font-bold flex items-center">
+                  <p className="text-yellow-500 font-bold flex items-center text-sm">
                     {renderStars(course.rating)} ({course.rating})
                   </p>
                   <button
                     onClick={() => handleStartLearning(course.id)}
-                    className="mt-4 w-full bg-blue-500 dark:bg-blue-600 text-white py-2 rounded-md hover:bg-blue-600 dark:hover:bg-blue-700 transition-colors duration-300"
+                    className="mt-2 w-full bg-blue-500 dark:bg-blue-600 text-white py-1.5 text-sm rounded-md hover:bg-blue-600 dark:hover:bg-blue-700 transition-colors duration-300"
                   >
                     Start Learning
                   </button>
