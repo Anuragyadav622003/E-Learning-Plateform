@@ -1,10 +1,15 @@
-import React from "react";
+import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import coursesData from "./CourseApi";
+import ListComponenet from "../../componenet/List";
+import VideoGallery from "../../componenet/YoutubeVideo";
 
 const CourseContent = () => {
   const { id } = useParams();
   const course = coursesData.find((course) => course.id === parseInt(id));
+
+  const [selectedTopic, setSelectedTopic] = useState(null);
+  const [selectedSubtopic, setSelectedSubtopic] = useState(null);
 
   if (!course) {
     return (
@@ -14,46 +19,67 @@ const CourseContent = () => {
     );
   }
 
+  const handleTopicSelect = (topic) => {
+    setSelectedTopic(topic);
+    setSelectedSubtopic(null); // Reset subtopic when a new topic is selected
+  };
+
+  const handleSubtopicSelect = (subtopic) => {
+    setSelectedSubtopic(subtopic);
+  };
+
   return (
-    <div className="min-h-screen bg-gray-100 dark:bg-gray-900">
-      <div className="container mx-auto py-6 px-4">
-        <h1 className="text-3xl font-bold mb-4 text-gray-900 dark:text-white">
-          {course.title} - Course Content
-        </h1>
-
-        {/* Video Player */}
-        <div className="mb-6">
-          <video
-            src="https://www.w3schools.com/html/mov_bbb.mp4" // Replace with actual video link
-            controls
-            className="w-full h-64 rounded-lg shadow-lg"
-          ></video>
+    <div className="min-h-screen bg-gray-100 dark:bg-gray-900 w-full">
+      <div className="container mx-auto py-6 px-4 max-w-full">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          {/* Sidebar Section */}
+          <div className="lg:col-span-3 bg-white dark:bg-gray-800 shadow-lg rounded-lg p-6">
+            <h2 className="text-2xl font-semibold text-gray-900 dark:text-white mb-2">{course.title}</h2>
+            <ListComponenet
+              data={course.modules}
+              onTopicSelect={handleTopicSelect}
+              onSubtopicSelect={handleSubtopicSelect}
+            />
+          </div>
+          {/* Main Content Section */}
+          <div className="lg:col-span-9 bg-white dark:bg-gray-800 shadow-lg rounded-lg p-6">
+            {selectedTopic && (
+              <div>
+                <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4">
+                  {selectedTopic.title}
+                </h3>
+                {selectedSubtopic ? (
+                  <div>
+                    <h4 className="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                      {selectedSubtopic.stitle}
+                    </h4>
+                    <p className="text-gray-600 dark:text-gray-400 mb-4">
+                      {selectedSubtopic.content}
+                    </p>
+                    <a
+                      href={selectedSubtopic.videoUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-500 underline"
+                    >
+                      Watch Video
+                    </a>
+                    <VideoGallery/>
+                  </div>
+                ) : (
+                  <p className="text-gray-500 dark:text-gray-400">
+                    Select a subtopic to view details.
+                  </p>
+                )}
+              </div>
+            )}
+            {!selectedTopic && (
+              <p className="text-gray-500 dark:text-gray-400">
+                Select a topic to get started.
+              </p>
+            )}
+          </div>
         </div>
-
-        {/* Course Modules */}
-        <h2 className="text-2xl font-semibold text-gray-900 dark:text-white mb-4">
-          Modules
-        </h2>
-        <ul className="list-decimal pl-5 text-gray-700 dark:text-gray-400 space-y-3">
-          <li>Introduction to the Course</li>
-          <li>Understanding the Basics</li>
-          <li>Hands-on Exercise 1</li>
-          <li>Advanced Techniques</li>
-          <li>Conclusion and Next Steps</li>
-        </ul>
-
-        {/* Action Buttons */}
-        <div className="mt-6 flex justify-between">
-          <button className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition-colors duration-300">
-            Previous
-          </button>
-          <button className="bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 transition-colors duration-300">
-            Next
-          </button>
-        </div>
-      </div>
-      <div className="container ">
-
       </div>
     </div>
   );
