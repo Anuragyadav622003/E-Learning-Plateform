@@ -184,7 +184,7 @@ export default function Navbar() {
               to={item.href}
               className={({ isActive }) =>
                 classNames(
-                  'text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-1 text-sm font-medium', // Reduced padding
+                  'text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 pt-1 text-sm font-medium', // Reduced padding
                   isActive ? 'bg-gray-900 text-white' : ''
                 )
               }
