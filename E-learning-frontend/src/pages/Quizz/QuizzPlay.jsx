@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useTimer } from "react-timer-hook";
 import { getQuizzes } from "./QuizzApi";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 function QuizzPlay() {
   const { id } = useParams(); // Extract the `id` from URL params
+  const navigate = useNavigate();
 
   const timerDuration = 30; // Timer duration for each question
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -71,7 +72,7 @@ function QuizzPlay() {
   }
 
   return (
-    <div className="flex flex-col justify-between min-h-screen p-4 sm:p-6 md:p-8 lg:p-12 bg-gray-100 dark:bg-gray-800">
+    <div className="flex flex-col justify-between min-h-screen p-4 sm:p-6 md:p-8 lg:p-12 bg-gray-100 dark:bg-gray-900">
       {!quizFinished ? (
         <>
           <div className="text-center mb-6">
@@ -149,7 +150,7 @@ function QuizzPlay() {
           <p className="text-md sm:text-lg text-gray-500 dark:text-gray-400 mt-4">
             Thank you for participating!
           </p>
-          <button
+          {/* <button
             className="mt-6 bg-indigo-600 text-white py-2 px-4 rounded-lg hover:bg-indigo-700 transition duration-300 ease-in-out dark:bg-indigo-700 dark:hover:bg-indigo-800"
             onClick={() => {
               setCurrentQuestionIndex(0);
@@ -158,7 +159,14 @@ function QuizzPlay() {
             }}
           >
             Restart Quiz
+          </button> */}
+          <button
+            className="mt-6 bg-indigo-600 text-white py-2 px-4 rounded-lg hover:bg-indigo-700 transition duration-300 ease-in-out dark:bg-indigo-700 dark:hover:bg-indigo-800"
+            onClick={() => navigate(`/quizzes/${id}/solution`)}
+          >
+           Solution
           </button>
+          
         </div>
       )}
     </div>
