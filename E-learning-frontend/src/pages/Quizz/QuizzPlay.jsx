@@ -13,6 +13,7 @@ function QuizzPlay() {
   const [score, setScore] = useState(0);
   const [quizFinished, setQuizFinished] = useState(false);
   const [quizData, setQuizData] = useState(null);
+  const [answersTracker, setAnswersTracker] = useState({}); // Object to store answers efficiently
 
   const { seconds, start, restart } = useTimer({
     expiryTimestamp: new Date().getTime() + timerDuration * 1000,
@@ -47,7 +48,14 @@ function QuizzPlay() {
   }, [currentQuestionIndex]);
 
   const handleNext = () => {
-    if (selectedOption) {
+    if (selectedOption !== null) {
+      // Store the selected answer in answersTracker with the question index
+      setAnswersTracker((prevAnswers) => ({
+        ...prevAnswers,
+        [currentQuestionIndex]: selectedOption,
+      }));
+
+      // Check if the answer is correct and update the score
       if (
         selectedOption === quizData.questions[currentQuestionIndex].correctAnswer
       ) {
@@ -55,13 +63,30 @@ function QuizzPlay() {
       }
     }
 
+    // Move to the next question or finish the quiz
     if (currentQuestionIndex < quizData.questions.length - 1) {
-      setSelectedOption(null);
+      setSelectedOption(null); // Reset selected option for the next question
       setCurrentQuestionIndex(currentQuestionIndex + 1);
     } else {
+      // Store the last answer for the last question
+      if (selectedOption !== null) {
+        setAnswersTracker((prevAnswers) => ({
+          ...prevAnswers,
+          [currentQuestionIndex]: selectedOption,
+        }));
+      }
+
       setQuizFinished(true);
+      sessionStorage.setItem("userAnswers", JSON.stringify(answersTracker)); // Store the answers in sessionStorage when quiz is finished
     }
   };
+
+  useEffect(() => {
+    // When quiz is finished, store the final answer tracker
+    if (quizFinished) {
+      sessionStorage.setItem("userAnswers", JSON.stringify(answersTracker));
+    }
+  }, [quizFinished, answersTracker]);
 
   if (!quizData) {
     return (
@@ -112,8 +137,8 @@ function QuizzPlay() {
                         id={option}
                         name="quiz-option"
                         checked={selectedOption === option}
-                        onChange={() => setSelectedOption(option)}
-                        className="h-6 w-6 border-gray-700 focus:ring-indigo-500 focus:ring-2"
+                        onChange={() => setSelectedOption(option)} // Set the selected option when user selects an answer
+                        className="h-6 w-6 border-gray-700 focus:ring-indigo-500 focus:ring-2 "
                       />
                       <label
                         htmlFor={option}
@@ -150,23 +175,12 @@ function QuizzPlay() {
           <p className="text-md sm:text-lg text-gray-500 dark:text-gray-400 mt-4">
             Thank you for participating!
           </p>
-          {/* <button
-            className="mt-6 bg-indigo-600 text-white py-2 px-4 rounded-lg hover:bg-indigo-700 transition duration-300 ease-in-out dark:bg-indigo-700 dark:hover:bg-indigo-800"
-            onClick={() => {
-              setCurrentQuestionIndex(0);
-              setScore(0);
-              setQuizFinished(false);
-            }}
-          >
-            Restart Quiz
-          </button> */}
           <button
             className="mt-6 bg-indigo-600 text-white py-2 px-4 rounded-lg hover:bg-indigo-700 transition duration-300 ease-in-out dark:bg-indigo-700 dark:hover:bg-indigo-800"
             onClick={() => navigate(`/quizzes/${id}/solution`)}
           >
-           Solution
+            Solution
           </button>
-          
         </div>
       )}
     </div>

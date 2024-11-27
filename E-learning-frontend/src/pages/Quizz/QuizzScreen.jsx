@@ -14,7 +14,7 @@ const QuizzScreen = () => {
   useEffect(() => {
     const fetchQuizzes = async () => {
       try {
-        const resp = await getQuizzes();
+        const resp = await getQuizzes(); 
       
         setQuizzes(resp);
       } catch (error) {

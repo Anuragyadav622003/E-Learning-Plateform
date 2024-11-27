@@ -28,7 +28,7 @@ const CourseDetails = () => {
       <div className="container mx-auto py-6 px-4">
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
           {/* Sidebar Section */}
-          <div className="lg:col-span-1 bg-white dark:bg-gray-800 shadow-lg rounded-lg p-6">
+          <div className="lg:col-span-1 bg-white dark:bg-gray-800 shadow-lg rounded-lg p-2">
             <img
               src={course.image}
               alt={course.title}

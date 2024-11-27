@@ -7,12 +7,28 @@ function QuizSolution() {
   const navigate = useNavigate();
 
   const [quizData, setQuizData] = useState(null);
+  const [userAnswersData, setUserAnswersData] = useState([]);
+
+
+  
 
   useEffect(() => {
     const fetchQuiz = async () => {
       try {
+       
+       
+        const userAnswers = sessionStorage.getItem("userAnswers"); // Retrieve the stored answers that is selected by the use
+
+        if (userAnswers) {
+          setUserAnswersData(JSON.parse(userAnswers)); // Parse and set user answers
+        } else {
+          console.error("No user answers found in sessionStorage.");
+        }
+
+
         const resp = await getQuizzes(); // Fetch all quizzes
         const selectedQuiz = resp.find((quiz, index) => index === parseInt(id)); // Match quiz by index
+
         if (selectedQuiz) {
           setQuizData(selectedQuiz);
         } else {
@@ -25,6 +41,9 @@ function QuizSolution() {
 
     fetchQuiz();
   }, [id]);
+
+
+  
 
   if (!quizData) {
     return (
@@ -58,7 +77,7 @@ function QuizSolution() {
                   className={`flex items-center my-4 p-4 border rounded-md ${
                     option === question.correctAnswer
                       ? "bg-green-100 dark:bg-green-600"
-                      : option === question.selectedAnswer
+                      : option === userAnswersData[index]
                       ? "bg-red-100 dark:bg-red-600"
                       : "hover:bg-gray-100 dark:hover:bg-gray-600"
                   }`}
