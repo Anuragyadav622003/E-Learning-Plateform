@@ -10,7 +10,7 @@ import dashboardRoutes from './src/routers/AdminRouter.js';
 import  authorizRouter  from './src/routers/AuthorizRouter.js';
 //upload images
 
-
+import fileUpload from "express-fileupload"
 
 dotenv.config();
 connectDB();
@@ -27,6 +27,9 @@ app.use(express.static('public'));
 app.use(cookieParser(process.env.COOKIE_SECRET || 'your-default-secret'));
 app.use(express.urlencoded());
 
+app.use(fileUpload({
+useTempFiles:true
+}))
 
 
 app.get('/',(req,res)=>{

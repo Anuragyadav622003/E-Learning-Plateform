@@ -2,9 +2,9 @@ import { v2 as cloudinary } from 'cloudinary';
 import fs from 'fs/promises'; 
 
 cloudinary.config({
-  cloud_name: "djmfydkpl",
-  api_key: 857628151944543,
-  api_secret: "ueuznKHnYNSpsrRvwJsF7AP_hZY"
+  cloud_name:'dsfzkkelg',
+  api_key: '427346933547673',
+  api_secret: 'CYizoqhcuSymgx3EkKh3NSwiGwc'
 });
 
 const uploadOnCloud = async (file_path) => {
@@ -13,7 +13,7 @@ const uploadOnCloud = async (file_path) => {
 
    
     const response = await cloudinary.uploader.upload(file_path, { resource_type: 'auto' });
-    // console.log("File is uploaded on Cloudinary");
+     console.log("File is uploaded on Cloudinary");
 
     // Remove the file using fs.promises.unlink
     await fs.unlink(file_path);
