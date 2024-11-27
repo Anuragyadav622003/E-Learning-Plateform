@@ -2,15 +2,32 @@ import React, { useState, useEffect } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import { Link, useNavigate } from 'react-router-dom';
-import { login } from './AuthApi';
-
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css"; // Import Toastify styles
+import { handleError, handleSuccess } from "../../../utils";
 function Login() {
   const { loginWithRedirect, user, isAuthenticated } = useAuth0();
   const navigate = useNavigate();
+  const [initialState, setInitialState] = useState({
+    
+    email: "",
+    password: "",
+    
+  });
 
+  //handling the input value
+ const handleInput = (e) => {
+  // console.log(e)
+  let name = e.target.name;
+  let value = e.target.value;
+
+  setInitialState({
+    ...initialState,
+    [name]: value,
+  });
+};
   // State to store email, password, error message, and loading status
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -22,11 +39,13 @@ function Login() {
       await loginWithRedirect({ connection: 'google-oauth2' });
     } catch (error) {
       console.error('Error during Google login:', error);
-      setError('Error logging in with Google. Please try again.');
+      setError(`Google login failed: ${error.message}`);
+      toast.error(`Google login failed: ${error.message}`);
     } finally {
       setLoading(false);
     }
   };
+  
 
   // Store authenticated user in localStorage when using Google login
   useEffect(() => {
@@ -40,7 +59,6 @@ function Login() {
       }
     }
   }, [isAuthenticated, user]);
-
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
@@ -48,26 +66,54 @@ function Login() {
   // Handle form submission for manual login
   const handleSubmit = async (e) => {
     e.preventDefault();  // Prevent form default submission
-    setError('');  // Reset error state
-    setLoading(true);  // Set loading state
+    // setError('');  // Reset error state
+    // setLoading(true);  // Set loading state
 
     // Basic validation
-    if (!email.includes('@') || password.length < 6) {
-      setError('Please enter a valid email and a password with at least 6 characters.');
-      setLoading(false);
-      return;
-    }
+    // if (!email.includes('@') || password.length < 6) {
+    //   setError('Please enter a valid email and a password with at least 6 characters.');
+    //   setLoading(false);
+    //   return;
+    // }
 
     try {
-      const resp = await login({ email, password });
-      alert(resp);
-      navigate('/');  // Navigate to the homepage after successful login
-    } catch (error) {
-      console.error('Error during manual login:', error);
-      setError('Login failed. Please check your credentials and try again.');
-    } finally {
-      setLoading(false);
+      const response = await fetch(`http://localhost:5000/api/user/login`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(initialState),
+    });
+    const res_data=await response.json();
+    console.log("response data from server",{res_data});
+    
+       // For development, store tokens in localStorage
+       localStorage.setItem("accessToken", res_data.accessToken);
+       localStorage.setItem("refreshToken", res_data.refreshToken);
+ 
+    
+    if (response.ok) {
+      // localStorage.setItem("token",res_data.token);
+      // storeTokenInLS(res_data.token)
+      setInitialState({
+       
+        email: "",
+        
+        password: "",
+        });
+      handleSuccess(res_data.msg)
+      setTimeout(() => {
+        navigate("/");
+      }, 4000);
     }
+    else{
+  handleError(res_data.msg)
+    }
+  
+  } catch (error) {
+      console.error('Error during manual login:', error);
+     
+    } 
   };
 
   return (
@@ -88,15 +134,16 @@ function Login() {
           <h1 className="text-center text-3xl font-bold mb-6 text-teal-950">Login</h1>
 
           {/* Error Message */}
-          {error && <div className="mb-4 text-red-600 text-center">{error}</div>}
+          {/* {error && <div className="mb-4 text-red-600 text-center">{error}</div>} */}
 
           {/* Email Field */}
           <div className="mb-4">
             <label className="block font-medium text-gray-700">Email</label>
             <input
+            name="email"
               type="email"
-              value={email}  // Bind email state
-              onChange={(e) => setEmail(e.target.value)}  // Update state on input change
+              value={initialState.email}
+              onChange={handleInput} // Update state on input change
               className="block w-full rounded-md border border-gray-300 py-2 px-3 mt-1 text-gray-900 focus:outline-none focus:ring-2 focus:ring-teal-600"
               placeholder="Enter your email"
               required
@@ -108,9 +155,10 @@ function Login() {
             <label className="block font-medium text-gray-700">Password</label>
             <div className="relative">
               <input
+              name="password"
                 type={showPassword ? 'text' : 'password'}
-                value={password}  // Bind password state
-                onChange={(e) => setPassword(e.target.value)}  // Update state on input change
+                value={initialState.password}
+                onChange={handleInput} // Update state on input change
                 className="block w-full rounded-md border border-gray-300 py-2 px-3 mt-1 text-gray-900 focus:outline-none focus:ring-2 focus:ring-teal-600 pr-10"
                 placeholder="Enter your password"
                 required
@@ -134,13 +182,12 @@ function Login() {
 
           {/* Login Button */}
           <div className="mb-6">
-            <button
-              type="submit"  // Ensure the form is submitted when button is clicked
-              className={`w-full h-12 rounded-md text-white font-semibold transition duration-200 ${loading ? 'bg-teal-300 cursor-not-allowed' : 'bg-teal-950 hover:bg-teal-700'}`}
-              disabled={loading} // Disable button while loading
-            >
-              {loading ? 'Logging in...' : 'Login'}
-            </button>
+          <button
+            type="submit"
+            className="w-full py-2 px-4 bg-teal-600 text-white font-bold rounded-md focus:outline-none hover:bg-teal-700 disabled:bg-teal-400"
+          >
+            Login
+          </button>
           </div>
 
           {/* OR Divider */}
@@ -173,6 +220,7 @@ function Login() {
           </div>
         </form>
       </div>
+      <ToastContainer />
     </div>
   );
 }
