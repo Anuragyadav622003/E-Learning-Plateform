@@ -36,7 +36,8 @@ function AdminRoute() {
                 },
                 {
                     path: 'assignments',
-                    element: <Assignments />
+                    element: <Assignments />,
+                    loader:null
                 },
                 {
                     path: 'quizzes',
