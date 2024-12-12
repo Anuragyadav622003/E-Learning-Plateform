@@ -15,9 +15,9 @@ function PeerToPeer() {
     }
     try {
       const response = await axios.post('https://e-learning-plateform-468p.vercel.app/execute', {
-        language,
-        code,
-        input,
+      language: language,
+        code: code,
+        input: input
       });
       setOutput(response.data.output || response.data.error);
     } catch (error) {
