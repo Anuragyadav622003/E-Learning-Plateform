@@ -26,7 +26,7 @@ function PeerToPeer() {
   };
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 p-6 bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-white max-h-screen">
+    <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 p-6 bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-white mix-h-screen">
       {/* Description Section */}
       <div className="col-span-1 lg:col-span-4">
         <div className="mb-4">
