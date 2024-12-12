@@ -40,13 +40,13 @@ function PeerToPeer() {
         <div className="hidden lg:block min-h-screen">
           <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg">
             <div className="flex justify-between w-1/2">
-            <label className="text-xl font-semibold text-gray-900 dark:text-gray-200 ">
+            <label className="text-sm font-semibold text-gray-900 dark:text-gray-200 ">
                 Input
               </label>
-              <label className="text-lg font-semibold text-gray-700 dark:text-gray-300">
+              <label className="text-sm font-semibold text-gray-700 dark:text-gray-300">
                 TestCase
               </label>
-              <label className="text-lg font-semibold text-gray-700 dark:text-gray-300">
+              <label className="text-sm font-semibold text-gray-700 dark:text-gray-300">
                 Test Result
               </label>
             </div>
@@ -65,7 +65,7 @@ function PeerToPeer() {
       {/* Code Section */}
       <div className="col-span-1 lg:col-span-8">
         <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg">
-          <label className="text-lg font-semibold text-gray-700 dark:text-gray-300">
+          <label className="text-base font-semibold text-gray-700 dark:text-gray-300">
             Your Code
           </label>
 
@@ -87,7 +87,7 @@ function PeerToPeer() {
           <textarea
             className="w-full mt-4 p-4 bg-gray-50 dark:bg-gray-700 text-gray-800 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
             style={{ maxHeight: '400px', overflowY: 'auto' }}
-            rows="10"
+            rows="14"
             placeholder="Enter your code here..."
             value={code}
             onChange={(e) => setCode(e.target.value)}
@@ -109,10 +109,10 @@ function PeerToPeer() {
       <div className="col-span-1 lg:col-span-8 lg:hidden">
         <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg">
           <div className="flex justify-between w-48">
-            <label className="text-lg font-semibold text-gray-700 dark:text-gray-300">
+            <label className="text-base font-semibold text-gray-700 dark:text-gray-300">
               TestCase
             </label>
-            <label className="text-lg font-semibold text-gray-700 dark:text-gray-300">
+            <label className="text-base font-semibold text-gray-700 dark:text-gray-300">
               Test Result
             </label>
           </div>
