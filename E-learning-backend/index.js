@@ -1,4 +1,4 @@
-import express, { urlencoded } from 'express';
+import express, { response, urlencoded } from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 
@@ -57,10 +57,12 @@ const JDoodleClientSecret = 'b2308d0ba981ea3b496139726ab62a22340175c2ca21de6bf8c
 const JDoodleAPIURL = 'https://api.jdoodle.com/v1/execute';
 
 // Middleware
-app.use(cors());
-app.use(express.json()); // Using built-in express.json() instead of body-parser
+app.get("/execute",async (req, res)=>{
+res.send('execute');
+});
 
 // POST endpoint to execute code
+
 app.post('/execute', async (req, res) => {
     const { language, code, input } = req.body;
     console.log(req.body);
