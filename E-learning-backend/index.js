@@ -58,7 +58,7 @@ const JDoodleAPIURL = 'https://api.jdoodle.com/v1/execute';
 
 // Middleware
 app.get("/execute",async (req, res)=>{
-res.send('execute');
+res.send('execute hello');
 });
 
 // POST endpoint to execute code
