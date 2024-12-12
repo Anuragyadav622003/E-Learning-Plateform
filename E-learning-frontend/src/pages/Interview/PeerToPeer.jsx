@@ -87,7 +87,7 @@ function PeerToPeer() {
           <textarea
             className="w-full mt-4 p-4 bg-gray-50 dark:bg-gray-700 text-gray-800 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
             style={{ maxHeight: '400px', overflowY: 'auto' }}
-            rows="14"
+            rows="12"
             placeholder="Enter your code here..."
             value={code}
             onChange={(e) => setCode(e.target.value)}
