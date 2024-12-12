@@ -1,6 +1,7 @@
 import express, { response, urlencoded } from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import axios from 'axios';
 
 import cookieParser from 'cookie-parser';
 import connectDB from './db.js';
@@ -48,24 +49,14 @@ app.use('/api/quizz',quizzRoutes);
 // app.use('/admin/create')
 
 
-
-
-
-//code execution 
 const JDoodleClientID = 'e7b06eab4696ece7f653aa623bb7a6af'; // Replace with your JDoodle client ID
 const JDoodleClientSecret = 'b2308d0ba981ea3b496139726ab62a22340175c2ca21de6bf8c0242c696a5489'; // Replace with your JDoodle client secret
 const JDoodleAPIURL = 'https://api.jdoodle.com/v1/execute';
 
-// Middleware
-app.get("/execute",async (req, res)=>{
-res.send('execute hello');
-});
 
 // POST endpoint to execute code
-
 app.post('/execute', async (req, res) => {
     const { language, code, input } = req.body;
-    console.log(req.body);
 
     if (!language || !code) {
         return res.status(400).json({ error: 'Language and code are required' });
@@ -89,6 +80,9 @@ app.post('/execute', async (req, res) => {
         res.status(500).json({ error: 'Error executing code' });
     }
 });
+
+
+
 
 // Start server
 app.listen(PORT, () => {
