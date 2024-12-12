@@ -5,8 +5,10 @@ import DarkModeSwitch from '../componenet/Darkmod';
 const navigation = [
   { name: 'Home', href: '/' },                     // Link to Home
   { name: 'Courses', href: '/courses' },           // Link to Courses
-  { name: 'Quizzes', href: '/quizzes' },           // Link to Quizzes
+  { name: 'Quizzes', href: '/quizzes' },            // Link to Quizzes
+  { name: 'Interview', href: '/interview' },                   //Link fo interview
   { name: 'Profile', href: '/profile' },            // Link to User Profile
+  
             
 ];
 

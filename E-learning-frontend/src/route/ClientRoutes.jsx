@@ -12,6 +12,8 @@ import { Logout } from '@mui/icons-material';
 import CourseDetails from '../pages/Courses/CourseDetails';
 import CourseContent from '../pages/Courses/CourseContent';
 import QuizSolution from '../pages/Quizz/QuizSolution';
+import Interview from '../pages/Interview/Interview';
+import PeerToPeer from '../pages/Interview/PeerToPeer';
 
 
 
@@ -31,6 +33,8 @@ function ComponentsRouter() {
         <Route path="/course/:id" element={<CourseDetails/>} />
         <Route path="/course/:id/content" element={<CourseContent/>} />
         <Route path='/profile' element={<Profile/>}/>
+        <Route path='/interview' element={<PeerToPeer/>}/>
+        
      <Route path='/logout' element={<Logout/>}/>
 
 </Routes>
