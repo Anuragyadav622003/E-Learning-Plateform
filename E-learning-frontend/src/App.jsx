@@ -9,7 +9,7 @@ function App() {
     <div>
      <BrowserRouter>
       <div className="min-h-screen flex flex-col">
-        <Navbar />
+          <Navbar />
           <ComponentsRouter />
       </div>
      </BrowserRouter>
