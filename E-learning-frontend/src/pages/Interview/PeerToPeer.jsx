@@ -100,7 +100,7 @@ function PeerToPeer() {
       <div className="col-span-1 lg:col-span-8">
         <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg">
           <label className="text-base font-semibold text-gray-700 dark:text-gray-300">
-            Your Code
+             Code
           </label>
 
           {/* Language Selector */}
