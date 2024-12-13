@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
+
 function PeerToPeer() {
   const [input, setInput] = useState('');
   const [testCase, setTestCase] = useState('');
@@ -15,9 +16,9 @@ function PeerToPeer() {
     }
     try {
       const response = await axios.post('https://e-learning-plateform-468p.vercel.app/execute', {
-        language,
-        code,
-        input,
+      language: language,
+        code: code,
+        input: input
       });
       setOutput(response.data.output || response.data.error);
     } catch (error) {
