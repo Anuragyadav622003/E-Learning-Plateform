@@ -99,18 +99,9 @@ const Interview = () => {
         {/* Right Section */}
         <div className="col-span-1 lg:col-span-6">
          
-          <div className="w-full h-80 bg-gray-800 rounded-lg flex items-center justify-center">
+          <div className="w-full h-80 bg-gray-800 rounded-xl flex items-center justify-center">
            
-          <iframe
-  className="h-full rounded-md"
-  width="100%" // Adjust width as needed
-  height="auto" // Set height to auto or a fixed value depending on your design
-  src="https://www.youtube.com/embed/0NFxcNheoLc?controls=1" // controls=1 enables controls
-  title="YouTube video"
-  frameBorder="0"
-  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-  allowFullScreen
-></iframe>
+    <video className="w-full h-full rounded-xl" controls/>
 
           </div>
         </div>
