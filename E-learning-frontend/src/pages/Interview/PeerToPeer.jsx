@@ -26,31 +26,31 @@ function PeerToPeer() {
     }
   };
 
-  const renderOutput = (text) => {
-    const tabWidth = 4; // Number of spaces per tab
+  // const renderOutput = (text) => {
+  //   const tabWidth = 4; // Number of spaces per tab
 
-    const elements = [];
-    for (let i = 0; i < text.length; i++) {
-      const char = text[i];
-      if (char === "\n") {
-        elements.push(<br key={`br-${i}`} />);
-      } else if (char === "\t") {
-        // Render tab as a series of non-breaking spaces
-        elements.push(
-          <span key={`tab-${i}`}>
-            {Array(tabWidth)
-              .fill("\u00A0")
-              .join("")}
-          </span>
-        );
-      } else if (char === " ") {
-        elements.push(<span key={`space-${i}`}>&nbsp;</span>); // Render space
-      } else {
-        elements.push(char);
-      }
-    }
-    return elements;
-  };
+  //   const elements = [];
+  //   for (let i = 0; i < text.length; i++) {
+  //     const char = text[i];
+  //     if (char === "\n") {
+  //       elements.push(<br key={`br-${i}`} />);
+  //     } else if (char === "\t") {
+  //       // Render tab as a series of non-breaking spaces
+  //       elements.push(
+  //         <span key={`tab-${i}`}>
+  //           {Array(tabWidth)
+  //             .fill("\u00A0")
+  //             .join("")}
+  //         </span>
+  //       );
+  //     } else if (char === " ") {
+  //       elements.push(<span key={`space-${i}`}>&nbsp;</span>); // Render space
+  //     } else {
+  //       elements.push(char);
+  //     }
+  //   }
+  //   return elements;
+  // };
   return (
     <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 p-6 bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-white mix-h-screen">
       {/* Description Section */}
@@ -88,7 +88,7 @@ function PeerToPeer() {
               </label>
               
               <textarea
-              value={renderOutput(output) || ''}
+              value={output || ''}
               className="w-full mt-2 p-4 bg-gray-50 dark:bg-gray-700 text-gray-800 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
               rows="5"
               placeholder="Waiting for output..."
@@ -166,7 +166,7 @@ function PeerToPeer() {
               </label>
               
               <textarea
-              value={renderOutput(output) || ''}
+              value={output || ''}
               className="w-full mt-2 p-4 bg-gray-50 dark:bg-gray-700 text-gray-800 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
               rows="5"
               placeholder="Waiting for output..."
