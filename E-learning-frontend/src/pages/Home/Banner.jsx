@@ -50,26 +50,7 @@ function Banner() {
           </select>
         </label>
 
-        {/* Email Input */}
-        {/* <label className="flex items-center gap-3 p-3 bg-gray-800 rounded-md shadow-md transition duration-300 ease-in-out hover:shadow-lg focus-within:ring-2 focus-within:ring-blue-500">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 16 16"
-            fill="currentColor"
-            className="w-8 h-8 text-blue-500"
-          >
-            <path d="M2.5 3A1.5 1.5 0 0 0 1 4.5v.793c.026.009.051.02.076.032L7.674 8.51c.206.1.446.1.652 0l6.598-3.185A.755.755 0 0 1 15 5.293V4.5A1.5 1.5 0 0 0 13.5 3h-11Z" />
-            <path d="M15 6.954 8.978 9.86a2.25 2.25 0 0 1-1.956 0L1 6.954V11.5A1.5 1.5 0 0 0 2.5 13h11a1.5 1.5 0 0 0 1.5-1.5V6.954Z" />
-          </svg>
-          <input
-            type="text"
-            className="flex-grow h-10 font-semibold text-lg text-gray-200 placeholder-gray-400 bg-gray-800 rounded-md p-2 focus:outline-none transition duration-200 ease-in-out"
-            placeholder={placeholder}
-            onFocus={handleFocus}
-            onBlur={handleBlur}
-          />
-        </label> */}
-
+       
         {/* Get Started Button */}
         <button
           className="text-xl font-bold text-black bg-pink-400 hover:bg-pink-500 py-3 px-5 rounded-md shadow-md transition duration-300 ease-in-out transform hover:scale-105"
