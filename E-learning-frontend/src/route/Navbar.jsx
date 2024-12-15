@@ -7,7 +7,8 @@ const navigation = [
   { name: 'Courses', href: '/courses' },           // Link to Courses
   { name: 'Quizzes', href: '/quizzes' },            // Link to Quizzes
   { name: 'Interview', href: '/interview' },                   //Link fo interview
-  { name: 'Profile', href: '/profile' },            // Link to User Profile
+  { name: 'Profile', href: '/profile' },             // Link to User Profile
+  { name: 'Contact', href: '/contact' },
   
             
 ];

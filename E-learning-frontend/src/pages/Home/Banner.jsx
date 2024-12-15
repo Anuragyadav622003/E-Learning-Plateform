@@ -25,19 +25,19 @@ function Banner() {
   return (
     <div className="flex flex-col-reverse md:flex-row items-center justify-between max-w-screen-2xl container mx-auto px-8 md:px-20 lg:px-24 py-16 md:h-screen">
       {/* Left Text Section */}
-      <div className="w-full md:w-1/2 space-y-6 md:space-y-10 text-white pt-10 md:pr-10">
+      <div className="w-full md:w-1/2 space-y-6 md:space-y-10 text-black pt-10 md:pr-10">
         <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold leading-tight">
           Welcome! Learn something{" "}
           <span className="text-pink-400">new every day!</span>
         </h1>
-        <p className="text-lg md:text-2xl text-gray-300">
+        <p className="text-lg md:text-2xl text-black">
           Explore a variety of topics and expand your knowledge with engaging
           content and resources.
         </p>
 
         {/* Role Selection */}
         <label className="flex flex-col">
-          <span className="text-gray-300 font-semibold mb-2">Select your role:</span>
+          <span className="text-black font-semibold mb-2">Select your role:</span>
           <select
             value={role}
             onChange={handleRoleChange}
