@@ -110,7 +110,7 @@ const ContactUs = () => {
                 <FaEnvelope className="text-blue-500 mr-4" />
                 <div>
                   <h3 className="font-semibold">Email</h3>
-                  <p className="text-gray-600">jeetu102122@gmail.com</p>
+                  <p className="text-gray-600">anuragyadav622003@gmail.com</p>
                 </div>
               </div>
               <div className="flex items-center">
