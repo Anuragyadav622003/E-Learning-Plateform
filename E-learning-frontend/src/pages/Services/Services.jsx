@@ -55,7 +55,7 @@ const ServicesData=[
 
 const Services = () => {
   return (
-    <div className='bg-gray-900'>
+    <div className='bg-blue-300'>
 
     <div className='container pb-14 pt-16'>
     <h1 className='text-4xl text-white font-bold text-center pb-10'>
