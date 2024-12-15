@@ -14,8 +14,7 @@ import CourseContent from '../pages/Courses/CourseContent';
 import QuizSolution from '../pages/Quizz/QuizSolution';
 import Interview from '../pages/Interview/Interview';
 import  ContactUS  from '../pages/Contact/ContactUS'
-
-
+import PeerToPeer from '../pages/Interview/PeerToPeer';
 
 function ComponentsRouter() {
   return (
@@ -35,6 +34,7 @@ function ComponentsRouter() {
         <Route path='/interview' element={<Interview/>}/>
         <Route path='/logout' element={<Logout/>}/>
         <Route path = '/contact' element = {<ContactUS/>}/>
+        <Route path = '/peertopeer' element = {<PeerToPeer/>}/>
 
 </Routes>
 
