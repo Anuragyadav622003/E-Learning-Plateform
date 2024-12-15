@@ -13,7 +13,7 @@ import CourseDetails from '../pages/Courses/CourseDetails';
 import CourseContent from '../pages/Courses/CourseContent';
 import QuizSolution from '../pages/Quizz/QuizSolution';
 import Interview from '../pages/Interview/Interview';
-
+import  ContactUS  from '../pages/Contact/ContactUS'
 
 
 
@@ -34,6 +34,7 @@ function ComponentsRouter() {
         <Route path='/profile' element={<Profile/>}/>
         <Route path='/interview' element={<Interview/>}/>
         <Route path='/logout' element={<Logout/>}/>
+        <Route path = '/contact' element = {<ContactUS/>}/>
 
 </Routes>
 
