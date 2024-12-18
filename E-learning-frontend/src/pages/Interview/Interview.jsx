@@ -1,5 +1,5 @@
 import React from "react";
-
+import {useNavigation} from 'react-router-dom';
 const Interview = () => {
   const interviewData = [
     {
@@ -48,6 +48,7 @@ const Interview = () => {
       feedback: "Schedule Feedback",
     },
   ];
+  const navigate = useNavigation();
 
   const RenderInterviews = (data) => (
     <table className="table-auto w-full text-left border-collapse border border-gray-300 dark:border-gray-700">
@@ -91,7 +92,7 @@ const Interview = () => {
           <p className="text-gray-400">
             Join thousands of tech candidates practicing interviews to land jobs. Practice real questions over video chat in a collaborative environment and get helpful feedback.
           </p>
-          <button className="bg-blue-600 text-white px-6 py-3 rounded-lg shadow-md hover:bg-blue-500 transition duration-200">
+          <button className="bg-blue-600 text-white px-6 py-3 rounded-lg shadow-md hover:bg-blue-500 transition duration-200" onClick = {()=>navigate('/peertopeer')}>
             Schedule Practice Session
           </button>
         </div>

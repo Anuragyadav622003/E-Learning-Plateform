@@ -10,7 +10,7 @@ import Hero from './Hero';
 
 const Home = () => {
   return (
-    <div className="flex flex-col bg-gray-900 w-screen items-center justify-center min-h-screen ">
+    <div className="flex flex-col bg-blue-300 text-black w-screen items-center justify-center min-h-screen ">
       <Banner /> {/* Full width and margin below the banner */}
       <div>
      <Services/>

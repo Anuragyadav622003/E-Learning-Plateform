@@ -13,9 +13,8 @@ import CourseDetails from '../pages/Courses/CourseDetails';
 import CourseContent from '../pages/Courses/CourseContent';
 import QuizSolution from '../pages/Quizz/QuizSolution';
 import Interview from '../pages/Interview/Interview';
-
-
-
+import  ContactUS  from '../pages/Contact/ContactUS'
+import PeerToPeer from '../pages/Interview/PeerToPeer';
 
 function ComponentsRouter() {
   return (
@@ -28,13 +27,14 @@ function ComponentsRouter() {
         <Route path='/quizzes' element={<QuizzScreen/>}/>
         <Route path='/quizzes/:id' element={<QuizzPlay/>}/>
         <Route path='/quizzes/:id/solution' element={<QuizSolution/>}/>
-
         <Route path="/courses" element={<Courses/>}/>
         <Route path="/course/:id" element={<CourseDetails/>} />
         <Route path="/course/:id/content" element={<CourseContent/>} />
         <Route path='/profile' element={<Profile/>}/>
         <Route path='/interview' element={<Interview/>}/>
-     <Route path='/logout' element={<Logout/>}/>
+        <Route path='/logout' element={<Logout/>}/>
+        <Route path = '/contact' element = {<ContactUS/>}/>
+        <Route path = '/peertopeer' element = {<PeerToPeer/>}/>
 
 </Routes>
 
