@@ -121,8 +121,6 @@ const Interview = () => {
           {RenderInterviews(interviewData)}
         </div>
       </div>
-
-     
     </div>
   );
 };
