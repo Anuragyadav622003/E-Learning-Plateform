@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { FaStar, FaRegStar } from "react-icons/fa"; // Importing stars from react-icons
-import coursesData from "./CourseApi";
+import coursesData from "./CourseApi"; // Import course data
 import { useNavigate } from "react-router-dom";
 
 const Courses = () => {
@@ -8,24 +8,23 @@ const Courses = () => {
   const navigate = useNavigate();
 
   // Filter courses based on the search query
-  const filteredCourses = coursesData.filter((course) =>
-    course.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    course.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    course.instructor.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredCourses = coursesData.filter(
+    (course) =>
+      course.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      course.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      course.instructor.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   // Function to render rating stars
   const renderStars = (rating) => {
     const fullStars = Math.floor(rating);
-    const halfStar = rating % 1 >= 0.5;
-    const emptyStars = 5 - fullStars - (halfStar ? 1 : 0);
+    const emptyStars = 5 - fullStars;
 
     return (
       <>
         {[...Array(fullStars)].map((_, index) => (
           <FaStar key={`full-${index}`} className="text-yellow-500" />
         ))}
-        {halfStar && <FaStar className="text-yellow-500" />}
         {[...Array(emptyStars)].map((_, index) => (
           <FaRegStar key={`empty-${index}`} className="text-gray-400" />
         ))}
@@ -35,7 +34,7 @@ const Courses = () => {
 
   const handleStartLearning = (courseId) => {
     console.log(`Starting course with ID: ${courseId}`);
-    navigate(`/course/${courseId}`);
+    navigate(`/course/${courseId}`); // Navigates to the course details page
   };
 
   return (
@@ -52,7 +51,7 @@ const Courses = () => {
             placeholder="Search for courses..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full text-black max-w-md px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-lg dark:bg-gray-800 dark:text-white outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full max-w-md px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-lg dark:bg-gray-800 dark:text-white outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
 
