@@ -4,13 +4,12 @@ import { BrowserRouter } from 'react-router-dom';
 import ComponentsRouter from './route/ClientRoutes';
 
 
-
 function App() {
   return (<>
     <div>
      <BrowserRouter>
       <div className="min-h-screen flex flex-col">
-        <Navbar />
+          <Navbar />
           <ComponentsRouter />
       </div>
      </BrowserRouter>

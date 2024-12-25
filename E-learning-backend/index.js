@@ -1,7 +1,8 @@
-import express, { urlencoded } from 'express';
+import express, { response, urlencoded } from 'express';
 import cors from 'cors';
-import dotenv from 'dotenv';
+import axios from 'axios';
 import bodyParser from 'body-parser';
+import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
 import connectDB from './db.js';
 import userRoutes from './src/routers/UserRouter.js';
@@ -51,6 +52,41 @@ app.use('/api/quizz',quizzRoutes);
 // Admin Dashboard routes
  app.use('/admin',dashboardRoutes);
 // app.use('/admin/create')
+
+
+const JDoodleClientID = 'e7b06eab4696ece7f653aa623bb7a6af'; // Replace with your JDoodle client ID
+const JDoodleClientSecret = 'b2308d0ba981ea3b496139726ab62a22340175c2ca21de6bf8c0242c696a5489'; // Replace with your JDoodle client secret
+const JDoodleAPIURL = 'https://api.jdoodle.com/v1/execute';
+
+
+// POST endpoint to execute code
+app.post('/execute', async (req, res) => {
+    const { language, code, input } = req.body;
+
+    if (!language || !code) {
+        return res.status(400).json({ error: 'Language and code are required' });
+    }
+
+    // Set up the request payload for JDoodle
+    const payload = {
+        clientId: JDoodleClientID,
+        clientSecret: JDoodleClientSecret,
+        script: code,
+        language: language,
+        versionIndex: "0", // default version, can adjust as per the JDoodle API docs
+        stdin: input || "", // Input to provide to the code (optional)
+    };
+
+    try {
+        const response = await axios.post(JDoodleAPIURL, payload);
+        res.json(response.data);  // Send back JDoodle response (output or error)
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Error executing code' });
+    }
+});
+
+
 
 
 // Start server

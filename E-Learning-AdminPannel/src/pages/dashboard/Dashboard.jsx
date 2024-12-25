@@ -99,14 +99,11 @@ const Dashboard = () => {
         {Card("Total Quizzes", state.dashboardData.totalQuizzes || 0)}
         {Card("Total Students", state.dashboardData.totalStudents || 0)}
 
+        {Card("Total Users", state.dashboardData.totalUsers || 0)}
+        {Card("Total Admins", state.dashboardData.totalAdmins || 0)}
+        {Card("Total Instructors", state.dashboardData.totalInstructors || 0)}
 
-        {Card(  "Total Users", state.dashboardData.totalUsers || 0 )}
-  {Card("Total Admins",state.dashboardData.totalAdmins || 0 )}
-  {Card("Total Instructors",state.dashboardData.totalInstructors || 0 )}
-  
-  {Card("Quizzes Created",state.dashboardData.quizzesCreated || 0 )}
-
-
+        {Card("Quizzes Created", state.dashboardData.quizzesCreated || 0)}
       </div>
       {/* Graph and Chart */}
       <div className="grid grid-cols-1  lg:grid-cols-2 gap-6 mb-8">

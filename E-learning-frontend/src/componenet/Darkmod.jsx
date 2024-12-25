@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, memo } from "react";
 import { MdDarkMode, MdLightMode } from "react-icons/md";
 
 const DarkModeSwitch = () => {
@@ -54,4 +54,4 @@ const DarkModeSwitch = () => {
   );
 };
 
-export default DarkModeSwitch;
+export default  memo(DarkModeSwitch);

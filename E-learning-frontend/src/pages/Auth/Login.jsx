@@ -39,8 +39,8 @@ function Login() {
       await loginWithRedirect({ connection: 'google-oauth2' });
     } catch (error) {
       console.error('Error during Google login:', error);
-      setError(`Google login failed: ${error.message}`);
-      toast.error(`Google login failed: ${error.message}`);
+      setError(Google login failed: ${error.message});
+      toast.error(Google login failed: ${error.message});
     } finally {
       setLoading(false);
     }
@@ -77,7 +77,7 @@ function Login() {
     // }
 
     try {
-      const response = await fetch(`http://localhost:5000/api/user/login`, {
+      const response = await fetch(http://localhost:5000/api/user/login, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

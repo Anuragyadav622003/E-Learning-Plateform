@@ -1,13 +1,19 @@
-import React, { useState, useEffect } from 'react';
-import { useTimer } from 'react-timer-hook';
+import React, { useState, useEffect } from "react";
+import { useTimer } from "react-timer-hook";
+import { getQuizzes } from "./QuizzApi";
+import { useNavigate, useParams } from "react-router-dom";
 
-function QuizzScreen() {
-  const timerDuration = 30; // Set the duration for each question timer (in seconds)
+function QuizzPlay() {
+  const { id } = useParams(); // Extract the `id` from URL params
+  const navigate = useNavigate();
+
+  const timerDuration = 30; // Timer duration for each question
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedOption, setSelectedOption] = useState(null);
   const [score, setScore] = useState(0);
   const [quizFinished, setQuizFinished] = useState(false);
   const [quizData, setQuizData] = useState(null);
+  const [answersTracker, setAnswersTracker] = useState({}); // Object to store answers efficiently
 
   const { seconds, start, restart } = useTimer({
     expiryTimestamp: new Date().getTime() + timerDuration * 1000,
@@ -15,14 +21,22 @@ function QuizzScreen() {
   });
 
   useEffect(() => {
-    try {
-      const resp = localStorage.getItem('quizzToPlay');
-      const data = JSON.parse(resp);
-      setQuizData(data);
-    } catch (error) {
-      console.log(error);
-    }
-  }, []);
+    const fetchQuiz = async () => {
+      try {
+        const resp = await getQuizzes(); // Fetch all quizzes
+        const selectedQuiz = resp.find((quiz, index) => index === parseInt(id)); // Match quiz by index
+        if (selectedQuiz) {
+          setQuizData(selectedQuiz);
+        } else {
+          console.error("Quiz not found.");
+        }
+      } catch (error) {
+        console.error("Error fetching quizzes:", error);
+      }
+    };
+
+    fetchQuiz();
+  }, [id]);
 
   useEffect(() => {
     restart(new Date().getTime() + timerDuration * 1000);
@@ -34,39 +48,76 @@ function QuizzScreen() {
   }, [currentQuestionIndex]);
 
   const handleNext = () => {
-    if (selectedOption) {
-      if (selectedOption === quizData.questions[currentQuestionIndex].correctAnswer) {
+    if (selectedOption !== null) {
+      // Store the selected answer in answersTracker with the question index
+      setAnswersTracker((prevAnswers) => ({
+        ...prevAnswers,
+        [currentQuestionIndex]: selectedOption,
+      }));
+
+      // Check if the answer is correct and update the score
+      if (
+        selectedOption === quizData.questions[currentQuestionIndex].correctAnswer
+      ) {
         setScore(score + 1);
       }
     }
 
+    // Move to the next question or finish the quiz
     if (currentQuestionIndex < quizData.questions.length - 1) {
-      setSelectedOption(null);
+      setSelectedOption(null); // Reset selected option for the next question
       setCurrentQuestionIndex(currentQuestionIndex + 1);
     } else {
+      // Store the last answer for the last question
+      if (selectedOption !== null) {
+        setAnswersTracker((prevAnswers) => ({
+          ...prevAnswers,
+          [currentQuestionIndex]: selectedOption,
+        }));
+      }
+
       setQuizFinished(true);
+      sessionStorage.setItem("userAnswers", JSON.stringify(answersTracker)); // Store the answers in sessionStorage when quiz is finished
     }
   };
 
+  useEffect(() => {
+    // When quiz is finished, store the final answer tracker
+    if (quizFinished) {
+      sessionStorage.setItem("userAnswers", JSON.stringify(answersTracker));
+    }
+  }, [quizFinished, answersTracker]);
+
   if (!quizData) {
-    return <div className="flex justify-center items-center h-screen text-gray-100">Loading...</div>;
+    return (
+      <div className="flex justify-center items-center h-screen text-gray-100">
+        Loading...
+      </div>
+    );
   }
 
   return (
-    <div className="flex flex-col justify-between min-h-screen p-4 sm:p-6 md:p-8 lg:p-12 bg-gray-100 dark:bg-gray-800">
+    <div className="flex flex-col justify-between min-h-screen p-4 sm:p-6 md:p-8 lg:p-12 bg-gray-100 dark:bg-gray-900">
       {!quizFinished ? (
         <>
           <div className="text-center mb-6">
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-indigo-600 dark:text-indigo-400">{quizData.title}</h1>
-            <p className="text-base sm:text-lg md:text-xl mt-2 text-gray-700 dark:text-gray-300">{quizData.description}</p>
-            <p className="text-sm sm:text-md md:text-lg mt-2 text-gray-500 dark:text-gray-400">Category: {quizData.category}</p>
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-indigo-600 dark:text-indigo-400">
+              {quizData.title}
+            </h1>
+            <p className="text-base sm:text-lg md:text-xl mt-2 text-gray-700 dark:text-gray-300">
+              {quizData.description}
+            </p>
+            <p className="text-sm sm:text-md md:text-lg mt-2 text-gray-500 dark:text-gray-400">
+              Category: {quizData.category}
+            </p>
           </div>
           <div className="bg-indigo-500 p-4 rounded-lg shadow-lg dark:bg-indigo-600">
             <h2 className="text-lg sm:text-xl md:text-2xl font-semibold text-white">
               Question {currentQuestionIndex + 1} of {quizData.questions.length}
             </h2>
             <div className="text-md sm:text-lg font-semibold text-yellow-400">
-              {Math.floor(seconds / 60)}:{seconds % 60 < 10 ? `0${seconds % 60}` : seconds % 60}
+              {Math.floor(seconds / 60)}:
+              {seconds % 60 < 10 ? `0${seconds % 60}` : seconds % 60}
             </div>
           </div>
           <div className="flex flex-col flex-grow space-y-4 w-full relative mt-4">
@@ -75,24 +126,29 @@ function QuizzScreen() {
                 {quizData.questions[currentQuestionIndex].question}
               </h3>
               <ul className="options-list list-none pl-0">
-                {quizData.questions[currentQuestionIndex].options.map((option, index) => (
-                  <li key={index} className="flex items-center my-4 border rounded-md p-4 hover:bg-gray-100 dark:hover:bg-gray-600 transition duration-200">
-                    <input
-                      type="radio"
-                      id={option}
-                      name="quiz-option"
-                      checked={selectedOption === option}
-                      onChange={() => setSelectedOption(option)}
-                      className="h-6 w-6 border-gray-700 focus:ring-indigo-500 focus:ring-2"
-                    />
-                    <label
-                      htmlFor={option}
-                      className="ml-4 text-base sm:text-lg md:text-xl font-medium text-gray-800 dark:text-gray-200"
+                {quizData.questions[currentQuestionIndex].options.map(
+                  (option, index) => (
+                    <li
+                      key={index}
+                      className="flex items-center my-4 border rounded-md p-4 hover:bg-gray-100 dark:hover:bg-gray-600 transition duration-200"
                     >
-                      {option}
-                    </label>
-                  </li>
-                ))}
+                      <input
+                        type="radio"
+                        id={option}
+                        name="quiz-option"
+                        checked={selectedOption === option}
+                        onChange={() => setSelectedOption(option)} // Set the selected option when user selects an answer
+                        className="h-6 w-6 border-gray-700 focus:ring-indigo-500 focus:ring-2 "
+                      />
+                      <label
+                        htmlFor={option}
+                        className="ml-4 text-base sm:text-lg md:text-xl font-medium text-gray-800 dark:text-gray-200"
+                      >
+                        {option}
+                      </label>
+                    </li>
+                  )
+                )}
               </ul>
             </div>
             <div className="absolute bottom-4 right-4 w-fit">
@@ -107,19 +163,23 @@ function QuizzScreen() {
         </>
       ) : (
         <div className="flex flex-col items-center justify-center min-h-screen bg-white shadow-lg rounded-lg p-6 dark:bg-gray-700 dark:text-white">
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-indigo-600 dark:text-indigo-400 mb-4">Quiz Finished!</h2>
-          <p className="text-lg sm:text-xl md:text-2xl font-semibold text-gray-700 dark:text-gray-300 mb-4">Your Score:</p>
-          <p className="text-2xl sm:text-3xl md:text-4xl font-bold text-indigo-600 dark:text-indigo-400">{score} / {quizData.questions.length}</p>
-          <p className="text-md sm:text-lg text-gray-500 dark:text-gray-400 mt-4">Thank you for participating!</p>
-          <button 
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-indigo-600 dark:text-indigo-400 mb-4">
+            Quiz Finished!
+          </h2>
+          <p className="text-lg sm:text-xl md:text-2xl font-semibold text-gray-700 dark:text-gray-300 mb-4">
+            Your Score:
+          </p>
+          <p className="text-2xl sm:text-3xl md:text-4xl font-bold text-indigo-600 dark:text-indigo-400">
+            {score} / {quizData.questions.length}
+          </p>
+          <p className="text-md sm:text-lg text-gray-500 dark:text-gray-400 mt-4">
+            Thank you for participating!
+          </p>
+          <button
             className="mt-6 bg-indigo-600 text-white py-2 px-4 rounded-lg hover:bg-indigo-700 transition duration-300 ease-in-out dark:bg-indigo-700 dark:hover:bg-indigo-800"
-            onClick={() => {
-              setCurrentQuestionIndex(0);
-              setScore(0);
-              setQuizFinished(false);
-            }}
+            onClick={() => navigate(`/quizzes/${id}/solution`)}
           >
-            Restart Quiz
+            Solution
           </button>
         </div>
       )}
@@ -127,4 +187,4 @@ function QuizzScreen() {
   );
 }
 
-export default QuizzScreen;
+export default QuizzPlay;
