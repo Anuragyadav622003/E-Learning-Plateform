@@ -1,8 +1,8 @@
 import express, { response, urlencoded } from 'express';
 import cors from 'cors';
-import dotenv from 'dotenv';
 import axios from 'axios';
-
+import bodyParser from 'body-parser';
+import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
 import connectDB from './db.js';
 import userRoutes from './src/routers/UserRouter.js';
@@ -11,10 +11,11 @@ import dashboardRoutes from './src/routers/AdminRouter.js';
 import  authorizRouter  from './src/routers/AuthorizRouter.js';
 //upload images
 
-
+import fileUpload from "express-fileupload"
 
 dotenv.config();
 connectDB();
+// Middleware to parse incoming request bodies
 
 
 const app = express();
@@ -27,11 +28,15 @@ app.use(express.json());
 app.use(express.static('public'));
 app.use(cookieParser(process.env.COOKIE_SECRET || 'your-default-secret'));
 app.use(express.urlencoded());
-
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());  // Make sure this is set up correctly
+app.use(fileUpload({
+useTempFiles:true
+}))
 
 
 app.get('/',(req,res)=>{
-  res.send('hello world')
+  res.send('deployed succesfully')
 });
 
 
