@@ -20,7 +20,7 @@ const signupSchema = z.object({
     .string({ required_error: " mobileNumber is Required" })
     .trim()
     .min(10, { message: " mobileNumber Must be atleast 10 char" })
-    .max(20, { message: " mobileNumber not be more than 20 char" }),
+    .max(11, { message: " mobileNumber not be more than 11 char" }),
 });
 
 export default signupSchema;

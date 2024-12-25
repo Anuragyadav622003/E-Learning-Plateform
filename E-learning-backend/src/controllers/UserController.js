@@ -1,10 +1,10 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import User from "../modals/UserModel.js"; // Corrected spelling of 'models'
+import cloudinary from "../utils/cloudinary.js";
 
 
-
- import { uploadOnCloud } from "../utils/cloudinary.util.js";
+ //import { uploadOnCloud } from "../utils/cloudinary.js";
 
 // // Ensure dotenv is configured in your server entry file
 // const secretKey = process.env.SECRET_KEY || "ELearning"; // Consistent secret key
@@ -190,12 +190,18 @@ export const register = async (req, res) => {
      
     } = req.body;
     const secretKey = process.env.SECRET_KEY || "ELearning"; // Consistent secret key
-    const profileLocalPath = req.files?.profileimage?.[0]?.path;
+    
    
     // Check if email or mobile number already exists
     const existingUser = await User.findOne({email});
     if (existingUser) {
-      return res.status(400).json({ message: "Email  already registered" });
+      return res.status(400).json({ msg: "Email  already registered" });
+    }
+
+    // Check if email or mobile number already exists
+    const PhoneNumber = await User.findOne({mobileNumber});
+    if (PhoneNumber) {
+      return res.status(400).json({ msg: "Phone  already registered" });
     }
 
      // Hash the password manually using bcrypt
@@ -203,17 +209,17 @@ export const register = async (req, res) => {
     //not exist then create it
         // Create new user with hashed password
          // Check if profile image exists and upload if provided
-    let profileImageUrl = "";
-    if (profileLocalPath) {
-      // Upload profile image to cloud if provided
-      const profileImage = await uploadOnCloud(profileLocalPath);
-      if (!profileImage) {
-        return res.status(400).json({ message: "Image upload failed" });
-      }
-      profileImageUrl = profileImage.secure_url; // Get the URL after upload
-    }
+    // let profileImageUrl = "";
+    // if (profileLocalPath) {
+    //   // Upload profile image to cloud if provided
+    //   const profileImage = await uploadOnCloud(profileLocalPath);
+    //   if (!profileImage) {
+    //     return res.status(400).json({ message: "Image upload failed" });
+    //   }
+    //   profileImageUrl = profileImage.secure_url; // Get the URL after upload
+    // }
 
-    console.log(profileImageUrl);
+  //  console.log(profileImageUrl);
         const newUser = new User({
           username,
           email,
@@ -221,8 +227,6 @@ export const register = async (req, res) => {
           mobileNumber,
           gender,
           role,
-          profileImage: profileImageUrl
-          
         });
     
       await newUser.save(); // Save the user to the database
