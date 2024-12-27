@@ -1,5 +1,6 @@
 import axios from "axios";
-const Base_Url = "http://localhost:5000/api"; // Make sure to update the URL for production
+import Base_Url from "../../Base_Url";
+
 
 // Login API call
 const login = async (postData) => {
@@ -30,23 +31,26 @@ const login = async (postData) => {
   }
 };
 
-// Register API call
-const register = async (postData) => {
-  try {
-    // Sending POST request for user registration
-    const response = await axios.post(`${Base_Url}/user/register`, postData);
-    console.log(response.data, "register");
 
-    // Returning the response or a success message
-    return response.data;
+
+
+
+
+// Function to register a new user
+const register = async (userData) => {
+  try {
+    const response = await axios.post(`${Base_Url}/api/user/register`, userData, {
+      headers: { "Content-Type": "application/json" },
+    });
+    return { ok: true, msg: response.data.msg };
   } catch (error) {
-    console.error("Error in register API:", error);
-    if (error.response) {
-      // Handle error response from server (e.g., user already exists)
-      return error.response.data?.message || "An error occurred during registration.";
-    }
-    return "An error occurred during registration.";
+    const message =
+      error.response && error.response.data
+        ? error.response.data.message
+        : "An unexpected error occurred";
+    return { ok: false, msg: message };
   }
 };
+
 
 export { login, register };

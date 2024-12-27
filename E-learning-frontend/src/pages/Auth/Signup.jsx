@@ -3,6 +3,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { handleError, handleSuccess } from "../../../utils";
+import { register } from "./AuthApi";
+import * as Yup from "yup";
 
 function Signup() {
   const navigate = useNavigate();
@@ -16,7 +18,38 @@ function Signup() {
     password: "",
     confirmPassword: "",
     loading: false,
-    error: "",
+  });
+
+  // Yup validation schema
+  const validationSchema = Yup.object().shape({
+    username: Yup.string()
+      .min(3, "Username must be at least 3 characters long")
+      .required("Username is required"),
+    email: Yup.string().email("Invalid email format").required("Email is required"),
+    mobileNumber: Yup.string()
+      .matches(/^[0-9]{10}$/, "Mobile number must be 10 digits")
+      .required("Mobile number is required"),
+    gender: Yup.string().required("Gender is required"),
+    password: Yup.string()
+      .min(6, "Password must be at least 6 characters long")
+      .required("Password is required"),
+    confirmPassword: Yup.string()
+      .oneOf([Yup.ref("password"), null], "Passwords must match")
+      .required("Confirm Password is required"),
+      profileImage: Yup.mixed()
+      .required("Profile image is required")
+      .test(
+        "fileType",
+        "Unsupported file format. Please upload an image (jpg, jpeg, png).",
+        (value) =>
+          value && 
+          ["image/jpeg", "image/png", "image/jpg"].includes(value.type)
+      )
+      .test(
+        "fileSize",
+        "File size is too large. Max size is 2MB.",
+        (value) => value && value.size <= 2 * 1024 * 1024 // 2MB
+      ),
   });
 
   // Handle input value changes
@@ -48,30 +81,41 @@ function Signup() {
     e.preventDefault();
 
     try {
-      const { password, confirmPassword, ...userData } = initialState;
+      const {
+        profileImage,
+        username,
+        email,
+        mobileNumber,
+        gender,
+        role,
+        password,
+        confirmPassword,
+      } = initialState;
 
-      // Check if passwords match
-      if (password !== confirmPassword) {
-        toast.error("Passwords do not match!", {
-          position: "top-right",
-          autoClose: 3000,
-        });
-        return;
-      }
+      // Validate using Yup
+      await validationSchema.validate(
+        { username, email, mobileNumber, gender, password, confirmPassword },
+        { abortEarly: false } // Show all errors
+      );
+
+      setInitialState((prev) => ({ ...prev, loading: true }));
+
+      // Data to send
+      const userData = {
+        profileImage,
+        username,
+        email,
+        mobileNumber,
+        gender,
+        role,
+        password,
+      };
 
       // Make API call
-      const response = await fetch("http://localhost:5000/api/user/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ ...userData, password }),
-      });
-
-      const resData = await response.json();
+      const response = await register(userData);
 
       if (response.ok) {
-        handleSuccess(resData.msg);
+        handleSuccess(response.msg);
         setInitialState({
           profileImage: null,
           username: "",
@@ -82,17 +126,25 @@ function Signup() {
           password: "",
           confirmPassword: "",
           loading: false,
-          error: "",
         });
         setTimeout(() => {
           navigate("/login");
         }, 3000);
       } else {
-        handleError(resData.msg || "Registration failed");
+        handleError(response.msg || "Registration failed");
       }
     } catch (error) {
-      console.error("Register Error:", error);
-      handleError("An unexpected error occurred. Please try again.");
+      if (error.name === "ValidationError") {
+        // Show validation errors
+        error.inner.forEach((err) => {
+          handleError(err.message);
+        });
+      } else {
+        console.error("Register Error:", error);
+        handleError("An unexpected error occurred. Please try again.");
+      }
+    } finally {
+      setInitialState((prev) => ({ ...prev, loading: false }));
     }
   };
 
@@ -103,11 +155,29 @@ function Signup() {
           Create an Account
         </h2>
         <form onSubmit={handleSubmit}>
+          {/* Profile Image Section */}
+          <div className="mb-4">
+            <label className="block text-sm font-medium text-gray-700">Profile Image</label>
+            <input
+              type="file"
+              name="profileImage"
+              onChange={handleImageChange}
+              className="block w-full p-2 mt-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-600"
+              accept="image/*"
+            />
+            {initialState.profileImage && (
+              <img
+                src={initialState.profileImage}
+                alt="Profile Preview"
+                className="mt-2 w-24 h-24 object-cover rounded-full border"
+              />
+            )}
+          </div>
+
+          {/* Username, Email, Phone Number Fields */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700">
-                Username
-              </label>
+              <label className="block text-sm font-medium text-gray-700">Username</label>
               <input
                 type="text"
                 name="username"
@@ -120,9 +190,7 @@ function Signup() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700">
-                Email
-              </label>
+              <label className="block text-sm font-medium text-gray-700">Email</label>
               <input
                 type="email"
                 name="email"
@@ -135,9 +203,7 @@ function Signup() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700">
-                Phone Number
-              </label>
+              <label className="block text-sm font-medium text-gray-700">Phone Number</label>
               <input
                 type="tel"
                 name="mobileNumber"
@@ -150,11 +216,10 @@ function Signup() {
             </div>
           </div>
 
+          {/* Password and Confirm Password Fields */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700">
-                Password
-              </label>
+              <label className="block text-sm font-medium text-gray-700">Password</label>
               <input
                 type="password"
                 name="password"
@@ -166,9 +231,7 @@ function Signup() {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700">
-                Confirm Password
-              </label>
+              <label className="block text-sm font-medium text-gray-700">Confirm Password</label>
               <input
                 type="password"
                 name="confirmPassword"
@@ -181,11 +244,10 @@ function Signup() {
             </div>
           </div>
 
+          {/* Gender and Role Selection */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700">
-                Gender
-              </label>
+              <label className="block text-sm font-medium text-gray-700">Gender</label>
               <select
                 name="gender"
                 value={initialState.gender}
@@ -200,9 +262,7 @@ function Signup() {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700">
-                Role
-              </label>
+              <label className="block text-sm font-medium text-gray-700">Role</label>
               <select
                 name="role"
                 value={initialState.role}
@@ -218,9 +278,12 @@ function Signup() {
 
           <button
             type="submit"
-            className="w-full py-2 px-4 bg-teal-600 text-white font-bold rounded-md focus:outline-none hover:bg-teal-700 disabled:bg-teal-400"
+            className={`w-full py-2 px-4 text-white font-bold rounded-md focus:outline-none ${
+              initialState.loading ? "bg-teal-400 cursor-not-allowed" : "bg-teal-600 hover:bg-teal-700"
+            }`}
+            disabled={initialState.loading}
           >
-            Register
+            {initialState.loading ? "Registering..." : "Register"}
           </button>
         </form>
 
