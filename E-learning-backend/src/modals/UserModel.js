@@ -75,6 +75,7 @@ userSchema.methods.refreshAccessToken = function () {
   }, process.env.JWT_REFRESH_SECRET, { expiresIn: process.env.JWT_REFRESH_EXPIRATION });
 }
 
+
 const User = mongoose.model('User', userSchema);
 
 export default User;
