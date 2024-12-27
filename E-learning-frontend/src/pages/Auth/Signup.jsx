@@ -36,20 +36,20 @@ function Signup() {
     confirmPassword: Yup.string()
       .oneOf([Yup.ref("password"), null], "Passwords must match")
       .required("Confirm Password is required"),
-      profileImage: Yup.mixed()
-      .required("Profile image is required")
-      .test(
-        "fileType",
-        "Unsupported file format. Please upload an image (jpg, jpeg, png).",
-        (value) =>
-          value && 
-          ["image/jpeg", "image/png", "image/jpg"].includes(value.type)
-      )
-      .test(
-        "fileSize",
-        "File size is too large. Max size is 2MB.",
-        (value) => value && value.size <= 2 * 1024 * 1024 // 2MB
-      ),
+      // profileImage: Yup.mixed()
+      // .required("Profile image is required")
+      // .test(
+      //   "fileType",
+      //   "Unsupported file format. Please upload an image (jpg, jpeg, png).",
+      //   (value) =>
+      //     value && 
+      //     ["image/jpeg", "image/png", "image/jpg"].includes(value.type)
+      // )
+      // .test(
+      //   "fileSize",
+      //   "File size is too large. Max size is 2MB.",
+      //   (value) => value && value.size <= 2 * 1024 * 1024 // 2MB
+      // ),
   });
 
   // Handle input value changes
