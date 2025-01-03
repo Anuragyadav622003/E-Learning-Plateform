@@ -22,9 +22,9 @@ const generateAccessRefreshTokens = async (userId) => {
 };
 
 export const register = async (req, res) => {
-  try {console.table(req.body)
+  try {console.log("regiter",req.body)
   
-    const { username, email, password, mobileNumber, gender, role } = req.body;
+    const { username, email, password, mobileNumber, gender, role,profileImage } = req.body;
     const secretKey = process.env.SECRET_KEY || "ELearning"; // Consistent secret key
     
     // Check if email or mobile number already exists

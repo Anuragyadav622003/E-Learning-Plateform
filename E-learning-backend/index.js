@@ -1,4 +1,4 @@
-import express, { response, urlencoded } from 'express';
+import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import axios from 'axios';
@@ -9,9 +9,10 @@ import userRoutes from './src/routers/UserRouter.js';
 import quizzRoutes from './src/routers/QuizzRouter.js';
 import dashboardRoutes from './src/routers/AdminRouter.js';
 import  authorizRouter  from './src/routers/AuthorizRouter.js';
+import  courseRoutes from './src/routers/CourseRouter.js';
 //upload images
 
-
+ 
 
 dotenv.config();
 connectDB();
@@ -41,6 +42,7 @@ app.use('/api/authorize',authorizRouter);
 
 app.use('/api/user',userRoutes);
 app.use('/api/quizz',quizzRoutes);
+app.use('/api/courses',courseRoutes)
 
 // Admin
 
