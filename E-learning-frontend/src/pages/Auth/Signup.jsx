@@ -36,20 +36,19 @@ function Signup() {
     confirmPassword: Yup.string()
       .oneOf([Yup.ref("password"), null], "Passwords must match")
       .required("Confirm Password is required"),
-      // profileImage: Yup.mixed()
-      // .required("Profile image is required")
-      // .test(
-      //   "fileType",
-      //   "Unsupported file format. Please upload an image (jpg, jpeg, png).",
-      //   (value) =>
-      //     value && 
-      //     ["image/jpeg", "image/png", "image/jpg"].includes(value.type)
-      // )
-      // .test(
-      //   "fileSize",
-      //   "File size is too large. Max size is 2MB.",
-      //   (value) => value && value.size <= 2 * 1024 * 1024 // 2MB
-      // ),
+    profileImage: Yup.mixed()
+      .test("fileRequired", "Profile image is required", (value) => !!value)
+      .test(
+        "fileType",
+        "Unsupported file format. Please upload an image (jpg, jpeg, png).",
+        (value) =>
+          value && ["image/jpeg", "image/png", "image/jpg"].includes(value.type)
+      )
+      .test(
+        "fileSize",
+        "File size is too large. Max size is 2MB.",
+        (value) => value && value.size <= 2 * 1024 * 1024
+      ),
   });
 
   // Handle input value changes
@@ -65,14 +64,10 @@ function Signup() {
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onload = () => {
-        setInitialState((prevState) => ({
-          ...prevState,
-          profileImage: reader.result,
-        }));
-      };
-      reader.readAsDataURL(file);
+      setInitialState((prevState) => ({
+        ...prevState,
+        profileImage: file, // Store the selected image in state
+      }));
     }
   };
 
@@ -94,13 +89,13 @@ function Signup() {
 
       // Validate using Yup
       await validationSchema.validate(
-        { username, email, mobileNumber, gender, password, confirmPassword },
+        { username, email, mobileNumber, gender, password, confirmPassword, profileImage },
         { abortEarly: false } // Show all errors
       );
 
       setInitialState((prev) => ({ ...prev, loading: true }));
 
-      // Data to send
+      // Prepare user data for API request
       const userData = {
         profileImage,
         username,
@@ -167,7 +162,7 @@ function Signup() {
             />
             {initialState.profileImage && (
               <img
-                src={initialState.profileImage}
+                src={URL.createObjectURL(initialState.profileImage)}
                 alt="Profile Preview"
                 className="mt-2 w-24 h-24 object-cover rounded-full border"
               />
@@ -270,32 +265,33 @@ function Signup() {
                 className="block w-full p-2 mt-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-600"
               >
                 <option value="admin">Admin</option>
-                <option value="student">Student</option>
-                <option value="instructor">Instructor</option>
+                <option value="user">User</option>
               </select>
             </div>
           </div>
 
-          <button
-            type="submit"
-            className={`w-full py-2 px-4 text-white font-bold rounded-md focus:outline-none ${
-              initialState.loading ? "bg-teal-400 cursor-not-allowed" : "bg-teal-600 hover:bg-teal-700"
-            }`}
-            disabled={initialState.loading}
-          >
-            {initialState.loading ? "Registering..." : "Register"}
-          </button>
+          {/* Submit Button */}
+          <div className="mt-4">
+            <button
+              type="submit"
+              className="w-full p-2 bg-teal-600 text-white rounded-md hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-600"
+              disabled={initialState.loading}
+            >
+              {initialState.loading ? "Registering..." : "Register"}
+            </button>
+          </div>
         </form>
 
-        <div className="text-center mt-4">
-          <p className="text-sm text-gray-600">
+        <div className="mt-4 text-center">
+          <span className="text-sm text-gray-700">
             Already have an account?{" "}
-            <Link to="/login" className="text-teal-600 font-medium">
+            <Link to="/login" className="text-teal-600">
               Login
             </Link>
-          </p>
+          </span>
         </div>
       </div>
+
       <ToastContainer />
     </div>
   );

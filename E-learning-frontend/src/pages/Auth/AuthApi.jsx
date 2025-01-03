@@ -39,15 +39,25 @@ const login = async (postData) => {
 // Function to register a new user
 const register = async (userData) => {
   try {
+    console.log("User Data:", userData);
+
+    // Sending the registration data
     const response = await axios.post(`${Base_Url}/api/user/register`, userData, {
-      headers: { "Content-Type": "application/json" },
+      headers: { 'Content-Type': 'application/json' },  // Set Content-Type to 'application/json'
     });
+
+    console.log("Response:", response);
+
+    // Check if registration was successful and return appropriate message
     return { ok: true, msg: response.data.msg };
   } catch (error) {
+    // Handle errors and extract message
     const message =
       error.response && error.response.data
         ? error.response.data.message
-        : "An unexpected error occurred";
+        : error.message || "An unexpected error occurred";
+
+    console.error("Error Message:", message);
     return { ok: false, msg: message };
   }
 };
