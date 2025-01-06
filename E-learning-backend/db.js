@@ -19,6 +19,5 @@ const connectDB = async () => {
   }
 };
 
-mongoose.set('bufferCommands', false);
 
 export default connectDB; // Export the connectDB function
