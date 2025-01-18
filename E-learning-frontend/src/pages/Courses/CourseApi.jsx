@@ -97,6 +97,30 @@ A closure is a function that remembers its lexical scope even when executed outs
     ],
   },
   {
+    id: 7,
+    title: "Node.js Essentials",
+    description: "Understand the basics of Node.js to build scalable server-side applications.",
+    instructor: "Michael Brown",
+    rating: 4.6,
+    image: "https://th.bing.com/th/id/OIP.dJw_f9aVwuHM-OCMe-UMBgHaEK?rs=1&pid=ImgDetMain",
+    modules: [
+      {
+        id: 1,
+        title: "Introduction to Node.js",
+        subtitle: [
+          {
+            sid: 1,
+            stitle: "Setting up Node.js",
+            videoUrl: "ohIAiuHMKMI",
+            content: "Install Node.js and create your first application...",
+          },
+        ],
+      },
+    ],
+  },
+  
+
+  {
     id: 3,
     title: "React for Beginners",
     description: "Learn the basics of React, including components, state, and props, to build modern web applications.",
@@ -140,6 +164,7 @@ A closure is a function that remembers its lexical scope even when executed outs
       },
     ],
   },
+  
   {
     id: 5,
     title: "Python Programming",
@@ -162,6 +187,31 @@ A closure is a function that remembers its lexical scope even when executed outs
       },
     ],
   },
+ 
+  {
+    id: 8,
+    title: "Node.js Essentials",
+    description: "Understand the basics of Node.js to build scalable server-side applications.",
+    instructor: "Michael Brown",
+    rating: 4.6,
+    image: "https://th.bing.com/th/id/OIP.dJw_f9aVwuHM-OCMe-UMBgHaEK?rs=1&pid=ImgDetMain",
+    modules: [
+      {
+        id: 1,
+        title: "Introduction to Node.js",
+        subtitle: [
+          {
+            sid: 1,
+            stitle: "Setting up Node.js",
+            videoUrl: "ohIAiuHMKMI",
+            content: "Install Node.js and create your first application...",
+          },
+        ],
+      },
+    ],
+  },
+  
+
   {
     id: 6,
     title: "Database Design",
