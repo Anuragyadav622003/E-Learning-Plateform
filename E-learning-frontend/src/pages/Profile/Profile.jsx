@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import userProfile from "./ProfileApi";
 
 // Sample data for demonstration
 const user = {
@@ -24,6 +25,33 @@ const Profile = () => {
     user.bio = bio;
     setEditing(false);
   };
+
+
+
+  useEffect(()=>{
+const fetchUserProfile = async () => {
+  try {
+    // Fetch the user profile
+    const profileData = await userProfile();
+    console.log(profileData);
+    toast.success("User profile fetched successfully!", {
+      position: "top-right",
+    });
+
+    console.log(profileData);  // Use the profile data here
+  } catch (error) {
+    // If an error occurs, show an error toast
+    toast.error("Unable to fetch user profile. Please try again.", {
+      position: "top-right",
+    });
+
+    console.error("Unable to fetch user profile:", error);
+    // Handle the error, e.g., display a message to the user
+  }
+};
+fetchUserProfile();
+
+  },[]);
 
   return (
     <div className="min-h-screen w-full flex flex-col bg-gray-100 dark:bg-gray-900 transition-colors duration-500">

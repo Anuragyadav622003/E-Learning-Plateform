@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify";
+
 import "react-toastify/dist/ReactToastify.css";
 import { handleError, handleSuccess } from "../../../utils";
 import { register } from "./AuthApi";
 import * as Yup from "yup";
+import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai"; // Import eye icons
 
 function Signup() {
   const navigate = useNavigate();
@@ -18,6 +19,8 @@ function Signup() {
     password: "",
     confirmPassword: "",
     loading: false,
+    passwordVisible: false, // Manage password visibility
+    confirmPasswordVisible: false, // Manage confirm password visibility
   });
 
   // Yup validation schema
@@ -69,6 +72,22 @@ function Signup() {
         profileImage: file, // Store the selected image in state
       }));
     }
+  };
+
+  // Toggle password visibility
+  const togglePasswordVisibility = () => {
+    setInitialState((prevState) => ({
+      ...prevState,
+      passwordVisible: !prevState.passwordVisible,
+    }));
+  };
+
+  // Toggle confirm password visibility
+  const toggleConfirmPasswordVisibility = () => {
+    setInitialState((prevState) => ({
+      ...prevState,
+      confirmPasswordVisible: !prevState.confirmPasswordVisible,
+    }));
   };
 
   // Handle form submission
@@ -215,27 +234,53 @@ function Signup() {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
             <div>
               <label className="block text-sm font-medium text-gray-700">Password</label>
-              <input
-                type="password"
-                name="password"
-                value={initialState.password}
-                onChange={handleInput}
-                className="block w-full p-2 mt-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-600"
-                placeholder="Enter your password"
-                required
-              />
+              <div className="relative">
+                <input
+                  type={initialState.passwordVisible ? "text" : "password"}
+                  name="password"
+                  value={initialState.password}
+                  onChange={handleInput}
+                  className="block w-full p-2 mt-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-600"
+                  placeholder="Enter your password"
+                  required
+                />
+                <button
+                  type="button"
+                  onClick={togglePasswordVisibility}
+                  className="absolute right-2 top-2 text-teal-600"
+                >
+                  {initialState.passwordVisible ? (
+                    <AiOutlineEyeInvisible size={20} />
+                  ) : (
+                    <AiOutlineEye size={20} />
+                  )}
+                </button>
+              </div>
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700">Confirm Password</label>
-              <input
-                type="password"
-                name="confirmPassword"
-                value={initialState.confirmPassword}
-                onChange={handleInput}
-                className="block w-full p-2 mt-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-600"
-                placeholder="Confirm your password"
-                required
-              />
+              <div className="relative">
+                <input
+                  type={initialState.confirmPasswordVisible ? "text" : "password"}
+                  name="confirmPassword"
+                  value={initialState.confirmPassword}
+                  onChange={handleInput}
+                  className="block w-full p-2 mt-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-600"
+                  placeholder="Confirm your password"
+                  required
+                />
+                <button
+                  type="button"
+                  onClick={toggleConfirmPasswordVisibility}
+                  className="absolute right-2 top-2 text-teal-600"
+                >
+                  {initialState.confirmPasswordVisible ? (
+                    <AiOutlineEyeInvisible size={20} />
+                  ) : (
+                    <AiOutlineEye size={20} />
+                  )}
+                </button>
+              </div>
             </div>
           </div>
 
@@ -292,7 +337,7 @@ function Signup() {
         </div>
       </div>
 
-      <ToastContainer />
+     
     </div>
   );
 }

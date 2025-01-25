@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import DarkModeSwitch from '../componenet/Darkmod';
+import logo from '../assets/companylogo.png'
 
 const navigation = [
   { name: 'Home', href: '/' },                     // Link to Home
@@ -37,11 +38,11 @@ export default function Navbar() {
       {/* Logo */}
       <div className="flex items-center">
         <img
-          src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
+          src={logo}
           alt="Logo"
           className="h-8 w-auto"
         />
-        <span className="text-white font-extrabold px-2">SkillSphere</span>
+        <span className="text-white font-extrabold px-2">Skillify</span>
       </div>
 
       {/* Desktop Navigation */}

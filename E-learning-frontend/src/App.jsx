@@ -2,7 +2,7 @@ import React from 'react';
 import Navbar from './route/Navbar';
 import { BrowserRouter } from 'react-router-dom';
 import ComponentsRouter from './route/ClientRoutes';
-
+import { ToastContainer, toast } from "react-toastify";
 
 function App() {
   return (<>
@@ -15,6 +15,7 @@ function App() {
      </BrowserRouter>
    
     </div>
+    <ToastContainer/>
     </>
   );
 }
