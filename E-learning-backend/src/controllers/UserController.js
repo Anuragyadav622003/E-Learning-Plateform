@@ -121,3 +121,24 @@ const deleteUser = async()=>{
 console.log("User Delete Successful")
 }
 //deleteUser();
+
+export const userProfile = async (req, res) => {
+  try {
+    // Assuming req.user contains the authenticated user information
+    console.log(req.user);
+
+    // Fetching the user by ID (assuming req.user.id contains the authenticated user's ID)
+    const user = await User.findById(req.user._id);
+    console.log(user);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Returning the user profile data as a response
+    res.status(200).json(user);
+  } catch (error) {
+    console.log('Error in user profile: ', error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+

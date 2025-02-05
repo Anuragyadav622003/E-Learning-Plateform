@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose, { mongo } from 'mongoose';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
@@ -49,6 +49,7 @@ const userSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Course', // Reference to the Course model
   }],
+  achivements:[{type:mongoose.Schema.Types.ObjectId,ref:'Achivement'}]
 }, { timestamps: true }); // Automatically handles createdAt and updatedAt
 
 
