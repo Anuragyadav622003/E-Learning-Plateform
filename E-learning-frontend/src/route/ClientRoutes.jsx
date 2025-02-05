@@ -6,7 +6,7 @@ import Home from '../pages/Home/Home';
 import QuizzScreen from '../pages/Quizz/QuizzScreen';
 import QuizzPlay from '../pages/Quizz/QuizzPlay'
 import ForgotPassword from '../pages/Auth/ForgotPassword';
-import Courses from '../pages/Courses/Courses';
+import Courses from '../pages/Courses/NewCourses';
 import Profile from '../pages/Profile/Profile';
 import { Logout } from '@mui/icons-material';
 import CourseDetails from '../pages/Courses/CourseDetails';

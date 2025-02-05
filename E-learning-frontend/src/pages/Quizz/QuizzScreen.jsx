@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { getQuizzes } from "./QuizzApi";
 import { useNavigate } from "react-router-dom";
-
+import ExploreQuizzesPage from "./Qizzes";
 import { authorize } from "../../componenet/Authorize";
 
 const QuizzScreen = () => {
@@ -120,7 +120,9 @@ const QuizzScreen = () => {
           <p className="text-center text-gray-500 mt-6">No quizzes found.</p>
         )}
       </div>
+      <ExploreQuizzesPage/>
     </div>
+
   );
 };
 

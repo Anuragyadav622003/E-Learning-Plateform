@@ -4,6 +4,9 @@ const coursesData = [
     title: "Introduction to Web Development",
     description: "Learn the basics of HTML, CSS, and JavaScript, and start your journey into web development.",
     instructor: "John Doe",
+    category: "Web Development",
+    price: 20,
+    difficulty: "Beginner",
     rating: 4.5,
     image: "https://thumbs.dreamstime.com/b/programming-web-banner-best-languages-technology-process-software-development-156829872.jpg",
     modules: [
@@ -53,7 +56,10 @@ To start developing websites, you’ll need:
     title: "Advanced JavaScript",
     description: "Delve deeper into JavaScript and learn how to write efficient and scalable code.",
     instructor: "Jane Smith",
+    category: "Programming",
+    price: 50,
     rating: 4.7,
+    difficulty: "Advanced",
     image: "https://bairesdev.mo.cloudinary.net/blog/2023/08/What-Is-JavaScript-Used-For.jpg?tx=w_384",
     modules: [
       {
@@ -101,6 +107,9 @@ A closure is a function that remembers its lexical scope even when executed outs
     title: "Node.js Essentials",
     description: "Understand the basics of Node.js to build scalable server-side applications.",
     instructor: "Michael Brown",
+    category: "Web Development",
+    price: 20,
+    difficulty: "Beginner",
     rating: 4.6,
     image: "https://th.bing.com/th/id/OIP.dJw_f9aVwuHM-OCMe-UMBgHaEK?rs=1&pid=ImgDetMain",
     modules: [
@@ -125,6 +134,9 @@ A closure is a function that remembers its lexical scope even when executed outs
     title: "React for Beginners",
     description: "Learn the basics of React, including components, state, and props, to build modern web applications.",
     instructor: "Alice Johnson",
+    category: "Web Development",
+    difficulty: "Beginner",
+    price: 20,
     rating: 4.8,
     image: "https://th.bing.com/th/id/OIP.FfFMBaA_sroMDCWBKhJhcAAAAA?rs=1&pid=ImgDetMain",
     modules: [
@@ -147,6 +159,9 @@ A closure is a function that remembers its lexical scope even when executed outs
     title: "Node.js Essentials",
     description: "Understand the basics of Node.js to build scalable server-side applications.",
     instructor: "Michael Brown",
+    category: "Web Development",
+    difficulty: "Beginner",
+    price: 20,
     rating: 4.6,
     image: "https://th.bing.com/th/id/OIP.dJw_f9aVwuHM-OCMe-UMBgHaEK?rs=1&pid=ImgDetMain",
     modules: [
@@ -170,6 +185,9 @@ A closure is a function that remembers its lexical scope even when executed outs
     title: "Python Programming",
     description: "Start your journey into programming with Python, a versatile and beginner-friendly language.",
     instructor: "Sarah Green",
+    category: "Programming",
+    difficulty: "Advanced",
+    price: 50,
     rating: 4.9,
     image: "https://thumbs.dreamstime.com/b/python-programming-colorful-plexus-design-python-language-programming-banner-colorful-plexus-design-software-technology-166200238.jpg",
     modules: [
@@ -193,6 +211,8 @@ A closure is a function that remembers its lexical scope even when executed outs
     title: "Node.js Essentials",
     description: "Understand the basics of Node.js to build scalable server-side applications.",
     instructor: "Michael Brown",
+    difficulty: "Beginner",
+    price: 20,
     rating: 4.6,
     image: "https://th.bing.com/th/id/OIP.dJw_f9aVwuHM-OCMe-UMBgHaEK?rs=1&pid=ImgDetMain",
     modules: [
@@ -217,6 +237,10 @@ A closure is a function that remembers its lexical scope even when executed outs
     title: "Database Design",
     description: "Master database concepts and learn to design efficient and normalized databases.",
     instructor: "David Lee",
+    category: "Programming",
+    price: 50,
+  
+    difficulty: "Advanced",
     rating: 4.7,
     image: "https://miro.medium.com/v2/resize:fit:1358/1*Xt6K_i5UlFC2CLrgbBPbwQ.png",
     modules: [
