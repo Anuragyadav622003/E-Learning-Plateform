@@ -3,6 +3,12 @@ import { useTimer } from "react-timer-hook";
 import { getQuizzes } from "./QuizzApi";
 import { useNavigate, useParams } from "react-router-dom";
 
+
+const Loader = () => (
+  <div className="absolute inset-0 flex items-center justify-center bg-gray-100 dark:bg-gray-900 bg-opacity-50">
+    <div className="w-12 h-12 border-4 border-blue-500 border-dashed rounded-full animate-spin"></div>
+  </div>
+);
 function QuizzPlay() {
   const { id } = useParams(); // Extract the `id` from URL params
   const navigate = useNavigate();
@@ -90,14 +96,15 @@ function QuizzPlay() {
 
   if (!quizData) {
     return (
-      <div className="flex justify-center items-center h-screen text-gray-100">
-        Loading...
-      </div>
+      <div className="absolute inset-0 flex items-center justify-center bg-gray-100 dark:bg-gray-900 bg-opacity-50">
+      <div className="w-12 h-12 border-4 border-blue-500 border-dashed rounded-full animate-spin"/>
+    </div>
     );
   }
 
   return (
     <div className="flex flex-col justify-between min-h-screen p-4 sm:p-6 md:p-8 lg:p-12 bg-gray-100 dark:bg-gray-900">
+      {!quizData && <Loader/> }
       {!quizFinished ? (
         <>
           <div className="text-center mb-6">

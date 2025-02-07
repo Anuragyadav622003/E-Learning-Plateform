@@ -3,9 +3,11 @@ import { useParams, useNavigate } from "react-router-dom";
 import { FaSearch, FaStar, FaStarHalfAlt } from "react-icons/fa";
 import  { getAllCourses } from "./CourseApi";
 
+
  const CourseDetails = () => {
   const { id } = useParams();
    const[courses,setCourses] = useState([]);
+  
    
   const navigate = useNavigate();
  
@@ -18,6 +20,8 @@ useEffect(()=>{
       } catch (error) {
         console.error("Error fetching quizzes:", error);
        navigate('/courses');
+      }finally{
+        setLoading(false)
       } 
     };
 
@@ -27,20 +31,14 @@ useEffect(()=>{
 
 const filteredCourses = courses.filter((course, index) => index == id);
 const course = filteredCourses.length > 0 ? filteredCourses[0] : null;
-console.log(course);
+
+
+//loader
   if (!course) {
     return (
-      <div className="min-h-screen bg-gray-100 dark:bg-gray-900 flex flex-col justify-center items-center">
-        <p className="text-center text-2xl font-bold text-gray-500 mt-6">
-          Course Not Found
-        </p>
-        <button
-          className="mt-4 px-6 py-3 bg-blue-500 text-white rounded-lg text-sm hover:bg-blue-600 transition-colors duration-300"
-          onClick={() => navigate("/courses")}
-        >
-          Go Back
-        </button>
-      </div>
+      <div className="absolute inset-0 flex items-center justify-center bg-gray-100 dark:bg-gray-900 bg-opacity-50">
+    <div className="w-12 h-12 border-4 border-blue-500 border-dashed rounded-full animate-spin"/>
+  </div>
     );
   }
 
@@ -88,6 +86,7 @@ console.log(course);
 
           {/* Course Content Section */}
           <div className="lg:col-span-3 bg-white dark:bg-gray-800 shadow-lg rounded-lg p-6">
+           
             <h1 className="text-3xl font-bold mb-6 text-gray-900 dark:text-white">
               {course.title}
             </h1>
@@ -116,7 +115,7 @@ console.log(course);
 
             <button
               className="mt-8 w-full bg-green-500 text-white py-2 rounded-lg text-sm hover:bg-green-600 transition-colors duration-300"
-              onClick={() => navigate(`/course/${id}/content`)}
+              onClick={() => navigate(`/courses/${id}/content`)}
             >
               Start Learning Now
             </button>

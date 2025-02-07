@@ -35,10 +35,11 @@ console.log(course,"courses filtered");
 
   if (!course) {
     return (
-      <div className="min-h-screen bg-gray-100 dark:bg-gray-900 flex justify-center items-center">
-        <p className="text-center text-gray-500 mt-6">Course not found.</p>
-      </div>
+      <div className="absolute inset-0 flex items-center justify-center bg-gray-100 dark:bg-gray-900 bg-opacity-50">
+      <div className="w-12 h-12 border-4 border-blue-500 border-dashed rounded-full animate-spin"></div>
+    </div>
     );
+  
   }
 
   const handleTopicSelect = (topic) => {

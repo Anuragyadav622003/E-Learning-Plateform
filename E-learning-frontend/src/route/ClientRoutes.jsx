@@ -27,8 +27,8 @@ function ComponentsRouter() {
         <Route path='/quizzes/:id' element={<QuizzPlay/>}/>
         <Route path='/quizzes/:id/solution' element={<QuizSolution/>}/>
         <Route path="/courses" element={<Courses/>}/>
-        <Route path="/course/:id" element={<CourseDetails/>} />
-        <Route path="/course/:id/content" element={<CourseContent/>} />
+        <Route path="/courses/:id" element={<CourseDetails/>} />
+        <Route path="/courses/:id/content" element={<CourseContent/>} />
         <Route path='/profile' element={<Profile/>}/>
         <Route path='/interview' element={<Interview/>}/>
         <Route path='/logout' element={<Logout/>}/>

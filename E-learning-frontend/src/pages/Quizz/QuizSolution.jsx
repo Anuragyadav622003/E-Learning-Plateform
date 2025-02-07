@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { getQuizzes } from "./QuizzApi";
 
+
+
 function QuizSolution() {
   const { id } = useParams(); // Extract the `id` from URL params
   const navigate = useNavigate();
@@ -47,14 +49,15 @@ function QuizSolution() {
 
   if (!quizData) {
     return (
-      <div className="flex justify-center items-center h-screen text-gray-100">
-        Loading...
-      </div>
+      <div className="absolute inset-0 flex items-center justify-center bg-gray-100 dark:bg-gray-900 bg-opacity-50">
+    <div className="w-12 h-12 border-4 border-blue-500 border-dashed rounded-full animate-spin"></div>
+  </div>
     );
   }
 
   return (
     <div className="flex flex-col justify-between min-h-screen p-4 sm:p-6 md:p-8 lg:p-12 bg-gray-100 dark:bg-gray-800">
+       
       <div className="text-center mb-6">
         <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-indigo-600 dark:text-indigo-400">
           {quizData.title} - Solutions

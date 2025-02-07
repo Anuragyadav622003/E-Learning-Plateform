@@ -96,7 +96,7 @@ const CoursesPage = () => {
 
   const handleStartLearning = (courseId) => {
     console.log(`Starting course with ID: ${courseId}`);
-    navigate(`/course/${courseId}`);
+    navigate(`/courses/${courseId}`);
   };
 
   return (
@@ -188,14 +188,14 @@ const CoursesPage = () => {
           {/* Courses List */}
           <main className="flex-1 p-4">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filteredCourses.map((course) => (
+              {filteredCourses.map((course,index) => (
                 <div key={course.id} className="bg-white dark:bg-gray-800 p-4 shadow-md rounded-md flex flex-col">
                   <img src={course.thumbnail} alt={course.title} className="w-full h-40 rounded-md object-cover" />
                   <h3 className="text-md font-semibold mt-2">{course.title}</h3>
                   <p className="text-sm text-gray-600 dark:text-gray-400">{course.category}</p>
                   <p className="mt-2 text-sm font-semibold">${course.price}</p>
                   <button
-                    onClick={() => handleStartLearning(course.id)}
+                    onClick={() => handleStartLearning(index)}
                     className="w-full text-sm bg-blue-500 dark:bg-blue-600 text-white py-2 mt-4 rounded-md"
                   >
                     Enroll Now
