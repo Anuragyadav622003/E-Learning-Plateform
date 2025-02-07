@@ -220,7 +220,7 @@ console.log(filteredQuizzes ,"hhgh");
                     <img
                       src={quiz.banner_url}
                       alt=""
-                      className="h-full rounded-md"
+                      className="h-full rounded-md w-full"
                     />
                   </div>
                   <h3 className="text-md font-semibold mt-2">{quiz.title}</h3>
