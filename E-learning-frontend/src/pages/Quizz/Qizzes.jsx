@@ -2,13 +2,19 @@ import React, { useState,useReducer,useEffect } from "react";
 import { FaSearch, FaStar, FaStarHalfAlt } from "react-icons/fa";
 import { getQuizzes } from "./QuizzApi";
 import { useNavigate } from "react-router-dom";
-
+// Loader Component
+const Loader = () => (
+  <div className="absolute inset-0 flex items-center justify-center bg-gray-100 dark:bg-gray-900 bg-opacity-50">
+    <div className="w-12 h-12 border-4 border-blue-500 border-dashed rounded-full animate-spin"></div>
+  </div>
+);
 const ExploreQuizzesPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [priceRange, setPriceRange] = useState(50);
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [selectedDifficulties, setSelectedDifficulties] = useState([]);
   const [quizzes,setQuizzes] = useState([]);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
       const initialFilters = {
@@ -34,73 +40,6 @@ const ExploreQuizzesPage = () => {
       const [state, dispatch] = useReducer(filterReducer, initialFilters);
       
     
-  const demoQuizzes = [
-    {
-      id: 1,
-      title: "Basic Science Quiz",
-      description: "Test your knowledge in basic science concepts.",
-      category: "Science",
-      difficulty: "Beginner",
-      price: 10,
-      image: "https://via.placeholder.com/400x200?text=Basic+Science+Quiz",
-    },
-    {
-      id: 2,
-      title: "Advanced Technology Quiz",
-      description: "Are you up-to-date with the latest tech trends?",
-      category: "Technology",
-      difficulty: "Advanced",
-      price: 25,
-      image: "https://via.placeholder.com/400x200?text=Advanced+Technology+Quiz",
-    },
-    {
-      id: 3,
-      title: "Math Fundamentals Quiz",
-      description: "Sharpen your basic math skills.",
-      category: "Math",
-      difficulty: "Intermediate",
-      price: 15,
-      image: "https://via.placeholder.com/400x200?text=Math+Fundamentals+Quiz",
-    },
-    {
-      id: 4,
-      title: "History of the World Quiz",
-      description: "Challenge yourself on world history facts.",
-      category: "History",
-      difficulty: "Intermediate",
-      price: 20,
-      rating:3,
-      image: "https://via.placeholder.com/400x200?text=History+of+the+World+Quiz",
-    },
-    {
-      id: 5,
-      title: "Art and Culture Quiz",
-      description: "Test your knowledge on art and cultural heritage.",
-      category: "Arts",
-      difficulty: "Beginner",
-      price: 5,
-      image: "https://via.placeholder.com/400x200?text=Art+and+Culture+Quiz",
-    },
-    // Add more quizzes here if needed
-  ];
-
-    // useEffect(() => {
-    //   const fetchQuizzes = async () => {
-    //     try {
-    //       const resp = await getQuizzes(); 
-        
-    //       setQuizzes(resp);
-    //     } catch (error) {
-    //       console.error("Error fetching quizzes:", error);
-    //       setError("Failed to fetch quizzes.");
-    //     } finally {
-    //       setLoading(false);
-    //     }
-    //   };
-  
-    //   fetchQuizzes();
-    // }, []);
-
     useEffect(() => {
       const fetchCourses = async () => {
         try {
@@ -132,7 +71,7 @@ const ExploreQuizzesPage = () => {
           console.error("Error fetching quizzes:", error);
           // setError("Failed to fetch quizzes.");
         } finally {
-          // setLoading(false);  // Stop loading spinner
+          setLoading(false);  // Stop loading spinner
         }
       };
     
@@ -182,6 +121,7 @@ console.log(filteredQuizzes ,"hhgh");
 
       {/* Main Content */}
       <div className="flex-1 p-4">
+      {loading && <Loader />}
         {/* Search Bar */}
         <div className="mb-4">
           <div className="relative w-full">
