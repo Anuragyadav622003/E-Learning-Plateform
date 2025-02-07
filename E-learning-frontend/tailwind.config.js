@@ -1,5 +1,7 @@
+import flowbitePlugin from 'flowbite/plugin';
+
 /** @type {import('tailwindcss').Config} */
-module.exports = {
+const config = {
   darkMode: 'class', // Enable dark mode based on user's system preference
   content: [
     "./src/**/*.{js,jsx,ts,tsx}",
@@ -8,7 +10,8 @@ module.exports = {
     extend: {},
   },
   plugins: [
-    require('flowbite/plugin')
+    flowbitePlugin
   ],
-  
-}
+};
+
+export default config;
