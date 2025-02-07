@@ -8,6 +8,7 @@ import Typography from '@mui/joy/Typography';
 import KeyboardArrowDown from '@mui/icons-material/KeyboardArrowDown';
 
 const ListComponent = ({ data, onTopicSelect, onSubtopicSelect }) => {
+
   const [openStates, setOpenStates] = React.useState(() =>
     data.map(() => false) // Initialize an open state for each topic
   );
@@ -38,7 +39,7 @@ const ListComponent = ({ data, onTopicSelect, onSubtopicSelect }) => {
           '--ListItem-startActionTranslateX': '-50%',
         }}
       >
-        {data.map((topic, index) => (
+        {data.map((topic, index) =>  (
           <ListItem
             key={index}
             nested
@@ -76,7 +77,7 @@ const ListComponent = ({ data, onTopicSelect, onSubtopicSelect }) => {
                 sx={{ '--ListItem-paddingY': '8px' }}
                 className="text-gray-700 dark:text-gray-400"
               >
-                {topic.subtitle.map((subtopic, subIndex) => (
+                {topic.lessons.map((subtopic, subIndex) => (
                   <ListItem key={subIndex}>
                     <ListItemButton
                       onClick={() =>

@@ -3,7 +3,6 @@ import React from 'react';
 import Login from '../pages/Auth/Login';
 import Signup from '../pages/Auth/Signup';
 import Home from '../pages/Home/Home';
-import QuizzScreen from '../pages/Quizz/QuizzScreen';
 import QuizzPlay from '../pages/Quizz/QuizzPlay'
 import ForgotPassword from '../pages/Auth/ForgotPassword';
 import Courses from '../pages/Courses/NewCourses';
@@ -15,7 +14,7 @@ import QuizSolution from '../pages/Quizz/QuizSolution';
 import Interview from '../pages/Interview/Interview';
 import  ContactUS  from '../pages/Contact/ContactUS'
 import PeerToPeer from '../pages/Interview/PeerToPeer';
-
+import ExploreQuizzesPage from '../pages/Quizz/Qizzes';
 function ComponentsRouter() {
   return (
    
@@ -24,7 +23,7 @@ function ComponentsRouter() {
         <Route path="/login" element={<Login />} />
         <Route path="/forgot-password" element={<ForgotPassword/>} />
         <Route path="/signup" element={<Signup />} />
-        <Route path='/quizzes' element={<QuizzScreen/>}/>
+        <Route path='/quizzes' element={<ExploreQuizzesPage/>}/>
         <Route path='/quizzes/:id' element={<QuizzPlay/>}/>
         <Route path='/quizzes/:id/solution' element={<QuizSolution/>}/>
         <Route path="/courses" element={<Courses/>}/>

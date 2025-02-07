@@ -1,15 +1,37 @@
-import React, { useState } from "react";
-import { useParams } from "react-router-dom";
+import React, { useState,useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import coursesData from "./CourseApi";
 import ListComponenet from "../../componenet/List";
 import VideoGallery from "../../componenet/YoutubeVideo";
-
+import  { getAllCourses } from "./CourseApi";
 const CourseContent = () => {
   const { id } = useParams();
-  const course = coursesData.find((course) => course.id === parseInt(id));
-
-  const [selectedTopic, setSelectedTopic] = useState(null);
+   const[courses,setCourses] = useState([]);
+   const [selectedTopic, setSelectedTopic] = useState(null);
   const [selectedSubtopic, setSelectedSubtopic] = useState(null);
+   const navigate = useNavigate();
+   
+ // const course = coursesData.find((course) => course.id === parseInt(id));
+//fetch data
+useEffect(()=>{
+ const fetchCourses = async () => {
+      try {
+        const resp = await getAllCourses(); 
+        setCourses(resp);
+      } catch (error) {
+        console.error("Error fetching quizzes:", error);
+        navigate('/courses');
+      } 
+    };
+
+    fetchCourses();
+
+},[]);
+
+const filteredCourses = courses.filter((course, index) => index == id);
+const course = filteredCourses.length > 0 ? filteredCourses[0] : null;
+console.log(course,"courses filtered");
+  
 
   if (!course) {
     return (
@@ -20,6 +42,7 @@ const CourseContent = () => {
   }
 
   const handleTopicSelect = (topic) => {
+  
     setSelectedTopic(topic);
     setSelectedSubtopic(null); // Reset subtopic when a new topic is selected
   };
@@ -31,9 +54,15 @@ const CourseContent = () => {
   return (
     <div className="min-h-screen bg-gray-100 dark:bg-gray-900 w-full">
       <div className="container mx-auto py-6 px-4 max-w-full">
+      
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
           {/* Sidebar Section */}
           <div className="lg:col-span-3 bg-white dark:bg-gray-800 shadow-lg rounded-lg p-6">
+             <img
+              src={course.thumbnail}
+              alt={course.title}
+              className="w-full  object-cover rounded-md mb-4"
+            />
             <h2 className="text-2xl font-semibold text-gray-900 dark:text-white mb-2">{course.title}</h2>
             <ListComponenet
               data={course.modules}
@@ -64,6 +93,7 @@ const CourseContent = () => {
                     >
                       Watch Video
                     </a> */}
+                    
                     <VideoGallery url={selectedSubtopic.videoUrl}/>
                   </div>
                 ) : (

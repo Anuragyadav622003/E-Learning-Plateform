@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useReducer,useEffect } from "react";
 import { FaSearch, FaStar, FaStarHalfAlt } from "react-icons/fa";
 import { getQuizzes } from "./QuizzApi";
 import { useNavigate } from "react-router-dom";
@@ -8,7 +8,32 @@ const ExploreQuizzesPage = () => {
   const [priceRange, setPriceRange] = useState(50);
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [selectedDifficulties, setSelectedDifficulties] = useState([]);
+  const [quizzes,setQuizzes] = useState([]);
   const navigate = useNavigate();
+
+      const initialFilters = {
+        categoryList: [],
+        defficultyList: [],
+        minPrice: 0,
+        maxPrice: 5000, // Example max price
+      };
+      
+      const filterReducer = (state, action) => {
+        switch (action.type) {
+          case "set_category_list":
+            return { ...state, categoryList: action.payload };  // Update only categoryList
+          case "set_defficulty_list":
+            return { ...state, defficultyList: action.payload };  // Update only deficultyList
+            case "set_price_range":
+              return { ...state, minPrice: action.payload.min, maxPrice: action.payload.max };
+          default:
+            return state;  // Return the current state if no action matches
+        }
+      };
+      
+      const [state, dispatch] = useReducer(filterReducer, initialFilters);
+      
+    
   const demoQuizzes = [
     {
       id: 1,
@@ -75,6 +100,46 @@ const ExploreQuizzesPage = () => {
   
     //   fetchQuizzes();
     // }, []);
+
+    useEffect(() => {
+      const fetchCourses = async () => {
+        try {
+          const resp = await getQuizzes(); ;  // Fetch courses
+         
+          setQuizzes(resp);  
+    
+          const cl = new Set(resp.map((c) => c.category));
+          const dl = new Set(resp.map((c) => c.level));
+          
+          const priceRange = [Infinity, -Infinity]; // Initialize correctly
+          
+          resp.forEach((c) => {
+            if (c.price < priceRange[0]) {
+              priceRange[0] = c.price; // Update min price
+            }
+            if (c.price > priceRange[1]) {
+              priceRange[1] = c.price; // Update max price
+            }
+          });
+          
+          // Convert Sets to arrays and dispatch them
+          dispatch({ type: "set_category_list", payload: [...cl] });
+          dispatch({ type: "set_defficulty_list", payload: [...dl] });
+          dispatch({ type: "set_price_range", payload: { min: priceRange[0], max: priceRange[1] } });
+          
+     
+        } catch (error) {
+          console.error("Error fetching quizzes:", error);
+          // setError("Failed to fetch quizzes.");
+        } finally {
+          // setLoading(false);  // Stop loading spinner
+        }
+      };
+    
+      fetchCourses();
+    }, []);
+    console.log(quizzes)
+  
   
   const handlePriceChange = (e) => setPriceRange(e.target.value);
   const toggleCategory = (category) =>
@@ -91,19 +156,21 @@ const ExploreQuizzesPage = () => {
     );
   const handleSearchChange = (e) => setSearchTerm(e.target.value.toLowerCase());
 
-  const filteredQuizzes = demoQuizzes.filter(
+  const filteredQuizzes = quizzes.filter(
     (quiz) =>
       (selectedCategories.length === 0 ||
         selectedCategories.includes(quiz.category)) &&
       (selectedDifficulties.length === 0 ||
-        selectedDifficulties.includes(quiz.difficulty)) &&
-      quiz.price <= priceRange &&
-      quiz.title.toLowerCase().includes(searchTerm)
+        selectedDifficulties.includes(quiz.difficulty))  &&
+        (quiz.title?.toLowerCase().includes(searchTerm) ||
+    quiz.description?.toLowerCase().includes(searchTerm) ||
+    quiz.category?.toLowerCase().includes(searchTerm))
+  
   );
-
+console.log(filteredQuizzes ,"hhgh");
   const handleStartQuiz = (quizId) => {
     console.log(`Starting quiz with ID: ${quizId}`);
-    navigate(`/quiz/${quizId}`); // Navigates to the quiz details page
+    navigate(`/quizzes/${quizId}`); // Navigates to the quiz details page
   };
 
   return (
@@ -139,7 +206,7 @@ const ExploreQuizzesPage = () => {
             <div>
               <h3 className="font-medium">Category</h3>
               <div className="space-y-2 mt-2">
-                {["Science", "Technology", "Math", "History", "Arts"].map((category) => (
+                {state.categoryList.map((category) => (
                   <label key={category} className="block">
                     <input
                       type="checkbox"
@@ -154,10 +221,11 @@ const ExploreQuizzesPage = () => {
             </div>
 
             {/* Difficulty Filter */}
+            {state.difficulty  && 
             <div className="mt-4">
               <h3 className="font-medium">Difficulty</h3>
               <div className="space-y-2 mt-2">
-                {["Beginner", "Intermediate", "Advanced"].map((difficulty) => (
+                {state.defficultyList.map((difficulty) => (
                   <label key={difficulty} className="block">
                     <input
                       type="checkbox"
@@ -170,8 +238,10 @@ const ExploreQuizzesPage = () => {
                 ))}
               </div>
             </div>
+}
 
             {/* Price Range Filter */}
+            {state.priceRange   && 
             <div className="mt-4">
               <h3 className="font-medium">Price Range</h3>
               <input
@@ -194,6 +264,7 @@ const ExploreQuizzesPage = () => {
                 <span>$100</span>
               </div>
             </div>
+}
           </aside>
 
           {/* Quiz Cards */}
@@ -205,22 +276,27 @@ const ExploreQuizzesPage = () => {
                   className="bg-white dark:bg-gray-800 p-4 shadow-md rounded-md flex flex-col h-full"
                 >
                   <div className="w-full h-40 bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
+                
                     <img
-                      src={quiz.image}
+                      src={quiz.banner_url}
                       alt=""
                       className="h-full rounded-md"
                     />
                   </div>
-                  <h3 className="text-lg font-semibold mt-2">{quiz.title}</h3>
-                  <p className="text-gray-600 dark:text-gray-400">
-                    {quiz.category}
+                  <h3 className="text-md font-semibold mt-2">{quiz.title}</h3>
+                  <p className=" text-sm text-gray-600 dark:text-gray-400">
+                  {quiz.description} 
                   </p>
-                  <p className="text-gray-600 dark:text-gray-400">
-                    Difficulty: {quiz.difficulty}
+                  <p className=" text-sm text-gray-600 dark:text-gray-400">
+                  Category: {quiz.category}
+                  </p>
+                
+                  <p className=" text-sm text-gray-600 dark:text-gray-400">
+                    {/* Difficulty: {quiz.difficulty} */}
                   </p>
 
                   <div className="flex items-center mt-2">
-                    {[...Array(5)].map((_, i) =>
+                    {/* {[...Array(5)].map((_, i) =>
                       i < quiz.rating ? (
                         <FaStar key={i} className="text-yellow-500" />
                       ) : i === Math.floor(quiz.rating) ? (
@@ -231,14 +307,14 @@ const ExploreQuizzesPage = () => {
                           className="text-gray-300 dark:text-gray-500"
                         />
                       )
-                    )}
+                    )} */}
                   </div>
-                  <p className="mt-2 font-semibold">${quiz.price}</p>
+                  {/* <p className="mt-2 font-semibold">${quiz.price}</p> */}
 
                   {/* Button to start quiz */}
                   <div className="mt-auto w-full">
                     <button
-                      onClick={() => handleStartQuiz(quiz.id)}
+                      onClick={() => handleStartQuiz(index)}
                       className="w-full bg-blue-500 dark:bg-blue-600 text-white py-2 mt-4 rounded-md"
                     >
                       Start Quiz

@@ -8,7 +8,7 @@ function App() {
   return (<>
     <div>
      <BrowserRouter>
-      <div className="min-h-screen flex flex-col">
+      <div className="min-h-screen flex flex-col w-screen">
           <Navbar />
           <ComponentsRouter />
       </div>
