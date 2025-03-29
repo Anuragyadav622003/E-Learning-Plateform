@@ -60,7 +60,7 @@ function Login() {
         }
 
         handleSuccess("Google login successful!");
-        setTimeout(() => navigate("/"), 2000);
+        setTimeout(() => navigate("/"), 5000);
       }
     };
     storeUser();
