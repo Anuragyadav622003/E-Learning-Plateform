@@ -52,37 +52,37 @@ function Login() {
   };
 
   // Automatically fetch Google login API after authentication
-  useEffect(() => {
-    const fetchGoogleLogin = async () => {
-      if (isAuthenticated && user) {
-        try {
-          setLoading(true);
-          const token = await getAccessTokenSilently(); // Get Google ID token
+  // useEffect(() => {
+  //   const fetchGoogleLogin = async () => {
+  //     if (isAuthenticated && user) {
+  //       try {
+  //         setLoading(true);
+  //         const token = await getAccessTokenSilently(); // Get Google ID token
 
-          // Call backend API with Google token
-          const apiResponse = await handleGoogleLogin(token);
+  //         // Call backend API with Google token
+  //         const apiResponse = await handleGoogleLogin(token);
 
-          if (apiResponse.ok) {
-            localStorage.setItem("user", JSON.stringify(apiResponse.user));
-            localStorage.setItem("accessToken", apiResponse.accessToken);
-            setUser(apiResponse.user);
-            setIsLoggedIn(true);
-            handleSuccess("Google login successful!");
-            setTimeout(() => navigate("/"), 1000);
-          } else {
-            handleError(apiResponse.msg);
-          }
-        } catch (error) {
-          console.error("Google Login Error:", error);
-          handleError("Google login failed.");
-        } finally {
-          setLoading(false);
-        }
-      }
-    };
+  //         if (apiResponse.ok) {
+  //           localStorage.setItem("user", JSON.stringify(apiResponse.user));
+  //           localStorage.setItem("accessToken", apiResponse.accessToken);
+  //           setUser(apiResponse.user);
+  //           setIsLoggedIn(true);
+  //           handleSuccess("Google login successful!");
+  //           setTimeout(() => navigate("/"), 1000);
+  //         } else {
+  //           handleError(apiResponse.msg);
+  //         }
+  //       } catch (error) {
+  //         console.error("Google Login Error:", error);
+  //         handleError("Google login failed.");
+  //       } finally {
+  //         setLoading(false);
+  //       }
+  //     }
+  //   };
 
-    fetchGoogleLogin();
-  }, [isAuthenticated, user]); // Runs only when user logs in with Google
+  //   fetchGoogleLogin();
+  // }, [isAuthenticated, user]); // Runs only when user logs in with Google
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
