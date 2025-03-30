@@ -1,6 +1,6 @@
 import React, { useState,useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import coursesData from "./CourseApi";
+
 import ListComponenet from "../../componenet/List";
 import VideoGallery from "../../componenet/YoutubeVideo";
 import  { getAllCourses } from "./CourseApi";

@@ -5,11 +5,14 @@ import { Link, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css"; // Import Toastify styles
 import { handleError, handleSuccess } from "../../../utils";
+import { useAuth } from "../../context/context";
+import { login } from "./AuthApi";
 
 function Login() {
   const { loginWithRedirect, user, isAuthenticated, getAccessTokenSilently } = useAuth0();
   const navigate = useNavigate();
-  
+const {setUser,setIsLoggedIn} = useAuth();
+
   const [initialState, setInitialState] = useState({
     email: "",
     password: "",
@@ -60,7 +63,8 @@ function Login() {
         }
 
         handleSuccess("Google login successful!");
-        setTimeout(() => navigate("/"), 5000);
+        await setIsLoggedIn(true);
+        setTimeout(() => navigate("/"), 3000);
       }
     };
     storeUser();
@@ -72,24 +76,26 @@ function Login() {
     setLoading(true);
 
     try {
-      const response = await fetch("http://localhost:5000/api/user/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(initialState),
-      });
+      // const response = await fetch("http://localhost:5000/api/user/login", {
+      //   method: "POST",
+      //   headers: { "Content-Type": "application/json" },
+      //   body: JSON.stringify(initialState),
+      // });
+  const response =  await login(initialState)
 
-      const resData = await response.json();
-      console.log("Response data from server", resData);
+     console.log(response,"ASdadsa")
 
       if (response.ok) {
-        localStorage.setItem("accessToken", resData.accessToken);
-        localStorage.setItem("refreshToken", resData.refreshToken);
+        // localStorage.setItem("accessToken", resData.accessToken);
+        // localStorage.setItem("refreshToken", resData.refreshToken);
 
         setInitialState({ email: "", password: "" });
-        handleSuccess(resData.msg);
+        handleSuccess(response.msg);
+        await setIsLoggedIn(true);
+        setUser(response.user);
         setTimeout(() => navigate("/"), 2000);
       } else {
-        handleError(resData.msg);
+        handleError(response.msg);
       }
     } catch (error) {
       console.error("Error during manual login:", error);

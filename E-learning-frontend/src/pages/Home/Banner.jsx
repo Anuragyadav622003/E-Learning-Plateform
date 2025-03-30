@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Button, Select, MenuItem, FormControl, InputLabel, styled } from "@mui/material";
 import { School as StudentIcon, Person as TeacherIcon, AdminPanelSettings as AdminIcon, ArrowRightAlt } from "@mui/icons-material";
+import { useAuth } from "../../context/context";
 import BannerIllustration from "../../assets/Banner.svg";
 
 const StyledSelect = styled(Select)(({ theme }) => ({
@@ -38,17 +39,37 @@ const scaleUp = {
 
 function Banner() {
   const navigate = useNavigate();
+  const {user, isLoggedIn } = useAuth();
   const [role, setRole] = useState("");
+
+  useEffect(() => {
+    if (isLoggedIn && user?.role) {
+    console.log("User role:",user.role);
+          redirectUser(user.role);
+    }
+  }, [isLoggedIn,user]);
 
   const handleRoleChange = (event) => {
     setRole(event.target.value);
   };
 
-  const handleGetStarted = () => {
+  const redirectUser = (role) => {
     if (role === "teacher" || role === "admin") {
       window.location.href = "https://e-learning-plateform-admin.vercel.app/";
     } else {
-      navigate("/login");
+      navigate("/"); // Redirect logged-in students to the dashboard
+    }
+  };
+
+  const handleGetStarted = () => {
+    if (isLoggedIn) {
+      redirectUser(user.role);
+    } else {
+      if (role === "teacher" || role === "admin") {
+        window.location.href = "https://e-learning-plateform-admin.vercel.app/";
+      } else {
+        navigate("/login");
+      }
     }
   };
 
@@ -62,33 +83,37 @@ function Banner() {
           <p className="text-lg md:text-xl mb-8 text-gray-600 dark:text-gray-300 leading-relaxed">
             Join thousands of students discovering new skills with our interactive courses designed for modern learners.
           </p>
-          <FormControl fullWidth className="mb-8">
-            <InputLabel id="role-select-label" className="text-gray-800 dark:text-gray-500 ">I am a...</InputLabel>
-            <StyledSelect
-              labelId="role-select-label"
-              value={role}
-              onChange={handleRoleChange}
-              className="text-gray-900 dark:text-white"
-            >
-              {roleOptions.map((option) => (
-                <MenuItem key={option.value} value={option.value} className="flex items-center gap-3 dark:hover:bg-gray-700 ">
-                  <span className="text-gray-800 px-2  dark:text-gray-800">{option.icon}</span>
-                  <span className="text-gray-800 px-2  dark:text-gray-800">{option.label}</span>
-                </MenuItem>
-              ))}
-            </StyledSelect>
-          </FormControl>
+          {!isLoggedIn && (
+            <FormControl fullWidth className="mb-8">
+              <InputLabel id="role-select-label" className="text-gray-800 dark:text-gray-500 ">I am a...</InputLabel>
+              <StyledSelect
+                labelId="role-select-label"
+                value={role}
+                onChange={handleRoleChange}
+                className="text-gray-900 dark:text-white"
+              >
+                {roleOptions.map((option) => (
+                  <MenuItem key={option.value} value={option.value} className="flex items-center gap-3 dark:hover:bg-gray-700 ">
+                    <span className="text-gray-800 px-2  dark:text-gray-800">{option.icon}</span>
+                    <span className="text-gray-800 px-2  dark:text-gray-800">{option.label}</span>
+                  </MenuItem>
+                ))}
+              </StyledSelect>
+            </FormControl>
+          )}
           <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} className="self-start mt-6">
             <Button
               variant="contained"
               size="large"
               endIcon={<ArrowRightAlt />}
               onClick={handleGetStarted}
-              disabled={!role}
-              className={`py-3 px-6rounded-xl text-white bg-gradient-to-r from-pink-500 to-rose-500 shadow-lg hover:shadow-xl transition-all ${!role ? 'opacity-70' : ''}`}
-              sx={{ textTransform: 'none', fontSize: '1rem', fontWeight: 600 }}
+              disabled={!role && !isLoggedIn}
+              className={`py-3 px-6 rounded-xl text-white bg-gradient-to-r from-pink-500 to-rose-500 shadow-lg hover:shadow-xl transition-all ${
+                !role && !isLoggedIn ? "opacity-70" : ""
+              }`}
+              sx={{ textTransform: "none", fontSize: "1rem", fontWeight: 600 }}
             >
-              Start Learning Now
+              {isLoggedIn ? "Go to Dashboard" : "Start Learning Now"}
             </Button>
           </motion.div>
         </motion.div>
