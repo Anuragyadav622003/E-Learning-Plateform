@@ -54,4 +54,38 @@ const register = async (userData) => {
   }
 };
 
-export { login, register };
+const handleGoogleLogin = async (googleIdToken) => {
+  try {
+    const response = await axios.post(
+      `${Base_Url}/api/user/google`,
+      { token: googleIdToken }, // Send token as an object
+      {
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+
+    console.log("Google Login Response:", response);
+
+    if (response?.data?.accessToken && response?.data?.refreshToken) {
+      console.log("Google Login Successful:", response.data);
+
+      localStorage.setItem("accessToken", response.data.accessToken);
+      localStorage.setItem("refreshToken", response.data.refreshToken);
+      localStorage.setItem("user", JSON.stringify(response.data.user));
+
+      return { ok: true, msg: "Google login successful", user: response.data.user };
+    } else {
+      throw new Error("Failed to retrieve tokens");
+    }
+  } catch (error) {
+    console.error("Error in Google Login:", error);
+    const errorMsg =
+      error.response?.data?.msg || "An error occurred during Google login.";
+    return { ok: false, msg: errorMsg };
+  }
+};
+
+
+
+
+export { login, register,handleGoogleLogin };

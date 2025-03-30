@@ -2,11 +2,10 @@ import React, { useState, useEffect } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
-
 import "react-toastify/dist/ReactToastify.css";
 import { handleError, handleSuccess } from "../../../utils";
 import { useAuth } from "../../context/context";
-import { login } from "./AuthApi";
+import { login, handleGoogleLogin } from "./AuthApi";
 
 function Login() {
   const { loginWithRedirect, user, isAuthenticated, getAccessTokenSilently } = useAuth0();
@@ -17,18 +16,13 @@ function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  // Handle input change
   const handleInput = (e) => {
     const { name, value } = e.target;
     setCredentials({ ...credentials, [name]: value });
   };
 
-  // Toggle password visibility
-  const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword);
-  };
+  const togglePasswordVisibility = () => setShowPassword(!showPassword);
 
-  // Handle both Google and manual login
   const handleLogin = async (isGoogle = false) => {
     setLoading(true);
     try {
@@ -41,7 +35,7 @@ function Login() {
           setUser(response.user);
           setIsLoggedIn(true);
           handleSuccess(response.msg);
-          setTimeout(() => navigate("/"), 2000);
+          setTimeout(() => navigate("/"), 1000);
         } else {
           handleError(response.msg);
         }
@@ -54,21 +48,27 @@ function Login() {
     }
   };
 
-  // Store Google user in localStorage after successful login
+  // Handle Google login after authentication with Auth0
   useEffect(() => {
     const storeGoogleUser = async () => {
       if (isAuthenticated && user) {
-        localStorage.setItem("user", JSON.stringify(user));
         try {
-          const token = await getAccessTokenSilently();
-          localStorage.setItem("accessToken", token);
+          const token = await getAccessTokenSilently(); // Get Google ID token from Auth0
+
+          const apiResponse = await handleGoogleLogin(token); // Call backend API
+
+          if (apiResponse.ok) {
+            setUser(apiResponse.user);
+            setIsLoggedIn(true);
+            handleSuccess("Google login successful!");
+            setTimeout(() => navigate("/"), 1000);
+          } else {
+            handleError(apiResponse.msg);
+          }
         } catch (error) {
           console.error("Auth0 token fetch error:", error);
+          handleError("Google login failed.");
         }
-        setUser(user);
-        setIsLoggedIn(true);
-        handleSuccess("Google login successful!");
-        setTimeout(() => navigate("/"), 2000);
       }
     };
     storeGoogleUser();
@@ -86,8 +86,6 @@ function Login() {
         </div>
         <form className="flex flex-col w-full md:w-1/2 p-8 bg-white overflow-hidden" onSubmit={(e) => { e.preventDefault(); handleLogin(); }}>
           <h1 className="text-center text-3xl font-bold mb-6 text-teal-950">Login</h1>
-
-          {/* Email Field */}
           <div className="mb-4">
             <label className="block font-medium text-gray-700">Email</label>
             <input
@@ -100,8 +98,6 @@ function Login() {
               required
             />
           </div>
-
-          {/* Password Field */}
           <div className="mb-4">
             <label className="block font-medium text-gray-700">Password</label>
             <div className="relative">
@@ -119,18 +115,13 @@ function Login() {
               </button>
             </div>
           </div>
-
-          {/* Login Button */}
           <button type="submit" className="w-full py-2 px-4 bg-teal-600 text-white font-bold rounded-md focus:outline-none hover:bg-teal-700 disabled:bg-teal-400" disabled={loading}>
             {loading ? "Logging in..." : "Login"}
           </button>
-
-          {/* Google Login Button */}
           <button type="button" onClick={() => handleLogin(true)} className="flex items-center w-full p-2 border rounded-lg shadow-md bg-white hover:bg-gray-200 transition duration-200 mt-4">
             <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google Login" className="w-6 h-6 mr-2" />
             <span>Login with Google</span>
           </button>
-
           <div className="text-center mt-4">
             <p className="text-gray-600">
               Don't have an account? <Link to="/signup" className="text-teal-600 hover:underline">Sign up here</Link>
@@ -138,7 +129,6 @@ function Login() {
           </div>
         </form>
       </div>
-    
     </div>
   );
 }
