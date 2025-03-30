@@ -26,10 +26,14 @@ export const AuthProvider = ({ children }) => {
     }, []); // Runs only on mount
   
     const handleLogout = ()=>{
-        localStorage.clear();
-        setIsLoggedIn(false);
-        setUser(null);
-        
+        try {
+          
+            localStorage.clear();
+            setIsLoggedIn(false);
+            setUser(null);
+        } catch (error) {
+            console.error("Error in AuthProvider:",error);
+        }
     };
     return (
         <AuthContext.Provider value={{ isLoggedIn, setIsLoggedIn, user, setUser,handleLogout }}>
