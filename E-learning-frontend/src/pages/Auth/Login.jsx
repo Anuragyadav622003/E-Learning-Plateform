@@ -16,6 +16,7 @@ function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
 
+  // Handle input changes
   const handleInput = (e) => {
     const { name, value } = e.target;
     setCredentials({ ...credentials, [name]: value });
@@ -23,15 +24,17 @@ function Login() {
 
   const togglePasswordVisibility = () => setShowPassword(!showPassword);
 
+  // Login handler (Google or Email/Password)
   const handleLogin = async (isGoogle = false) => {
     setLoading(true);
     try {
       if (isGoogle) {
-        await loginWithRedirect({ connection: "google-oauth2" });
+        await loginWithRedirect({ connection: "google-oauth2" }); // Redirects to Google login
       } else {
         const response = await login(credentials);
         if (response.ok) {
           localStorage.setItem("user", JSON.stringify(response.user));
+          localStorage.setItem("accessToken", response.accessToken);
           setUser(response.user);
           setIsLoggedIn(true);
           handleSuccess(response.msg);
@@ -48,16 +51,20 @@ function Login() {
     }
   };
 
-  // Handle Google login after authentication with Auth0
+  // Automatically fetch Google login API after authentication
   useEffect(() => {
-    const storeGoogleUser = async () => {
+    const fetchGoogleLogin = async () => {
       if (isAuthenticated && user) {
         try {
-          const token = await getAccessTokenSilently(); // Get Google ID token from Auth0
+          setLoading(true);
+          const token = await getAccessTokenSilently(); // Get Google ID token
 
-          const apiResponse = await handleGoogleLogin(token); // Call backend API
+          // Call backend API with Google token
+          const apiResponse = await handleGoogleLogin(token);
 
           if (apiResponse.ok) {
+            localStorage.setItem("user", JSON.stringify(apiResponse.user));
+            localStorage.setItem("accessToken", apiResponse.accessToken);
             setUser(apiResponse.user);
             setIsLoggedIn(true);
             handleSuccess("Google login successful!");
@@ -66,13 +73,16 @@ function Login() {
             handleError(apiResponse.msg);
           }
         } catch (error) {
-          console.error("Auth0 token fetch error:", error);
+          console.error("Google Login Error:", error);
           handleError("Google login failed.");
+        } finally {
+          setLoading(false);
         }
       }
     };
-    storeGoogleUser();
-  }, [isAuthenticated, user, getAccessTokenSilently, navigate]);
+
+    fetchGoogleLogin();
+  }, [isAuthenticated, user]); // Runs only when user logs in with Google
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
