@@ -62,9 +62,9 @@ const {setUser,setIsLoggedIn} = useAuth();
           console.error("Error fetching Auth0 token:", error);
         }
 
-        handleSuccess("Google login successful!");
+        await handleSuccess("Google login successful!");
         await setIsLoggedIn(true);
-        setTimeout(() => navigate("/"), 3000);
+        setTimeout(() => navigate("/"), 5000);
       }
     };
     storeUser();
