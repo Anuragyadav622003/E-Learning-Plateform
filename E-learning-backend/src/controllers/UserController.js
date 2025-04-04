@@ -3,6 +3,7 @@ import jwt from "jsonwebtoken";
 import User from "../modals/UserModel.js"; // Corrected 'modals' to 'models'
 import cloudinary from "../utils/cloudinary.js";
 import dotenv from "dotenv";
+import { OAuth2Client } from "google-auth-library";
 
 dotenv.config();
 
@@ -123,3 +124,56 @@ const deleteUser = async () => {
 };
 // Uncomment below line to use (Be cautious!)
 // deleteUser();
+
+
+
+//google auth
+
+const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+// Google Login Controller
+export const googleLogin = async (req, res) => {
+  try {
+    const { token } = req.body; // Frontend sends Google ID token
+    console.log(token,"sd")
+    if (!token) {
+      return res.status(400).json({ msg: "Google token is required" });
+    }
+
+    // Verify Google ID Token
+    const ticket = await client.verifyIdToken({
+      idToken: token,
+      audience: process.env.GOOGLE_CLIENT_ID,
+    });
+
+    const { email, name, picture, sub: googleId } = ticket.getPayload();
+
+    // Check if user exists
+    let user = await User.findOne({ email });
+
+    if (!user) {
+      // Register new user
+      user = new User({
+        username: name,
+        email,
+        password: await bcrypt.hash(googleId, 10), // Store hashed Google ID
+        profileImage: picture,
+        role: "user",
+      });
+
+      await user.save();
+    }
+
+    // Generate JWT tokens
+    const { accessToken, refreshToken } = await generateAccessRefreshTokens(user);
+
+    // Send response with cookies
+    res.status(200)
+      .cookie("accessToken", accessToken, { httpOnly: true, secure: process.env.NODE_ENV === "production", maxAge: 86400000 })
+      .cookie("refreshToken", refreshToken, { httpOnly: true, secure: process.env.NODE_ENV === "production", maxAge: 604800000 })
+      .json({ user: { _id: user._id, username: user.username, email: user.email, profileImage: user.profileImage }, accessToken, refreshToken, msg: "Google login successful" });
+
+  } catch (error) {
+    console.error("Error in Google Login:", error);
+    res.status(500).json({ msg: "Server error", error: error.message });
+  }
+};

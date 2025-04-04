@@ -20,7 +20,6 @@ const userSchema = new mongoose.Schema({
   },
   mobileNumber: {
     type: String,
-    required: true,
     unique: true, // Ensure mobile numbers are unique
     match: [/^\d{10}$/, 'Please enter a valid mobile number'], // Regex for validation
   },

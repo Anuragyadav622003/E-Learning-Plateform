@@ -310,7 +310,8 @@ function Signup() {
                 className="block w-full p-2 mt-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-600"
               >
                 <option value="admin">Admin</option>
-                <option value="user">User</option>
+                <option value="instructor">Instructor</option>
+                <option value="student">Student</option>
               </select>
             </div>
           </div>
